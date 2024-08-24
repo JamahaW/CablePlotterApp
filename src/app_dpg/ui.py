@@ -1,6 +1,7 @@
 from pathlib import Path
 from typing import Callable
 from typing import Iterable
+from typing import Optional
 
 from dearpygui import dearpygui as dpg
 
@@ -31,3 +32,27 @@ def makeFileDialog(label: str, on_select: Callable[[tuple[Path, ...]], None], ex
             dpg.add_file_extension(f".{extension}", color=(255, 160, 80, 255), custom_text=f"[{text}]")
 
         return f
+
+
+class DragLine:
+
+    def __init__(self, is_vertical: bool, value: int = 0, *, color: Color = (0xFF, 0xFF, 0xFF), on_change: Callable[[int], None] = None) -> None:
+        self.color = color
+        self.__is_vertical = is_vertical
+        self.__default_value = value
+        self.__item_id: Optional[ItemID] = None
+        self.__on_change = None if on_change is None else lambda x: on_change(dpg.get_value(x))
+
+    def build(self) -> None:
+        self.__item_id = dpg.add_drag_line(
+            color=self.color,
+            default_value=self.__default_value,
+            vertical=self.__is_vertical,
+            callback=self.__on_change
+        )
+
+    def getValue(self) -> float:
+        return dpg.get_value(self.__item_id)
+
+    def setValue(self, value: float) -> None:
+        dpg.set_value(self.__item_id, value)

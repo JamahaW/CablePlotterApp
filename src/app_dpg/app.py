@@ -4,7 +4,7 @@ from typing import Optional
 
 from dearpygui import dearpygui as dpg
 
-from app_dpg.ui import Color
+from app_dpg.ui import DragLine
 from app_dpg.ui import ItemID
 from app_dpg.ui import makeFileDialog
 
@@ -72,23 +72,7 @@ class StackContainer:
         self.__items_count += 1
 
 
-class DragLine:
-
-    def __init__(self, is_vertical: bool, value: int = 0, *, color: Color = (0xFF, 0xFF, 0xFF)) -> None:
-        self.color = color
-        self.is_vertical = is_vertical
-        self.value = value
-        self.item_id: Optional[ItemID] = None
-
-    def build(self) -> None:
-        self.item_id = dpg.add_drag_line(
-            color=self.color,
-            default_value=self.value,
-            vertical=self.is_vertical
-        )
-
-
-class PlotCanvas:
+class CanvasPlot:
     CANVAS_BORDER_COLOR = (255, 0X74, 0)
 
     def __init__(self, width: int, height: int) -> None:
@@ -133,7 +117,7 @@ class App:
             r"A:\Program\Python3\CablePlotterApp\res\images"
         )
 
-        self.plot = PlotCanvas(1200, 1200)
+        self.plot = CanvasPlot(1200, 1200)
 
     def on_image_selected(self, paths: tuple[Path, ...]) -> None:
         print(paths)
