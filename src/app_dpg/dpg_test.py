@@ -69,15 +69,24 @@ class StackContainer:
             )
 
 
-def makeFileDialog(label: str, on_select: Callable[[Path], None], extensions: Iterable[tuple[str, str]], default_path: str = "") -> ItemID:
+def makeFileDialog(label: str, on_select: Callable[[tuple[Path, ...]], None], extensions: Iterable[tuple[str, str]], default_path: str = "") -> ItemID:
+    def callback(_, app_data: dict[str, dict]):
+        paths = app_data.get("selections").values()
+
+        if len(paths) == 0:
+            return
+
+        on_select(tuple(Path(p) for p in paths))
+
     with dpg.file_dialog(
             label=label,
-            callback=lambda _, data: on_select(Path(data["file_path_name"])),
+            callback=callback,
             directory_selector=False,
             show=False,
             width=1200,
             height=800,
-            default_path=default_path
+            default_path=default_path,
+            modal=True
     ) as f:
         for extension, text in extensions:
             dpg.add_file_extension(f".{extension}", color=(255, 128, 64, 255), custom_text=f"[{text}]")
@@ -93,8 +102,8 @@ class App:
 
         self.file_dialog = makeFileDialog("Select Image file", self.on_image_selected, (("png", "Image"),), r"A:\Program\Python3\CablePlotterApp\res\images")
 
-    def on_image_selected(self, path: Path) -> None:
-        print(path)
+    def on_image_selected(self, paths: tuple[Path, ...]) -> None:
+        print(paths)
 
     def build(self) -> None:
         with dpg.window() as main_window:
