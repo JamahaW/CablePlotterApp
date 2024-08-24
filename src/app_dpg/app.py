@@ -9,6 +9,23 @@ from app_dpg.ui import ItemID
 from app_dpg.ui import makeFileDialog
 
 
+class StackContainer:
+
+    def __init__(self, label: str) -> None:
+        self.label = label
+        self.items_header: Optional[ItemID] = None
+        self.__items_count = 0
+
+    def build(self) -> None:
+        with dpg.group():
+            dpg.add_button(label="Add", callback=lambda: self.addItem(f"item: {self.__items_count}"))
+            self.items_header = dpg.add_collapsing_header(label=self.label)
+
+    def addItem(self, label: str) -> None:
+        dpg.add_text(label, parent=self.items_header)
+        self.__items_count += 1
+
+
 class Circle:
 
     def __init__(self) -> None:
@@ -18,7 +35,7 @@ class Circle:
         self.offset_y = 0
         self.rotate = 0
         self.end_angle = 360
-        self.series = None
+        self.series = LineSeries("circle")
 
     def redraw(self):
         R = range(self.end_angle + 1)
@@ -26,7 +43,7 @@ class Circle:
         x = [math.cos(math.radians(i + self.rotate)) * self.scale_x + self.offset_x for i in R]
         y = [math.sin(math.radians(i + self.rotate)) * self.scale_y + self.offset_y for i in R]
 
-        dpg.set_value(self.series, (x, y))
+        self.series.setValue(x, y)
 
     def build(self) -> None:
         with dpg.collapsing_header(label="test control"):
@@ -62,23 +79,6 @@ class Circle:
         self.redraw()
 
 
-class StackContainer:
-
-    def __init__(self, label: str) -> None:
-        self.label = label
-        self.items_header: Optional[ItemID] = None
-        self.__items_count = 0
-
-    def build(self) -> None:
-        with dpg.group():
-            dpg.add_button(label="Add", callback=lambda: self.addItem(f"item: {self.__items_count}"))
-            self.items_header = dpg.add_collapsing_header(label=self.label)
-
-    def addItem(self, label: str) -> None:
-        dpg.add_text(label, parent=self.items_header)
-        self.__items_count += 1
-
-
 class Axis:
 
     def __init__(self, axis_type: int) -> None:
@@ -87,6 +87,20 @@ class Axis:
 
     def build(self) -> None:
         self.item_id = dpg.add_plot_axis(self.__type)
+
+
+class LineSeries:
+
+    def __init__(self, label: str) -> None:
+        self.__label = label
+
+        self.__item_id = None
+
+    def build(self, axis: Axis) -> None:
+        self.__item_id = dpg.add_line_series(tuple(), tuple(), label=self.__label, parent=axis.item_id)
+
+    def setValue(self, x, y):
+        dpg.set_value(self.__item_id, (x, y))
 
 
 class Plot:
@@ -111,9 +125,9 @@ class App:
             r"A:\Program\Python3\CablePlotterApp\res\images"
         )
 
+        self.plot = Plot()
         self.circle_drawer = Circle()
         self.test_stack_container = StackContainer("Test Stack container")
-        self.plot = Plot()
 
     @staticmethod
     def on_image_selected(paths: tuple[Path, ...]) -> None:
@@ -135,7 +149,7 @@ class App:
 
                 self.plot.build()
 
-        self.circle_drawer.series = dpg.add_line_series(tuple(), tuple(), label="s", parent=self.plot.axis.item_id)
+        self.circle_drawer.series.build(self.plot.axis)
         self.circle_drawer.redraw()
 
 
@@ -143,7 +157,8 @@ if __name__ == '__main__':
     dpg.create_context()
     dpg.create_viewport(title="title", width=1600, height=900)
 
-    App().build()
+    app = App()
+    app.build()
 
     dpg.setup_dearpygui()
     dpg.show_viewport()
