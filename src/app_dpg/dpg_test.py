@@ -89,7 +89,7 @@ def makeFileDialog(label: str, on_select: Callable[[tuple[Path, ...]], None], ex
             modal=True
     ) as f:
         for extension, text in extensions:
-            dpg.add_file_extension(f".{extension}", color=(255, 128, 64, 255), custom_text=f"[{text}]")
+            dpg.add_file_extension(f".{extension}", color=(255, 160, 80, 255), custom_text=f"[{text}]")
 
         return f
 
