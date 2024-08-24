@@ -70,10 +70,27 @@ class StackContainer:
         self.__items_count += 1
 
 
+class Axis:
+
+    def __init__(self, axis_type: int) -> None:
+        self.__type = axis_type
+        self.item_id = None
+
+    def build(self) -> None:
+        self.item_id = dpg.add_plot_axis(self.__type)
+
+
 class Plot:
 
     def __init__(self) -> None:
         self.canvas_border = CanvasLines(50)
+        self.axis = Axis(dpg.mvXAxis)
+
+    def build(self) -> None:
+        with dpg.plot(height=-1, width=-1, equal_aspects=True):
+            dpg.add_plot_legend()
+            self.axis.build()
+            self.canvas_border.build()
 
 
 class App:
@@ -113,16 +130,10 @@ class App:
                     with dpg.collapsing_header(label="test list"):
                         self.test_stack_container.build()
 
-                with dpg.plot(height=-1, width=-1, equal_aspects=True):
-                    dpg.add_plot_legend()
+                self.plot.build()
 
-                    x = dpg.add_plot_axis(dpg.mvXAxis)
-
-                    self.circle_drawer.series = dpg.add_line_series(tuple(), tuple(), label="s", parent=x)
-
-                    self.circle_drawer.redraw()
-
-                    self.plot.canvas_border.build()
+        self.circle_drawer.series = dpg.add_line_series(tuple(), tuple(), label="s", parent=self.plot.axis.item_id)
+        self.circle_drawer.redraw()
 
 
 if __name__ == '__main__':

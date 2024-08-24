@@ -95,3 +95,4 @@ class CanvasLines:
 
     def getSize(self) -> tuple[float, float]:
         return self.__width_lines.getSize(), self.__height_lines.getSize()
+
