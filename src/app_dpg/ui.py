@@ -34,26 +34,50 @@ def makeFileDialog(label: str, on_select: Callable[[tuple[Path, ...]], None], ex
         return f
 
 
-class DragLine:
+class Item[T]:
+
+    def __init__(self) -> None:
+        self.dpg_item_id: Optional[ItemID] = None
+
+    def getItemID(self) -> ItemID:
+        return self.dpg_item_id
+
+    def configure(self, **kwargs) -> None:
+        dpg.configure_item(self.dpg_item_id, **kwargs)
+
+    def hide(self) -> None:
+        dpg.hide_item(self.dpg_item_id)
+
+    def show(self) -> None:
+        dpg.show_item(self.dpg_item_id)
+
+    def setValue(self, value: T) -> None:
+        dpg.set_value(self.dpg_item_id, value)
+
+    def getValue(self) -> T:
+        return dpg.get_value(self.dpg_item_id)
+
+    def enable(self) -> None:
+        dpg.enable_item(self.dpg_item_id)
+
+    def disable(self) -> None:
+        dpg.disable_item(self.dpg_item_id)
+
+
+class DragLine(Item[float]):
     CANVAS_BORDER_COLOR = (255, 0X74, 0)
 
     def __init__(self, is_vertical: bool, on_change: Callable[[float], None] = None) -> None:
+        super().__init__()
         self.__is_vertical = is_vertical
-        self.__item_id: Optional[ItemID] = None
         self.__on_change = None if on_change is None else lambda x: on_change(dpg.get_value(x))
 
     def build(self) -> None:
-        self.__item_id = dpg.add_drag_line(
+        self.dpg_item_id = dpg.add_drag_line(
             color=self.CANVAS_BORDER_COLOR,
             vertical=self.__is_vertical,
             callback=self.__on_change
         )
-
-    def getValue(self) -> float:
-        return dpg.get_value(self.__item_id)
-
-    def setValue(self, value: float) -> None:
-        dpg.set_value(self.__item_id, value)
 
 
 class CanvasLinePair:
@@ -96,3 +120,22 @@ class CanvasLines:
     def getSize(self) -> tuple[float, float]:
         return self.__width_lines.getSize(), self.__height_lines.getSize()
 
+
+class Axis(Item):
+
+    def __init__(self, axis_type: int) -> None:
+        super().__init__()
+        self.__type = axis_type
+
+    def build(self) -> None:
+        self.dpg_item_id = dpg.add_plot_axis(self.__type)
+
+
+class LineSeries(Item[tuple[Iterable[float], Iterable[float]]]):
+
+    def __init__(self, label: str) -> None:
+        super().__init__()
+        self.__label = label
+
+    def build(self, axis: Axis) -> None:
+        self.dpg_item_id = dpg.add_line_series(tuple(), tuple(), label=self.__label, parent=axis.getItemID())

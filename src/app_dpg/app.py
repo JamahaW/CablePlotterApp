@@ -4,8 +4,10 @@ from typing import Optional
 
 from dearpygui import dearpygui as dpg
 
+from app_dpg.ui import Axis
 from app_dpg.ui import CanvasLines
 from app_dpg.ui import ItemID
+from app_dpg.ui import LineSeries
 from app_dpg.ui import makeFileDialog
 
 
@@ -43,10 +45,10 @@ class Circle:
         x = [math.cos(math.radians(i + self.rotate)) * self.scale_x + self.offset_x for i in R]
         y = [math.sin(math.radians(i + self.rotate)) * self.scale_y + self.offset_y for i in R]
 
-        self.series.setValue(x, y)
+        self.series.setValue((x, y))
 
     def build(self) -> None:
-        with dpg.collapsing_header(label="test control"):
+        with dpg.collapsing_header(label="test control", default_open=True):
             dpg.add_slider_int(label="scale_x", max_value=500, callback=self.update_scale_x)
             dpg.add_slider_int(label="scale_y", max_value=500, callback=self.update_scale_y)
             dpg.add_slider_int(label="pos x", max_value=500, callback=self.update_offset_x)
@@ -77,30 +79,6 @@ class Circle:
     def update_offset_y(self, __id) -> None:
         self.offset_y = dpg.get_value(__id)
         self.redraw()
-
-
-class Axis:
-
-    def __init__(self, axis_type: int) -> None:
-        self.__type = axis_type
-        self.item_id = None
-
-    def build(self) -> None:
-        self.item_id = dpg.add_plot_axis(self.__type)
-
-
-class LineSeries:
-
-    def __init__(self, label: str) -> None:
-        self.__label = label
-
-        self.__item_id = None
-
-    def build(self, axis: Axis) -> None:
-        self.__item_id = dpg.add_line_series(tuple(), tuple(), label=self.__label, parent=axis.item_id)
-
-    def setValue(self, x, y):
-        dpg.set_value(self.__item_id, (x, y))
 
 
 class Plot:
@@ -139,12 +117,12 @@ class App:
 
             with dpg.group(horizontal=True):
                 with dpg.group(width=200):
-                    with dpg.collapsing_header(label="Main"):
+                    with dpg.collapsing_header(label="Main", default_open=True):
                         dpg.add_button(label="Open", callback=lambda: dpg.show_item(self.file_dialog))
 
                     self.circle_drawer.build()
 
-                    with dpg.collapsing_header(label="test list"):
+                    with dpg.collapsing_header(label="test list", default_open=True):
                         self.test_stack_container.build()
 
                 self.plot.build()
@@ -163,6 +141,9 @@ if __name__ == '__main__':
     dpg.setup_dearpygui()
     dpg.show_viewport()
 
+    dpg.show_implot_demo()
+
+    # dpg.show_font_manager()
     # dpg.show_style_editor()
 
     dpg.start_dearpygui()
