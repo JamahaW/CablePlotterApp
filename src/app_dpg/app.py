@@ -1,16 +1,15 @@
 import math
 from pathlib import Path
-from typing import Callable
-from typing import Iterable
 from typing import Optional
 
 from dearpygui import dearpygui as dpg
 
+from app_dpg.ui import Color
+from app_dpg.ui import ItemID
+from app_dpg.ui import makeFileDialog
+
 CANVAS_HALF_HEIGHT_DEFAULT = 600
 CANVAS_HALF_WIDTH_DEFAULT = 600
-CANVAS_BORDER_COLOR = (255, 0X74, 0)
-
-type ItemID = int | str
 
 
 class Circle:
@@ -59,48 +58,82 @@ class Circle:
 class StackContainer:
 
     def __init__(self, label: str) -> None:
-        self.items = list[ItemID]()
+        self.label = label
+        self.items_header: Optional[ItemID] = None
+        self.__items_count = 0
 
+    def build(self) -> None:
         with dpg.group():
-            self.items_header = dpg.add_collapsing_header(label=label)
-            dpg.add_button(
-                label="Add item",
-                callback=lambda: self.items.append(dpg.add_text(f"item: {len(self.items)}", parent=self.items_header))
-            )
+            dpg.add_button(label="Add", callback=lambda: self.addItem(f"item: {self.__items_count}"))
+            self.items_header = dpg.add_collapsing_header(label=self.label)
+
+    def addItem(self, label: str) -> None:
+        dpg.add_text(label, parent=self.items_header)
+        self.__items_count += 1
 
 
-def makeFileDialog(label: str, on_select: Callable[[tuple[Path, ...]], None], extensions: Iterable[tuple[str, str]], default_path: str = "") -> ItemID:
-    def callback(_, app_data: dict[str, dict]):
-        paths = app_data.get("selections").values()
+class DragLine:
 
-        if len(paths) == 0:
-            return
+    def __init__(self, is_vertical: bool, value: int = 0, *, color: Color = (0xFF, 0xFF, 0xFF)) -> None:
+        self.color = color
+        self.is_vertical = is_vertical
+        self.value = value
+        self.item_id: Optional[ItemID] = None
 
-        on_select(tuple(Path(p) for p in paths))
+    def build(self) -> None:
+        self.item_id = dpg.add_drag_line(
+            color=self.color,
+            default_value=self.value,
+            vertical=self.is_vertical
+        )
 
-    with dpg.file_dialog(
-            label=label,
-            callback=callback,
-            directory_selector=False,
-            show=False,
-            width=1200,
-            height=800,
-            default_path=default_path,
-            modal=True
-    ) as f:
-        for extension, text in extensions:
-            dpg.add_file_extension(f".{extension}", color=(255, 160, 80, 255), custom_text=f"[{text}]")
 
-        return f
+class PlotCanvas:
+    CANVAS_BORDER_COLOR = (255, 0X74, 0)
+
+    def __init__(self, width: int, height: int) -> None:
+        self.half_width = width // 2
+        self.half_height = height // 2
+
+        # items
+
+        self.x_axis: Optional[ItemID] = None
+        self.y_axis: Optional[ItemID] = None
+
+        self.canvas_half_width_positive = DragLine(False, self.half_width, color=self.CANVAS_BORDER_COLOR)
+        self.canvas_half_width_negative = DragLine(False, -self.half_width, color=self.CANVAS_BORDER_COLOR)
+        self.canvas_half_height_positive = DragLine(True, self.half_height, color=self.CANVAS_BORDER_COLOR)
+        self.canvas_half_height_negative = DragLine(True, -self.half_height, color=self.CANVAS_BORDER_COLOR)
+
+    def build(self) -> None:
+        with dpg.plot(height=-1, width=-1, equal_aspects=True):
+            dpg.add_plot_legend()
+
+            self.x_axis = dpg.add_plot_axis(dpg.mvXAxis)
+            self.y_axis = dpg.add_plot_axis(dpg.mvYAxis)
+
+            self.canvas_half_width_positive.build()
+            self.canvas_half_width_negative.build()
+            self.canvas_half_height_positive.build()
+            self.canvas_half_height_negative.build()
+
+    def addSeries(self, label: str) -> ItemID:
+        return dpg.add_line_series(tuple(), tuple(), label=label, parent=self.y_axis)
 
 
 class App:
 
     def __init__(self) -> None:
         self.circle_drawer = Circle()
-        self.test_stack_container: Optional[StackContainer] = None
+        self.test_stack_container = StackContainer("Test Stack container")
 
-        self.file_dialog = makeFileDialog("Select Image file", self.on_image_selected, (("png", "Image"),), r"A:\Program\Python3\CablePlotterApp\res\images")
+        self.file_dialog = makeFileDialog(
+            "Select Image file", self.on_image_selected,
+            (("png", "Image"),),
+            r"A:\Program\Python3\CablePlotterApp\res\images"
+        )
+
+        self.plot = PlotCanvas(1200, 1200)
 
     def on_image_selected(self, paths: tuple[Path, ...]) -> None:
         print(paths)
@@ -123,21 +156,11 @@ class App:
                         dpg.add_slider_int(label="end_angle", max_value=360, callback=self.circle_drawer.update_end_angle)
 
                     with dpg.collapsing_header(label="test list"):
-                        self.test_stack_container = StackContainer("Items")
+                        self.test_stack_container.build()
 
-                with dpg.plot(height=-1, width=-1, equal_aspects=True):
-                    dpg.add_plot_legend()
+                self.plot.build()
 
-                    dpg.add_plot_axis(dpg.mvXAxis, label="x")
-
-                    with dpg.plot_axis(dpg.mvYAxis, label="y"):
-                        SERIES_TAG = dpg.add_line_series([], [], label="Path")
-                        self.circle_drawer.series_tag = SERIES_TAG
-
-                    dpg.add_drag_line(color=CANVAS_BORDER_COLOR, default_value=CANVAS_HALF_WIDTH_DEFAULT)
-                    dpg.add_drag_line(color=CANVAS_BORDER_COLOR, default_value=-CANVAS_HALF_WIDTH_DEFAULT)
-                    dpg.add_drag_line(color=CANVAS_BORDER_COLOR, vertical=False, default_value=CANVAS_HALF_HEIGHT_DEFAULT)
-                    dpg.add_drag_line(color=CANVAS_BORDER_COLOR, vertical=False, default_value=-CANVAS_HALF_HEIGHT_DEFAULT)
+        self.circle_drawer.series_tag = self.plot.addSeries("path")
 
 
 if __name__ == '__main__':
@@ -148,5 +171,8 @@ if __name__ == '__main__':
 
     dpg.setup_dearpygui()
     dpg.show_viewport()
+
+    # dpg.show_style_editor()
+
     dpg.start_dearpygui()
     dpg.destroy_context()
