@@ -95,16 +95,3 @@ class CanvasLines:
 
     def getSize(self) -> tuple[float, float]:
         return self.__width_lines.getSize(), self.__height_lines.getSize()
-
-
-class Axis:
-
-    def __init__(self, axis_type: int) -> None:
-        self.__type = axis_type
-        self.__item_id: Optional[ItemID] = None
-
-    def build(self) -> None:
-        self.__item_id = dpg.add_plot_axis(self.__type)
-
-    def addLineSeries(self, label: str) -> ItemID:
-        return dpg.add_line_series(tuple(), tuple(), label=label, parent=self.__item_id)
