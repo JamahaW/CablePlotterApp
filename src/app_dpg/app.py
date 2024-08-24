@@ -28,6 +28,15 @@ class Circle:
 
         dpg.set_value(self.series, (x, y))
 
+    def build(self) -> None:
+        with dpg.collapsing_header(label="test control"):
+            dpg.add_slider_int(label="scale_x", max_value=500, callback=self.update_scale_x)
+            dpg.add_slider_int(label="scale_y", max_value=500, callback=self.update_scale_y)
+            dpg.add_slider_int(label="pos x", max_value=500, callback=self.update_offset_x)
+            dpg.add_slider_int(label="pos y", max_value=500, callback=self.update_offset_y)
+            dpg.add_slider_int(label="rotate_angle", max_value=360, callback=self.update_rotate_angle)
+            dpg.add_slider_int(label="end_angle", max_value=360, callback=self.update_end_angle)
+
     def update_scale_x(self, __id) -> None:
         self.scale_x = dpg.get_value(__id)
         self.redraw()
@@ -119,13 +128,7 @@ class App:
                     with dpg.collapsing_header(label="Main"):
                         dpg.add_button(label="Open", callback=lambda: dpg.show_item(self.file_dialog))
 
-                    with dpg.collapsing_header(label="test control"):
-                        dpg.add_slider_int(label="scale_x", max_value=500, callback=self.circle_drawer.update_scale_x)
-                        dpg.add_slider_int(label="scale_y", max_value=500, callback=self.circle_drawer.update_scale_y)
-                        dpg.add_slider_int(label="pos x", max_value=500, callback=self.circle_drawer.update_offset_x)
-                        dpg.add_slider_int(label="pos y", max_value=500, callback=self.circle_drawer.update_offset_y)
-                        dpg.add_slider_int(label="rotate_angle", max_value=360, callback=self.circle_drawer.update_rotate_angle)
-                        dpg.add_slider_int(label="end_angle", max_value=360, callback=self.circle_drawer.update_end_angle)
+                    self.circle_drawer.build()
 
                     with dpg.collapsing_header(label="test list"):
                         self.test_stack_container.build()
