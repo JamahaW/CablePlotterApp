@@ -1,5 +1,7 @@
 import math
 from pathlib import Path
+from typing import Callable
+from typing import Iterable
 from typing import Optional
 
 from dearpygui import dearpygui as dpg
@@ -8,7 +10,7 @@ CANVAS_HALF_HEIGHT_DEFAULT = 600
 CANVAS_HALF_WIDTH_DEFAULT = 600
 CANVAS_BORDER_COLOR = (255, 0X74, 0)
 
-type ID = int | str
+type ItemID = int | str
 
 
 class Circle:
@@ -20,7 +22,7 @@ class Circle:
         self.offset_y = 0
         self.rotate = 0
         self.end_angle = 360
-        self.series_tag: Optional[ID] = None
+        self.series_tag: Optional[ItemID] = None
 
     def redraw(self):
         R = range(self.end_angle + 1)
@@ -57,7 +59,7 @@ class Circle:
 class StackContainer:
 
     def __init__(self, label: str) -> None:
-        self.items = list[ID]()
+        self.items = list[ItemID]()
 
         with dpg.group():
             self.items_header = dpg.add_collapsing_header(label=label)
@@ -67,29 +69,31 @@ class StackContainer:
             )
 
 
-class App:
+def makeFileDialog(label: str, on_select: Callable[[Path], None], extensions: Iterable[tuple[str, str]], default_path: str = "") -> ItemID:
+    with dpg.file_dialog(
+            label=label,
+            callback=lambda _, data: on_select(Path(data["file_path_name"])),
+            directory_selector=False,
+            show=False,
+            width=1200,
+            height=800,
+            default_path=default_path
+    ) as f:
+        for extension, text in extensions:
+            dpg.add_file_extension(f".{extension}", color=(255, 128, 64, 255), custom_text=f"[{text}]")
 
-    def make_file_dialog(self):
-        with dpg.file_dialog(
-                label="Select Image file",
-                callback=self.on_image_selected,
-                directory_selector=False,
-                show=False,
-                width=1200,
-                height=800,
-                default_path=r"A:\Program\Python3\CablePlotterApp\res\images"
-        ) as f:
-            dpg.add_file_extension(".png", color=(255, 0, 255, 255), custom_text="[Image]")
-            return f
+        return f
+
+
+class App:
 
     def __init__(self) -> None:
         self.circle_drawer = Circle()
         self.test_stack_container: Optional[StackContainer] = None
 
-        self.file_dialog = self.make_file_dialog()
+        self.file_dialog = makeFileDialog("Select Image file", self.on_image_selected, (("png", "Image"),), r"A:\Program\Python3\CablePlotterApp\res\images")
 
-    def on_image_selected(self, _, app_data):
-        path = Path(app_data.get("file_path_name"))
+    def on_image_selected(self, path: Path) -> None:
         print(path)
 
     def build(self) -> None:
@@ -98,6 +102,9 @@ class App:
 
             with dpg.group(horizontal=True):
                 with dpg.group(width=200):
+                    with dpg.collapsing_header(label="Main"):
+                        dpg.add_button(label="Open", callback=lambda: dpg.show_item(self.file_dialog))
+
                     with dpg.collapsing_header(label="test control"):
                         dpg.add_slider_int(label="scale_x", max_value=CANVAS_HALF_WIDTH_DEFAULT, callback=self.circle_drawer.update_scale_x)
                         dpg.add_slider_int(label="scale_y", max_value=CANVAS_HALF_WIDTH_DEFAULT, callback=self.circle_drawer.update_scale_y)
@@ -105,8 +112,6 @@ class App:
                         dpg.add_slider_int(label="pos y", max_value=CANVAS_HALF_WIDTH_DEFAULT, callback=self.circle_drawer.update_offset_y)
                         dpg.add_slider_int(label="rotate_angle", max_value=360, callback=self.circle_drawer.update_rotate_angle)
                         dpg.add_slider_int(label="end_angle", max_value=360, callback=self.circle_drawer.update_end_angle)
-                        dpg.add_separator()
-                        dpg.add_button(label="Open", callback=lambda: dpg.show_item(self.file_dialog))
 
                     with dpg.collapsing_header(label="test list"):
                         self.test_stack_container = StackContainer("Items")
