@@ -88,6 +88,21 @@ class SliderFloat(Slider[float]):
         return dpg.add_slider_double(**kwargs)
 
 
+class Button(Item):
+
+    def __init__(self, label: str, on_click: Callable[[], None]) -> None:
+        super().__init__()
+        self.__label = label
+        self.__callback = lambda: on_click()
+
+    def build(self, **kwargs) -> None:
+        self.dpg_item_id = dpg.add_button(
+            label=self.__label,
+            callback=self.__callback,
+            **kwargs
+        )
+
+
 class FileDialog(Item):
 
     def __init__(self, label: str, on_select: Callable[[tuple[Path, ...]], None], extensions: Iterable[tuple[str, str]], default_path: str = "") -> None:

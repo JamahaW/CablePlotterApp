@@ -5,6 +5,7 @@ from typing import Optional
 from dearpygui import dearpygui as dpg
 
 from app_dpg.ui import Axis
+from app_dpg.ui import Button
 from app_dpg.ui import CanvasLines
 from app_dpg.ui import FileDialog
 from app_dpg.ui import ItemID
@@ -32,8 +33,8 @@ class StackContainer:
 class Circle:
 
     def __init__(self) -> None:
-        self.scale_x = SliderInt((0, 500), "scale x", self.redraw, default_value=1)
-        self.scale_y = SliderInt((0, 500), "scale y", self.redraw, default_value=1)
+        self.scale_x = SliderInt((0, 500), "scale x", self.redraw, default_value=200)
+        self.scale_y = SliderInt((0, 500), "scale y", self.redraw, default_value=200)
         self.offset_x = SliderInt((-500, 500), "offset x", self.redraw)
         self.offset_y = SliderInt((-500, 500), "offset y", self.redraw)
         self.rotate = SliderInt((0, 360), "rotate", self.redraw, default_value=45)
@@ -83,6 +84,7 @@ class App:
         )
 
         self.plot = Plot()
+        self.open_button = Button("Open", self.file_dialog.show)
         self.circle_drawer = Circle()
         self.test_stack_container = StackContainer("Test Stack container")
 
@@ -97,7 +99,7 @@ class App:
             with dpg.group(horizontal=True):
                 with dpg.group(width=200):
                     with dpg.collapsing_header(label="Main", default_open=True):
-                        dpg.add_button(label="Open", callback=self.file_dialog.show)
+                        self.open_button.build()
 
                     self.circle_drawer.build()
 
@@ -105,6 +107,8 @@ class App:
                         self.test_stack_container.build()
 
                 self.plot.build()
+
+        self.plot.canvas_border.setSize(1200, 1200)
 
         self.circle_drawer.series.build(self.plot.axis)
         self.circle_drawer.redraw()
