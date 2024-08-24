@@ -1,6 +1,5 @@
 import math
 from pathlib import Path
-from typing import Optional
 
 from dearpygui import dearpygui as dpg
 
@@ -8,57 +7,44 @@ from app_dpg.ui import Axis
 from app_dpg.ui import Button
 from app_dpg.ui import CanvasLines
 from app_dpg.ui import FileDialog
+from app_dpg.ui import Group
+from app_dpg.ui import Header
 from app_dpg.ui import ItemID
 from app_dpg.ui import LineSeries
+from app_dpg.ui import PlaceableItem
 from app_dpg.ui import SliderInt
 
 
-class StackContainer:
-
-    def __init__(self, label: str) -> None:
-        self.label = label
-        self.items_header: Optional[ItemID] = None
-        self.__items_count = 0
-
-    def build(self) -> None:
-        with dpg.group():
-            dpg.add_button(label="Add", callback=lambda: self.addItem(f"item: {self.__items_count}"))
-            self.items_header = dpg.add_collapsing_header(label=self.label)
-
-    def addItem(self, label: str) -> None:
-        dpg.add_text(label, parent=self.items_header)
-        self.__items_count += 1
-
-
-class Circle:
+class CircleItem(PlaceableItem):
 
     def __init__(self) -> None:
-        self.scale_x = SliderInt((0, 500), "scale x", self.redraw, default_value=200)
-        self.scale_y = SliderInt((0, 500), "scale y", self.redraw, default_value=200)
-        self.offset_x = SliderInt((-500, 500), "offset x", self.redraw)
-        self.offset_y = SliderInt((-500, 500), "offset y", self.redraw)
-        self.rotate = SliderInt((0, 360), "rotate", self.redraw, default_value=45)
-        self.end_angle = SliderInt((0, 360), "end angle", self.redraw, default_value=270)
+        self.__scale_x = SliderInt((0, 500), "scale x", self.redraw, default_value=200)
+        self.__scale_y = SliderInt((0, 500), "scale y", self.redraw, default_value=200)
+        self.__offset_x = SliderInt((-500, 500), "offset x", self.redraw)
+        self.__offset_y = SliderInt((-500, 500), "offset y", self.redraw)
+        self.__rotate = SliderInt((0, 360), "rotate", self.redraw, default_value=45)
+        self.__end_angle = SliderInt((0, 360), "end angle", self.redraw, default_value=270)
 
         self.series = LineSeries("circle")
 
     def redraw(self, _=None):
-        R = range(self.end_angle.getValue() + 1)
-        r = self.rotate.getValue()
+        R = range(self.__end_angle.getValue() + 1)
+        r = self.__rotate.getValue()
 
-        x = [math.cos(math.radians(i + r)) * self.scale_x.getValue() + self.offset_x.getValue() for i in R]
-        y = [math.sin(math.radians(i + r)) * self.scale_y.getValue() + self.offset_y.getValue() for i in R]
+        x = [math.cos(math.radians(i + r)) * self.__scale_x.getValue() + self.__offset_x.getValue() for i in R]
+        y = [math.sin(math.radians(i + r)) * self.__scale_y.getValue() + self.__offset_y.getValue() for i in R]
 
         self.series.setValue((x, y))
 
-    def build(self) -> None:
-        with dpg.collapsing_header(label="test control", default_open=True):
-            self.offset_x.build()
-            self.offset_y.build()
-            self.scale_x.build()
-            self.scale_y.build()
-            self.rotate.build()
-            self.end_angle.build()
+    def placeRaw(self, parent_id: ItemID) -> None:
+        control = Header("Control")
+        control.placeRaw(parent_id)
+        control.add(self.__offset_x)
+        control.add(self.__offset_y)
+        control.add(self.__scale_x)
+        control.add(self.__scale_y)
+        control.add(self.__rotate)
+        control.add(self.__end_angle)
 
 
 class Plot:
@@ -84,9 +70,15 @@ class App:
         )
 
         self.plot = Plot()
-        self.open_button = Button("Open", self.file_dialog.show)
-        self.circle_drawer = Circle()
-        self.test_stack_container = StackContainer("Test Stack container")
+        self.circle_drawer = CircleItem()
+
+        self.test_container_item = Header("Test container")
+
+    def addCircleItem(self) -> None:
+        circle = CircleItem()
+        circle.series.build(self.plot.axis)
+        self.test_container_item.add(circle)
+        circle.redraw()
 
     @staticmethod
     def on_image_selected(paths: tuple[Path, ...]) -> None:
@@ -98,20 +90,18 @@ class App:
 
             with dpg.group(horizontal=True):
                 with dpg.group(width=200):
-                    with dpg.collapsing_header(label="Main", default_open=True):
-                        self.open_button.build()
+                    main = Header("Main")
+                    main.place()
+                    main.add(Button("Open", self.file_dialog.show))
 
-                    self.circle_drawer.build()
-
-                    with dpg.collapsing_header(label="test list", default_open=True):
-                        self.test_stack_container.build()
+                    lib_control = Group()
+                    lib_control.place()
+                    lib_control.add(Button("Add", self.addCircleItem))
+                    lib_control.add(self.test_container_item)
 
                 self.plot.build()
 
         self.plot.canvas_border.setSize(1200, 1200)
-
-        self.circle_drawer.series.build(self.plot.axis)
-        self.circle_drawer.redraw()
 
 
 if __name__ == '__main__':

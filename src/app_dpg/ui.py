@@ -34,8 +34,37 @@ class Item:
     def disable(self) -> None:
         dpg.disable_item(self.dpg_item_id)
 
+    def delete(self) -> None:
+        dpg.delete_item(self.dpg_item_id)
 
-class ValueContainerItem[T](Item):
+
+class PlaceableItem(ABC):
+
+    def place(self, parent: Item = None) -> None:
+        self.placeRaw(0 if parent is None else parent.getItemID())
+
+    @abstractmethod
+    def placeRaw(self, parent_id: ItemID) -> None:
+        pass
+
+
+class ContainerItem(Item, PlaceableItem, ABC):
+
+    def add(self, item: PlaceableItem) -> None:
+        item.place(self)
+
+
+class Group(ContainerItem):
+
+    def __init__(self, **kwargs) -> None:
+        super().__init__()
+        self.__kwargs = kwargs
+
+    def placeRaw(self, parent_id: ItemID) -> None:
+        self.dpg_item_id = dpg.add_group(parent=parent_id, **self.__kwargs)
+
+
+class VariableItem[T](Item):
     def setValue(self, value: T) -> None:
         dpg.set_value(self.dpg_item_id, value)
 
@@ -43,7 +72,17 @@ class ValueContainerItem[T](Item):
         return dpg.get_value(self.dpg_item_id)
 
 
-class Slider[T: (float, int)](ValueContainerItem[T], ABC):
+class Header(ContainerItem):
+
+    def __init__(self, label: str) -> None:
+        super().__init__()
+        self.__label = label
+
+    def placeRaw(self, parent_id: ItemID) -> None:
+        self.dpg_item_id = dpg.add_collapsing_header(label=self.__label, parent=parent_id)
+
+
+class Slider[T: (float, int)](VariableItem[T], PlaceableItem, ABC):
 
     def __init__(
             self,
@@ -59,47 +98,45 @@ class Slider[T: (float, int)](ValueContainerItem[T], ABC):
         self.value_range = value_range
         self.default_value = default_value
 
-    @classmethod
-    @abstractmethod
-    def _make_slider(cls, **kwargs) -> ItemID:
-        pass
 
-    def build(self) -> None:
-        self.dpg_item_id = self._make_slider(
+class SliderInt(Slider[int]):
+
+    def placeRaw(self, parent_id: ItemID) -> None:
+        self.dpg_item_id = dpg.add_slider_int(
             label=self.label,
             callback=self.callback,
             min_value=self.value_range[0],
             max_value=self.value_range[1],
+            parent=parent_id,
             default_value=self.default_value
         )
 
 
-class SliderInt(Slider[int]):
-
-    @classmethod
-    def _make_slider(cls, **kwargs) -> ItemID:
-        return dpg.add_slider_int(**kwargs)
-
-
 class SliderFloat(Slider[float]):
 
-    @classmethod
-    def _make_slider(cls, **kwargs) -> ItemID:
-        return dpg.add_slider_double(**kwargs)
+    def placeRaw(self, parent_id: ItemID) -> None:
+        self.dpg_item_id = dpg.add_slider_double(
+            label=self.label,
+            callback=self.callback,
+            min_value=self.value_range[0],
+            max_value=self.value_range[1],
+            parent=parent_id,
+            default_value=self.default_value
+        )
 
 
-class Button(Item):
+class Button(Item, PlaceableItem):
 
     def __init__(self, label: str, on_click: Callable[[], None]) -> None:
         super().__init__()
         self.__label = label
         self.__callback = lambda: on_click()
 
-    def build(self, **kwargs) -> None:
+    def placeRaw(self, parent_id: ItemID) -> None:
         self.dpg_item_id = dpg.add_button(
             label=self.__label,
             callback=self.__callback,
-            **kwargs
+            parent=parent_id
         )
 
 
@@ -132,7 +169,7 @@ class FileDialog(Item):
                 dpg.add_file_extension(f".{extension}", color=(255, 160, 80, 255), custom_text=f"[{text}]")
 
 
-class DragLine(ValueContainerItem[float]):
+class DragLine(VariableItem[float]):
     CANVAS_BORDER_COLOR = (255, 0X74, 0)
 
     def __init__(self, is_vertical: bool, on_change: Callable[[float], None] = None) -> None:
@@ -199,7 +236,7 @@ class Axis(Item):
         self.dpg_item_id = dpg.add_plot_axis(self.__type)
 
 
-class LineSeries(ValueContainerItem[tuple[Iterable[float], Iterable[float]]]):
+class LineSeries(VariableItem[tuple[Iterable[float], Iterable[float]]]):
 
     def __init__(self, label: str) -> None:
         super().__init__()
