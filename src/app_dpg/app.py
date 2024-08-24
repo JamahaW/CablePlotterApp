@@ -9,6 +9,7 @@ from app_dpg.ui import CanvasLines
 from app_dpg.ui import FileDialog
 from app_dpg.ui import ItemID
 from app_dpg.ui import LineSeries
+from app_dpg.ui import SliderInt
 
 
 class StackContainer:
@@ -31,54 +32,32 @@ class StackContainer:
 class Circle:
 
     def __init__(self) -> None:
-        self.scale_x = 1.0
-        self.scale_y = 1.0
-        self.offset_x = 0
-        self.offset_y = 0
-        self.rotate = 0
-        self.end_angle = 360
+        self.scale_x = SliderInt((0, 500), "scale x", self.redraw, default_value=1)
+        self.scale_y = SliderInt((0, 500), "scale y", self.redraw, default_value=1)
+        self.offset_x = SliderInt((-500, 500), "offset x", self.redraw)
+        self.offset_y = SliderInt((-500, 500), "offset y", self.redraw)
+        self.rotate = SliderInt((0, 360), "rotate", self.redraw, default_value=45)
+        self.end_angle = SliderInt((0, 360), "end angle", self.redraw, default_value=270)
+
         self.series = LineSeries("circle")
 
-    def redraw(self):
-        R = range(self.end_angle + 1)
+    def redraw(self, _=None):
+        R = range(self.end_angle.getValue() + 1)
+        r = self.rotate.getValue()
 
-        x = [math.cos(math.radians(i + self.rotate)) * self.scale_x + self.offset_x for i in R]
-        y = [math.sin(math.radians(i + self.rotate)) * self.scale_y + self.offset_y for i in R]
+        x = [math.cos(math.radians(i + r)) * self.scale_x.getValue() + self.offset_x.getValue() for i in R]
+        y = [math.sin(math.radians(i + r)) * self.scale_y.getValue() + self.offset_y.getValue() for i in R]
 
         self.series.setValue((x, y))
 
     def build(self) -> None:
         with dpg.collapsing_header(label="test control", default_open=True):
-            dpg.add_slider_int(label="scale_x", max_value=500, callback=self.update_scale_x)
-            dpg.add_slider_int(label="scale_y", max_value=500, callback=self.update_scale_y)
-            dpg.add_slider_int(label="pos x", max_value=500, callback=self.update_offset_x)
-            dpg.add_slider_int(label="pos y", max_value=500, callback=self.update_offset_y)
-            dpg.add_slider_int(label="rotate_angle", max_value=360, callback=self.update_rotate_angle)
-            dpg.add_slider_int(label="end_angle", max_value=360, callback=self.update_end_angle)
-
-    def update_scale_x(self, __id) -> None:
-        self.scale_x = dpg.get_value(__id)
-        self.redraw()
-
-    def update_scale_y(self, __id) -> None:
-        self.scale_y = dpg.get_value(__id)
-        self.redraw()
-
-    def update_rotate_angle(self, __id) -> None:
-        self.rotate = dpg.get_value(__id)
-        self.redraw()
-
-    def update_end_angle(self, __id) -> None:
-        self.end_angle = dpg.get_value(__id)
-        self.redraw()
-
-    def update_offset_x(self, __id) -> None:
-        self.offset_x = dpg.get_value(__id)
-        self.redraw()
-
-    def update_offset_y(self, __id) -> None:
-        self.offset_y = dpg.get_value(__id)
-        self.redraw()
+            self.offset_x.build()
+            self.offset_y.build()
+            self.scale_x.build()
+            self.scale_y.build()
+            self.rotate.build()
+            self.end_angle.build()
 
 
 class Plot:
@@ -141,8 +120,7 @@ if __name__ == '__main__':
     dpg.setup_dearpygui()
     dpg.show_viewport()
 
-    dpg.show_implot_demo()
-
+    # dpg.show_implot_demo()
     # dpg.show_font_manager()
     # dpg.show_style_editor()
 
