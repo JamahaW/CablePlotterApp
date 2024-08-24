@@ -6,9 +6,9 @@ from dearpygui import dearpygui as dpg
 
 from app_dpg.ui import Axis
 from app_dpg.ui import CanvasLines
+from app_dpg.ui import FileDialog
 from app_dpg.ui import ItemID
 from app_dpg.ui import LineSeries
-from app_dpg.ui import makeFileDialog
 
 
 class StackContainer:
@@ -97,7 +97,7 @@ class Plot:
 class App:
 
     def __init__(self) -> None:
-        self.file_dialog = makeFileDialog(
+        self.file_dialog = FileDialog(
             "Select Image file", self.on_image_selected,
             (("png", "Image"),),
             r"A:\Program\Python3\CablePlotterApp\res\images"
@@ -118,7 +118,7 @@ class App:
             with dpg.group(horizontal=True):
                 with dpg.group(width=200):
                     with dpg.collapsing_header(label="Main", default_open=True):
-                        dpg.add_button(label="Open", callback=lambda: dpg.show_item(self.file_dialog))
+                        dpg.add_button(label="Open", callback=self.file_dialog.show)
 
                     self.circle_drawer.build()
 

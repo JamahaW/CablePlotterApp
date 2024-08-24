@@ -9,32 +9,7 @@ type ItemID = int | str
 type Color = tuple[int, int, int]
 
 
-def makeFileDialog(label: str, on_select: Callable[[tuple[Path, ...]], None], extensions: Iterable[tuple[str, str]], default_path: str = "") -> ItemID:
-    def callback(_, app_data: dict[str, dict]):
-        paths = app_data.get("selections").values()
-
-        if len(paths) == 0:
-            return
-
-        on_select(tuple(Path(p) for p in paths))
-
-    with dpg.file_dialog(
-            label=label,
-            callback=callback,
-            directory_selector=False,
-            show=False,
-            width=1200,
-            height=800,
-            default_path=default_path,
-            modal=True
-    ) as f:
-        for extension, text in extensions:
-            dpg.add_file_extension(f".{extension}", color=(255, 160, 80, 255), custom_text=f"[{text}]")
-
-        return f
-
-
-class Item[T]:
+class Item:
 
     def __init__(self) -> None:
         self.dpg_item_id: Optional[ItemID] = None
@@ -51,12 +26,6 @@ class Item[T]:
     def show(self) -> None:
         dpg.show_item(self.dpg_item_id)
 
-    def setValue(self, value: T) -> None:
-        dpg.set_value(self.dpg_item_id, value)
-
-    def getValue(self) -> T:
-        return dpg.get_value(self.dpg_item_id)
-
     def enable(self) -> None:
         dpg.enable_item(self.dpg_item_id)
 
@@ -64,7 +33,44 @@ class Item[T]:
         dpg.disable_item(self.dpg_item_id)
 
 
-class DragLine(Item[float]):
+class ValueContainerItem[T](Item):
+    def setValue(self, value: T) -> None:
+        dpg.set_value(self.dpg_item_id, value)
+
+    def getValue(self) -> T:
+        return dpg.get_value(self.dpg_item_id)
+
+
+class FileDialog(Item):
+
+    def __init__(self, label: str, on_select: Callable[[tuple[Path, ...]], None], extensions: Iterable[tuple[str, str]], default_path: str = "") -> None:
+        super().__init__()
+
+        def callback(_, app_data: dict[str, dict]):
+            paths = app_data.get("selections").values()
+
+            if len(paths) == 0:
+                return
+
+            on_select(tuple(Path(p) for p in paths))
+
+        with dpg.file_dialog(
+                label=label,
+                callback=callback,
+                directory_selector=False,
+                show=False,
+                width=1200,
+                height=800,
+                default_path=default_path,
+                modal=True
+        ) as f:
+            self.dpg_item_id = f
+
+            for extension, text in extensions:
+                dpg.add_file_extension(f".{extension}", color=(255, 160, 80, 255), custom_text=f"[{text}]")
+
+
+class DragLine(ValueContainerItem[float]):
     CANVAS_BORDER_COLOR = (255, 0X74, 0)
 
     def __init__(self, is_vertical: bool, on_change: Callable[[float], None] = None) -> None:
@@ -131,7 +137,7 @@ class Axis(Item):
         self.dpg_item_id = dpg.add_plot_axis(self.__type)
 
 
-class LineSeries(Item[tuple[Iterable[float], Iterable[float]]]):
+class LineSeries(ValueContainerItem[tuple[Iterable[float], Iterable[float]]]):
 
     def __init__(self, label: str) -> None:
         super().__init__()
