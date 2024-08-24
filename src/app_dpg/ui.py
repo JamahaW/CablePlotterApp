@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 from abc import ABC
 from abc import abstractmethod
 from pathlib import Path
@@ -40,8 +42,9 @@ class Item:
 
 class PlaceableItem(ABC):
 
-    def place(self, parent: Item = None) -> None:
+    def place(self, parent: Item = None) -> PlaceableItem:
         self.placeRaw(0 if parent is None else parent.getItemID())
+        return self
 
     @abstractmethod
     def placeRaw(self, parent_id: ItemID) -> None:
@@ -50,8 +53,15 @@ class PlaceableItem(ABC):
 
 class ContainerItem(Item, PlaceableItem, ABC):
 
-    def add(self, item: PlaceableItem) -> None:
+    def add(self, item: PlaceableItem) -> ContainerItem:
         item.place(self)
+        return self
+
+    def addItems(self, items: Iterable[PlaceableItem]) -> ContainerItem:
+        for item in items:
+            self.add(item)
+
+        return self
 
 
 class Group(ContainerItem):

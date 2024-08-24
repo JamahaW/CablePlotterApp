@@ -72,7 +72,7 @@ class App:
         self.plot = Plot()
         self.circle_drawer = CircleItem()
 
-        self.test_container_item = Header("Test container")
+        self.test_container_item = Group()
 
     def addCircleItem(self) -> None:
         circle = CircleItem()
@@ -89,15 +89,14 @@ class App:
             dpg.set_primary_window(main_window, True)
 
             with dpg.group(horizontal=True):
-                with dpg.group(width=200):
-                    main = Header("Main")
-                    main.place()
-                    main.add(Button("Open", self.file_dialog.show))
 
-                    lib_control = Group()
-                    lib_control.place()
-                    lib_control.add(Button("Add", self.addCircleItem))
-                    lib_control.add(self.test_container_item)
+                with dpg.group(width=200):
+                    Header("Main").place().add(Button("Open", self.file_dialog.show))
+
+                    Header("Library").place().addItems((
+                        Button("Add", self.addCircleItem),
+                        self.test_container_item
+                    ))
 
                 self.plot.build()
 
