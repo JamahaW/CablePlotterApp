@@ -35,18 +35,16 @@ def makeFileDialog(label: str, on_select: Callable[[tuple[Path, ...]], None], ex
 
 
 class DragLine:
+    CANVAS_BORDER_COLOR = (255, 0X74, 0)
 
-    def __init__(self, is_vertical: bool, value: int = 0, *, color: Color = (0xFF, 0xFF, 0xFF), on_change: Callable[[int], None] = None) -> None:
-        self.color = color
+    def __init__(self, is_vertical: bool, on_change: Callable[[float], None] = None) -> None:
         self.__is_vertical = is_vertical
-        self.__default_value = value
         self.__item_id: Optional[ItemID] = None
         self.__on_change = None if on_change is None else lambda x: on_change(dpg.get_value(x))
 
     def build(self) -> None:
         self.__item_id = dpg.add_drag_line(
-            color=self.color,
-            default_value=self.__default_value,
+            color=self.CANVAS_BORDER_COLOR,
             vertical=self.__is_vertical,
             callback=self.__on_change
         )
@@ -56,3 +54,57 @@ class DragLine:
 
     def setValue(self, value: float) -> None:
         dpg.set_value(self.__item_id, value)
+
+
+class CanvasLinePair:
+
+    def __init__(self, is_vertical: bool, step) -> None:
+        self.__positive_line = DragLine(is_vertical, self.__setHalfSize)
+        self.__negative_line = DragLine(is_vertical, self.__setHalfSize)
+        self.step = step
+
+    def build(self) -> None:
+        self.__positive_line.build()
+        self.__negative_line.build()
+
+    def __setHalfSize(self, half_size: float) -> None:
+        half_size = abs(half_size) // self.step * self.step
+        self.__positive_line.setValue(half_size)
+        self.__negative_line.setValue(-half_size)
+
+    def setSize(self, size: float) -> None:
+        self.__setHalfSize(size / 2)
+
+    def getSize(self) -> float:
+        return self.__positive_line.getValue() * 2
+
+
+class CanvasLines:
+
+    def __init__(self, step: int) -> None:
+        self.__width_lines = CanvasLinePair(False, step)
+        self.__height_lines = CanvasLinePair(True, step)
+
+    def build(self) -> None:
+        self.__width_lines.build()
+        self.__height_lines.build()
+
+    def setSize(self, width: int, height: int) -> None:
+        self.__width_lines.setSize(width)
+        self.__height_lines.setSize(height)
+
+    def getSize(self) -> tuple[float, float]:
+        return self.__width_lines.getSize(), self.__height_lines.getSize()
+
+
+class Axis:
+
+    def __init__(self, axis_type: int) -> None:
+        self.__type = axis_type
+        self.__item_id: Optional[ItemID] = None
+
+    def build(self) -> None:
+        self.__item_id = dpg.add_plot_axis(self.__type)
+
+    def addLineSeries(self, label: str) -> ItemID:
+        return dpg.add_line_series(tuple(), tuple(), label=label, parent=self.__item_id)

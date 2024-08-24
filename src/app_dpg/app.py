@@ -4,7 +4,8 @@ from typing import Optional
 
 from dearpygui import dearpygui as dpg
 
-from app_dpg.ui import DragLine
+from app_dpg.ui import Axis
+from app_dpg.ui import CanvasLines
 from app_dpg.ui import ItemID
 from app_dpg.ui import makeFileDialog
 
@@ -72,54 +73,34 @@ class StackContainer:
         self.__items_count += 1
 
 
-class CanvasPlot:
-    CANVAS_BORDER_COLOR = (255, 0X74, 0)
+class Plot:
 
-    def __init__(self, width: int, height: int) -> None:
-        self.half_width = width // 2
-        self.half_height = height // 2
-
-        # items
-
-        self.x_axis: Optional[ItemID] = None
-        self.y_axis: Optional[ItemID] = None
-
-        self.canvas_half_width_positive = DragLine(False, self.half_width, color=self.CANVAS_BORDER_COLOR)
-        self.canvas_half_width_negative = DragLine(False, -self.half_width, color=self.CANVAS_BORDER_COLOR)
-        self.canvas_half_height_positive = DragLine(True, self.half_height, color=self.CANVAS_BORDER_COLOR)
-        self.canvas_half_height_negative = DragLine(True, -self.half_height, color=self.CANVAS_BORDER_COLOR)
+    def __init__(self) -> None:
+        self.axis = Axis(dpg.mvPlotAxis)
+        self.canvas_border = CanvasLines(50)
 
     def build(self) -> None:
         with dpg.plot(height=-1, width=-1, equal_aspects=True):
             dpg.add_plot_legend()
-
-            self.x_axis = dpg.add_plot_axis(dpg.mvXAxis)
-            self.y_axis = dpg.add_plot_axis(dpg.mvYAxis)
-
-            self.canvas_half_width_positive.build()
-            self.canvas_half_width_negative.build()
-            self.canvas_half_height_positive.build()
-            self.canvas_half_height_negative.build()
-
-    def addSeries(self, label: str) -> ItemID:
-        return dpg.add_line_series(tuple(), tuple(), label=label, parent=self.y_axis)
+            self.axis.build()
+            self.canvas_border.build()
 
 
 class App:
 
     def __init__(self) -> None:
-        self.circle_drawer = Circle()
-        self.test_stack_container = StackContainer("Test Stack container")
-
         self.file_dialog = makeFileDialog(
             "Select Image file", self.on_image_selected,
             (("png", "Image"),),
             r"A:\Program\Python3\CablePlotterApp\res\images"
         )
 
-        self.plot = CanvasPlot(1200, 1200)
+        self.circle_drawer = Circle()
+        self.test_stack_container = StackContainer("Test Stack container")
+        self.plot = Plot()
 
-    def on_image_selected(self, paths: tuple[Path, ...]) -> None:
+    @staticmethod
+    def on_image_selected(paths: tuple[Path, ...]) -> None:
         print(paths)
 
     def build(self) -> None:
@@ -144,7 +125,7 @@ class App:
 
                 self.plot.build()
 
-        self.circle_drawer.series_tag = self.plot.addSeries("path")
+        self.circle_drawer.series_tag = self.plot.axis.addLineSeries("path")
 
 
 if __name__ == '__main__':
