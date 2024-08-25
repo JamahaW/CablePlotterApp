@@ -3,21 +3,22 @@ from pathlib import Path
 
 from dearpygui import dearpygui as dpg
 
-from app_dpg.ui import Axis
-from app_dpg.ui import Button
-from app_dpg.ui import CanvasLines
-from app_dpg.ui import FileDialog
-from app_dpg.ui import Group
-from app_dpg.ui import Header
-from app_dpg.ui import ItemID
-from app_dpg.ui import LineSeries
-from app_dpg.ui import PlaceableItem
-from app_dpg.ui import SliderInt
+from app_dpg.ui.abc import PlaceableItem
+from app_dpg.ui.dpg import Axis
+from app_dpg.ui.dpg import Button
+from app_dpg.ui.dpg import FileDialog
+from app_dpg.ui.dpg import Group
+from app_dpg.ui.dpg import Header
+from app_dpg.ui.dpg import LineSeries
+from app_dpg.ui.dpg import Plot
+from app_dpg.ui.dpg import SliderInt
+from app_dpg.ui.widgets import Border
+from app_dpg.ui.widgets import ItemID
 
 
 class CircleItem(PlaceableItem):
 
-    def __init__(self) -> None:
+    def __init__(self, figure_name: str) -> None:
         self.__scale_x = SliderInt((0, 500), "scale x", self.redraw, default_value=200)
         self.__scale_y = SliderInt((0, 500), "scale y", self.redraw, default_value=200)
         self.__offset_x = SliderInt((-500, 500), "offset x", self.redraw)
@@ -25,7 +26,8 @@ class CircleItem(PlaceableItem):
         self.__rotate = SliderInt((0, 360), "rotate", self.redraw, default_value=45)
         self.__end_angle = SliderInt((0, 360), "end angle", self.redraw, default_value=270)
 
-        self.series = LineSeries("circle")
+        self.series = LineSeries(figure_name)
+        self.control_panel = Header(figure_name)
 
     def redraw(self, _=None):
         R = range(self.__end_angle.getValue() + 1)
@@ -37,27 +39,25 @@ class CircleItem(PlaceableItem):
         self.series.setValue((x, y))
 
     def placeRaw(self, parent_id: ItemID) -> None:
-        control = Header("Control")
-        control.placeRaw(parent_id)
-        control.add(self.__offset_x)
-        control.add(self.__offset_y)
-        control.add(self.__scale_x)
-        control.add(self.__scale_y)
-        control.add(self.__rotate)
-        control.add(self.__end_angle)
+        self.control_panel.placeRaw(parent_id)
+        self.control_panel.add(self.__offset_x)
+        self.control_panel.add(self.__offset_y)
+        self.control_panel.add(self.__scale_x)
+        self.control_panel.add(self.__scale_y)
+        self.control_panel.add(self.__rotate)
+        self.control_panel.add(self.__end_angle)
 
 
-class Plot:
+class Canvas(PlaceableItem):
 
     def __init__(self) -> None:
-        self.canvas_border = CanvasLines(50)
         self.axis = Axis(dpg.mvXAxis)
+        self.border = Border(50)
+        self.plot = Plot()
 
-    def build(self) -> None:
-        with dpg.plot(height=-1, width=-1, equal_aspects=True):
-            dpg.add_plot_legend()
-            self.axis.build()
-            self.canvas_border.build()
+    def placeRaw(self, parent_id: ItemID) -> None:
+        self.plot.placeRaw(parent_id)
+        self.plot.addItems((self.axis, self.border))
 
 
 class App:
@@ -69,14 +69,15 @@ class App:
             r"A:\Program\Python3\CablePlotterApp\res\images"
         )
 
-        self.plot = Plot()
-        self.circle_drawer = CircleItem()
-
+        self.canvas = Canvas()
         self.test_container_item = Group()
 
+        self.items_count = 0
+
     def addCircleItem(self) -> None:
-        circle = CircleItem()
-        circle.series.build(self.plot.axis)
+        circle = CircleItem(f"Circle:{self.items_count}")
+        self.items_count += 1
+        circle.series.place(self.canvas.axis)
         self.test_container_item.add(circle)
         circle.redraw()
 
@@ -89,18 +90,13 @@ class App:
             dpg.set_primary_window(main_window, True)
 
             with dpg.group(horizontal=True):
-
                 with dpg.group(width=200):
                     Header("Main").place().add(Button("Open", self.file_dialog.show))
+                    Header("Library").place().addItems((Button("Add", self.addCircleItem), self.test_container_item))
 
-                    Header("Library").place().addItems((
-                        Button("Add", self.addCircleItem),
-                        self.test_container_item
-                    ))
+                self.canvas.place()
 
-                self.plot.build()
-
-        self.plot.canvas_border.setSize(1200, 1200)
+        self.canvas.border.setSize(1200, 1200)
 
 
 if __name__ == '__main__':

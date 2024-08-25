@@ -1,67 +1,15 @@
-from __future__ import annotations
-
 from abc import ABC
-from abc import abstractmethod
 from pathlib import Path
 from typing import Callable
 from typing import Iterable
-from typing import Optional
 
 from dearpygui import dearpygui as dpg
 
-type ItemID = int | str
-type Color = tuple[int, int, int]
-
-
-class Item:
-
-    def __init__(self) -> None:
-        self.dpg_item_id: Optional[ItemID] = None
-
-    def getItemID(self) -> ItemID:
-        return self.dpg_item_id
-
-    def configure(self, **kwargs) -> None:
-        dpg.configure_item(self.dpg_item_id, **kwargs)
-
-    def hide(self) -> None:
-        dpg.hide_item(self.dpg_item_id)
-
-    def show(self) -> None:
-        dpg.show_item(self.dpg_item_id)
-
-    def enable(self) -> None:
-        dpg.enable_item(self.dpg_item_id)
-
-    def disable(self) -> None:
-        dpg.disable_item(self.dpg_item_id)
-
-    def delete(self) -> None:
-        dpg.delete_item(self.dpg_item_id)
-
-
-class PlaceableItem(ABC):
-
-    def place(self, parent: Item = None) -> PlaceableItem:
-        self.placeRaw(0 if parent is None else parent.getItemID())
-        return self
-
-    @abstractmethod
-    def placeRaw(self, parent_id: ItemID) -> None:
-        pass
-
-
-class ContainerItem(Item, PlaceableItem, ABC):
-
-    def add(self, item: PlaceableItem) -> ContainerItem:
-        item.place(self)
-        return self
-
-    def addItems(self, items: Iterable[PlaceableItem]) -> ContainerItem:
-        for item in items:
-            self.add(item)
-
-        return self
+from app_dpg.ui.abc import ContainerItem
+from app_dpg.ui.abc import Item
+from app_dpg.ui.abc import ItemID
+from app_dpg.ui.abc import PlaceableItem
+from app_dpg.ui.abc import VariableItem
 
 
 class Group(ContainerItem):
@@ -74,14 +22,6 @@ class Group(ContainerItem):
         self.dpg_item_id = dpg.add_group(parent=parent_id, **self.__kwargs)
 
 
-class VariableItem[T](Item):
-    def setValue(self, value: T) -> None:
-        dpg.set_value(self.dpg_item_id, value)
-
-    def getValue(self) -> T:
-        return dpg.get_value(self.dpg_item_id)
-
-
 class Header(ContainerItem):
 
     def __init__(self, label: str) -> None:
@@ -90,6 +30,14 @@ class Header(ContainerItem):
 
     def placeRaw(self, parent_id: ItemID) -> None:
         self.dpg_item_id = dpg.add_collapsing_header(label=self.__label, parent=parent_id)
+
+
+class Plot(ContainerItem):
+
+    def placeRaw(self, parent_id: ItemID) -> None:
+        with dpg.plot(width=-1, height=-1, equal_aspects=True, anti_aliased=True) as plot:
+            self.dpg_item_id = plot
+            dpg.add_plot_legend(horizontal=True)
 
 
 class Slider[T: (float, int)](VariableItem[T], PlaceableItem, ABC):
@@ -179,7 +127,7 @@ class FileDialog(Item):
                 dpg.add_file_extension(f".{extension}", color=(255, 160, 80, 255), custom_text=f"[{text}]")
 
 
-class DragLine(VariableItem[float]):
+class DragLine(VariableItem[float], PlaceableItem):
     CANVAS_BORDER_COLOR = (255, 0X74, 0)
 
     def __init__(self, is_vertical: bool, on_change: Callable[[float], None] = None) -> None:
@@ -187,70 +135,30 @@ class DragLine(VariableItem[float]):
         self.__is_vertical = is_vertical
         self.__on_change = None if on_change is None else lambda x: on_change(dpg.get_value(x))
 
-    def build(self) -> None:
+    def placeRaw(self, parent_id: ItemID) -> None:
         self.dpg_item_id = dpg.add_drag_line(
             color=self.CANVAS_BORDER_COLOR,
             vertical=self.__is_vertical,
-            callback=self.__on_change
+            callback=self.__on_change,
+            parent=parent_id
         )
 
 
-class CanvasLinePair:
-
-    def __init__(self, is_vertical: bool, step) -> None:
-        self.__positive_line = DragLine(is_vertical, self.__setHalfSize)
-        self.__negative_line = DragLine(is_vertical, self.__setHalfSize)
-        self.step = step
-
-    def build(self) -> None:
-        self.__positive_line.build()
-        self.__negative_line.build()
-
-    def __setHalfSize(self, half_size: float) -> None:
-        half_size = abs(half_size) // self.step * self.step
-        self.__positive_line.setValue(half_size)
-        self.__negative_line.setValue(-half_size)
-
-    def setSize(self, size: float) -> None:
-        self.__setHalfSize(size / 2)
-
-    def getSize(self) -> float:
-        return self.__positive_line.getValue() * 2
-
-
-class CanvasLines:
-
-    def __init__(self, step: int) -> None:
-        self.__width_lines = CanvasLinePair(False, step)
-        self.__height_lines = CanvasLinePair(True, step)
-
-    def build(self) -> None:
-        self.__width_lines.build()
-        self.__height_lines.build()
-
-    def setSize(self, width: int, height: int) -> None:
-        self.__width_lines.setSize(width)
-        self.__height_lines.setSize(height)
-
-    def getSize(self) -> tuple[float, float]:
-        return self.__width_lines.getSize(), self.__height_lines.getSize()
-
-
-class Axis(Item):
+class Axis(Item, PlaceableItem):
 
     def __init__(self, axis_type: int) -> None:
         super().__init__()
         self.__type = axis_type
 
-    def build(self) -> None:
-        self.dpg_item_id = dpg.add_plot_axis(self.__type)
+    def placeRaw(self, parent_id: ItemID) -> None:
+        self.dpg_item_id = dpg.add_plot_axis(self.__type, parent=parent_id)
 
 
-class LineSeries(VariableItem[tuple[Iterable[float], Iterable[float]]]):
+class LineSeries(VariableItem[tuple[Iterable[float], Iterable[float]]], PlaceableItem):
 
     def __init__(self, label: str) -> None:
         super().__init__()
         self.__label = label
 
-    def build(self, axis: Axis) -> None:
-        self.dpg_item_id = dpg.add_line_series(tuple(), tuple(), label=self.__label, parent=axis.getItemID())
+    def placeRaw(self, parent_id: ItemID) -> None:
+        self.dpg_item_id = dpg.add_line_series(tuple(), tuple(), label=self.__label, parent=parent_id)
