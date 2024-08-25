@@ -10,7 +10,7 @@ from dearpygui import dearpygui as dpg
 type ItemID = int | str
 
 
-class Item:
+class DPGItem:
 
     def __init__(self) -> None:
         self.dpg_item_id: Optional[ItemID] = None
@@ -39,7 +39,7 @@ class Item:
 
 class PlaceableItem(ABC):
 
-    def place(self, parent: Item = None) -> PlaceableItem:
+    def place(self, parent: DPGItem = None) -> PlaceableItem:
         self.placeRaw(0 if parent is None else parent.getItemID())
         return self
 
@@ -48,20 +48,31 @@ class PlaceableItem(ABC):
         pass
 
 
-class ContainerItem(PlaceableItem, Item, ABC):
+class ContainerDPGItem(PlaceableItem, DPGItem, ABC):
 
-    def add(self, item: PlaceableItem) -> ContainerItem:
+    def add(self, item: PlaceableItem) -> ContainerDPGItem:
         item.place(self)
         return self
 
-    def addItems(self, items: Iterable[PlaceableItem]) -> ContainerItem:
+    def addItems(self, items: Iterable[PlaceableItem]) -> ContainerDPGItem:
         for item in items:
             self.add(item)
 
         return self
 
 
-class VariableItem[T](Item):
+class VariableItem[T](ABC):
+
+    @abstractmethod
+    def setValue(self, value: T) -> None:
+        pass
+
+    @abstractmethod
+    def getValue(self) -> T:
+        pass
+
+
+class VariableDPGItem[T](DPGItem, VariableItem):
     def setValue(self, value: T) -> None:
         dpg.set_value(self.dpg_item_id, value)
 

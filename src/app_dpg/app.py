@@ -8,12 +8,13 @@ from app_dpg.ui.dpg import Axis
 from app_dpg.ui.dpg import Button
 from app_dpg.ui.dpg import FileDialog
 from app_dpg.ui.dpg import Group
-from app_dpg.ui.dpg import Header
+from app_dpg.ui.dpg import CollapsingHeader
 from app_dpg.ui.dpg import LineSeries
 from app_dpg.ui.dpg import Plot
 from app_dpg.ui.dpg import SliderInt
 from app_dpg.ui.widgets import Border
 from app_dpg.ui.widgets import ItemID
+from app_dpg.ui.widgets import SpinBoxInt
 
 
 class CircleItem(PlaceableItem):
@@ -27,7 +28,7 @@ class CircleItem(PlaceableItem):
         self.__end_angle = SliderInt((0, 360), "end angle", self.redraw, default_value=270)
 
         self.series = LineSeries(figure_name)
-        self.control_panel = Header(figure_name)
+        self.control_panel = CollapsingHeader(figure_name)
 
     def redraw(self, _=None):
         R = range(self.__end_angle.getValue() + 1)
@@ -91,8 +92,8 @@ class App:
 
             with dpg.group(horizontal=True):
                 with dpg.group(width=200):
-                    Header("Main").place().add(Button("Open", self.file_dialog.show))
-                    Header("Library").place().addItems((Button("Add", self.addCircleItem), self.test_container_item))
+                    CollapsingHeader("Main").place().add(Button("Open", self.file_dialog.show)).add(SpinBoxInt("spinbox"))
+                    CollapsingHeader("Library").place().addItems((Button("Add", self.addCircleItem), self.test_container_item))
 
                 self.canvas.place()
 

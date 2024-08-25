@@ -5,24 +5,34 @@ from typing import Iterable
 
 from dearpygui import dearpygui as dpg
 
-from app_dpg.ui.abc import ContainerItem
-from app_dpg.ui.abc import Item
+from app_dpg.ui.abc import ContainerDPGItem
+from app_dpg.ui.abc import DPGItem
 from app_dpg.ui.abc import ItemID
 from app_dpg.ui.abc import PlaceableItem
-from app_dpg.ui.abc import VariableItem
+from app_dpg.ui.abc import VariableDPGItem
 
 
-class Group(ContainerItem):
+class Group(ContainerDPGItem):
 
-    def __init__(self, **kwargs) -> None:
+    def __init__(
+            self,
+            *,
+            horizontal: bool = False,
+            **kwargs
+    ) -> None:
         super().__init__()
         self.__kwargs = kwargs
+        self.__horizontal = horizontal
 
     def placeRaw(self, parent_id: ItemID) -> None:
-        self.dpg_item_id = dpg.add_group(parent=parent_id, **self.__kwargs)
+        self.dpg_item_id = dpg.add_group(
+            parent=parent_id,
+            horizontal=self.__horizontal,
+            **self.__kwargs
+        )
 
 
-class Header(ContainerItem):
+class CollapsingHeader(ContainerDPGItem):
 
     def __init__(self, label: str) -> None:
         super().__init__()
@@ -32,7 +42,7 @@ class Header(ContainerItem):
         self.dpg_item_id = dpg.add_collapsing_header(label=self.__label, parent=parent_id)
 
 
-class Plot(ContainerItem):
+class Plot(ContainerDPGItem):
 
     def placeRaw(self, parent_id: ItemID) -> None:
         with dpg.plot(width=-1, height=-1, equal_aspects=True, anti_aliased=True) as plot:
@@ -40,7 +50,17 @@ class Plot(ContainerItem):
             dpg.add_plot_legend(horizontal=True)
 
 
-class Slider[T: (float, int)](VariableItem[T], PlaceableItem, ABC):
+class Text(VariableDPGItem[str], PlaceableItem):
+
+    def __init__(self, label: str) -> None:
+        super().__init__()
+        self.__label = label
+
+    def placeRaw(self, parent_id: ItemID) -> None:
+        dpg.add_text(self.__label, parent=parent_id)
+
+
+class Slider[T: (float, int)](VariableDPGItem[T], PlaceableItem, ABC):
 
     def __init__(
             self,
@@ -53,8 +73,14 @@ class Slider[T: (float, int)](VariableItem[T], PlaceableItem, ABC):
         super().__init__()
         self.callback = None if on_change is None else lambda: on_change(self.getValue())
         self.label = label
-        self.value_range = value_range
         self.default_value = default_value
+        self.min_value, self.max_value = value_range
+
+    def getMaxValue(self) -> T:
+        return self.max_value
+
+    def getMinValue(self) -> T:
+        return self.min_value
 
 
 class SliderInt(Slider[int]):
@@ -63,8 +89,8 @@ class SliderInt(Slider[int]):
         self.dpg_item_id = dpg.add_slider_int(
             label=self.label,
             callback=self.callback,
-            min_value=self.value_range[0],
-            max_value=self.value_range[1],
+            min_value=self.getMinValue(),
+            max_value=self.getMaxValue(),
             parent=parent_id,
             default_value=self.default_value
         )
@@ -76,14 +102,14 @@ class SliderFloat(Slider[float]):
         self.dpg_item_id = dpg.add_slider_double(
             label=self.label,
             callback=self.callback,
-            min_value=self.value_range[0],
-            max_value=self.value_range[1],
+            min_value=self.getMinValue(),
+            max_value=self.getMaxValue(),
             parent=parent_id,
             default_value=self.default_value
         )
 
 
-class Button(Item, PlaceableItem):
+class Button(DPGItem, PlaceableItem):
 
     def __init__(self, label: str, on_click: Callable[[], None]) -> None:
         super().__init__()
@@ -98,7 +124,7 @@ class Button(Item, PlaceableItem):
         )
 
 
-class FileDialog(Item):
+class FileDialog(DPGItem):
 
     def __init__(self, label: str, on_select: Callable[[tuple[Path, ...]], None], extensions: Iterable[tuple[str, str]], default_path: str = "") -> None:
         super().__init__()
@@ -127,7 +153,7 @@ class FileDialog(Item):
                 dpg.add_file_extension(f".{extension}", color=(255, 160, 80, 255), custom_text=f"[{text}]")
 
 
-class DragLine(VariableItem[float], PlaceableItem):
+class DragLine(VariableDPGItem[float], PlaceableItem):
     CANVAS_BORDER_COLOR = (255, 0X74, 0)
 
     def __init__(self, is_vertical: bool, on_change: Callable[[float], None] = None) -> None:
@@ -144,7 +170,7 @@ class DragLine(VariableItem[float], PlaceableItem):
         )
 
 
-class Axis(Item, PlaceableItem):
+class Axis(DPGItem, PlaceableItem):
 
     def __init__(self, axis_type: int) -> None:
         super().__init__()
@@ -154,7 +180,7 @@ class Axis(Item, PlaceableItem):
         self.dpg_item_id = dpg.add_plot_axis(self.__type, parent=parent_id)
 
 
-class LineSeries(VariableItem[tuple[Iterable[float], Iterable[float]]], PlaceableItem):
+class LineSeries(VariableDPGItem[tuple[Iterable[float], Iterable[float]]], PlaceableItem):
 
     def __init__(self, label: str) -> None:
         super().__init__()
