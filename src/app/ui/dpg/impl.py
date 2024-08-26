@@ -220,7 +220,7 @@ class Axis(DPGItem, Placeable, Container):
 
 class LineSeries(VariableDPGItem[tuple[Iterable[float], Iterable[float]]], Placeable):
 
-    def __init__(self, label: str) -> None:
+    def __init__(self, label: str = None) -> None:
         super().__init__()
         self.__label = label
 

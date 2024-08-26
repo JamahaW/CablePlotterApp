@@ -1,5 +1,6 @@
 import math
 from pathlib import Path
+from typing import Iterable
 
 from dearpygui import dearpygui as dpg
 
@@ -16,22 +17,26 @@ from app.ui.dpg.impl import LineSeries
 from app.ui.dpg.impl import Plot
 
 
-class FigureDisplayItem(CollapsingHeader):
+class FigureSeriesControl(LineSeries):
 
-    def __init__(self, figure_name: str) -> None:
-        super().__init__(figure_name)
-        self.__rotate_spinbox = SpinboxInt("rotate", self.redraw, (0, 360), default_value=45, step=15)
-        self.__end_angle_spinbox = SpinboxInt("end angle", self.redraw, (0, 360), default_value=270, step=15)
+    def __init__(self, vertices: tuple[Iterable[float], Iterable[float]]) -> None:
+        super().__init__()
 
-        self.series = LineSeries(figure_name)
+        self.__angle: int = 0
+        self.__scale = (100, 100)
+
+        self.__source_vertices = vertices
 
         self.position_point = DragPoint(self.__on_position_change, label="Position")
+        self.scale_point = DragPoint(self.__on_scale_change, label="Scale", default_value=self.__scale)
 
-        self.__last_scale = (100, 100)
-        self.scale_point = DragPoint(self.__on_scale_change, label="Scale", default_value=self.__last_scale)
+    def delete(self) -> None:
+        super().delete()
+        self.position_point.delete()
+        self.scale_point.delete()
 
     def __on_position_change(self, new_position: tuple[float, float]) -> None:
-        scale_x, scale_y = self.__last_scale
+        scale_x, scale_y = self.__scale
         position_x, position_y = new_position
 
         self.scale_point.setValue((
@@ -39,18 +44,18 @@ class FigureDisplayItem(CollapsingHeader):
             position_y + scale_y
         ))
 
-        self.redraw()
+        self.update()
 
     def __on_scale_change(self, new_scale: tuple[float, float]) -> None:
         scale_x, scale_y = new_scale
         position_x, position_y = self.getPosition()
 
-        self.__last_scale = (
+        self.__scale = (
             scale_x - position_x,
             scale_y - position_y
         )
 
-        self.redraw()
+        self.update()
 
     def getPosition(self) -> tuple[float, float]:
         return self.position_point.getValue()
@@ -58,8 +63,11 @@ class FigureDisplayItem(CollapsingHeader):
     def setPosition(self, position: tuple[float, float]) -> None:
         self.position_point.setValue(position)
 
+    def setRotation(self, angle: int) -> None:
+        self.__angle = math.radians(angle)
+
     def setScale(self, scale: tuple[float, float]) -> None:
-        self.__last_scale = scale_x, scale_y = scale
+        self.__scale = scale_x, scale_y = scale
         position_x, position_y = self.getPosition()
 
         self.scale_point.setValue((
@@ -68,30 +76,65 @@ class FigureDisplayItem(CollapsingHeader):
         ))
 
     def getScale(self) -> tuple[float, float]:
-        return self.__last_scale
+        return self.__scale
 
-    def redraw(self, _=None):
-        R = range(self.__end_angle_spinbox.getValue() + 1)
-        r = self.__rotate_spinbox.getValue()
+    def __transform_source_vertices(self) -> tuple[list[float], list[float]]:
+        transformed_x = list[float]()
+        transformed_y = list[float]()
 
         scale_x, scale_y = self.getScale()
         position_x, position_y = self.getPosition()
 
-        x = [math.cos(math.radians(i + r)) * scale_x + position_x for i in R]
-        y = [math.sin(math.radians(i + r)) * scale_y + position_y for i in R]
+        sin_angle = math.sin(self.__angle)
+        cos_angle = math.cos(self.__angle)
 
-        self.series.setValue((x, y))
+        source_x, source_y = self.__source_vertices
+
+        for x, y in zip(source_x, source_y):
+            # x *= scale_x
+            # y *= scale_y
+
+            rx = cos_angle * x - sin_angle * y
+            ry = sin_angle * x + cos_angle * y
+
+            # x += position_x
+            # y += position_y
+
+            transformed_x.append(rx)
+            transformed_y.append(ry)
+
+        return transformed_x, transformed_y
+
+    def update(self) -> None:
+        self.setValue(self.__transform_source_vertices())
+
+
+class FigureDisplayItem(CollapsingHeader):
+
+    def __init__(self, figure_name: str) -> None:
+        super().__init__(figure_name)
+        self.__rotation_spinbox = SpinboxInt("rotate", self.redraw, (0, 360 * 4), default_value=45, step=15)
+
+        R = range(0, 271, 1)
+
+        self.series = FigureSeriesControl(
+            (
+                [math.cos(math.radians(i)) for i in R],
+                [math.sin(math.radians(i)) for i in R]
+            )
+        )
+
+    def redraw(self, _=None):
+        self.series.setRotation(self.__rotation_spinbox.getValue())
+        self.series.update()
 
     def delete(self) -> None:
         super().delete()
         self.series.delete()
-        self.position_point.delete()
-        self.scale_point.delete()
 
     def placeRaw(self, parent_id: ItemID) -> None:
         super().placeRaw(parent_id)
-        self.add(self.__rotate_spinbox)
-        self.add(self.__end_angle_spinbox)
+        self.add(self.__rotation_spinbox)
         self.add(Button("[X]", self.delete))
 
 
@@ -126,7 +169,7 @@ class App:
         circle = FigureDisplayItem(f"Circle:{self.items_count}")
         self.items_count += 1
         self.canvas.axis.add(circle.series)
-        self.canvas.add(circle.position_point).add(circle.scale_point)
+        self.canvas.add(circle.series.position_point).add(circle.series.scale_point)
         self.container_item.add(circle)
         circle.redraw()
 
