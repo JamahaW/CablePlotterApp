@@ -6,6 +6,7 @@ from typing import Iterable
 
 from dearpygui import dearpygui as dpg
 
+from app.ui.abc import Color3i
 from app.ui.abc import Container
 from app.ui.abc import ItemID
 from app.ui.abc import Placeable
@@ -26,6 +27,9 @@ class Group(DPGItem, Container, Placeable):
             **self.__kwargs
         ))
 
+    def _cleanup(self) -> None:
+        del self.__kwargs
+
 
 class CollapsingHeader(Container, DPGItem, Placeable):
 
@@ -35,6 +39,8 @@ class CollapsingHeader(Container, DPGItem, Placeable):
 
     def placeRaw(self, parent_id: ItemID) -> None:
         self.setItemID(dpg.add_collapsing_header(label=self.__label, parent=parent_id))
+
+    def _cleanup(self) -> None:
         del self.__label
 
 
@@ -54,6 +60,8 @@ class Text(VariableDPGItem[str], Placeable):
 
     def placeRaw(self, parent_id: ItemID) -> None:
         dpg.add_text(self.__label, parent=parent_id)
+
+    def _cleanup(self) -> None:
         del self.__label
 
 
@@ -93,6 +101,10 @@ class Button(DPGItem, Placeable):
     def placeRaw(self, parent_id: ItemID) -> None:
         self.setItemID(dpg.add_button(label=self.__label, callback=self.__callback, parent=parent_id))
 
+    def _cleanup(self) -> None:
+        del self.__label
+        del self.__callback
+
 
 class FileDialog(DPGItem):
 
@@ -124,22 +136,65 @@ class FileDialog(DPGItem):
 
 
 class DragLine(VariableDPGItem[float], Placeable):
-    CANVAS_BORDER_COLOR = (255, 0X74, 0)
+    DEFAULT_COLOR = (255, 0X74, 0)
 
     def __init__(self, is_vertical: bool, on_change: Callable[[float], None] = None) -> None:
         super().__init__()
         self.__is_vertical = is_vertical
-        self.__on_change = None if on_change is None else lambda x: on_change(dpg.get_value(x))
+        self.__on_change = None if on_change is None else lambda: on_change(self.getValue())
 
     def placeRaw(self, parent_id: ItemID) -> None:
         self.setItemID(dpg.add_drag_line(
-            color=self.CANVAS_BORDER_COLOR,
+            color=self.DEFAULT_COLOR,
             vertical=self.__is_vertical,
             callback=self.__on_change,
             parent=parent_id
         ))
+
+    def _cleanup(self) -> None:
         del self.__is_vertical
         del self.__on_change
+
+
+class DragPoint(VariableDPGItem[tuple[float, float]], Placeable):
+    DEFAULT_COLOR = (0, 0X74, 0xFF)
+
+    def __init__(
+            self,
+            on_move: Callable[[tuple[float, float]], None] = None,
+            *,
+            default_value: tuple[float, float] = (0, 0),
+            label: str = None,
+            color: Color3i = DEFAULT_COLOR,
+            thickness: float = 1.0
+
+    ):
+        super().__init__()
+
+        self.__callback = None if on_move is None else lambda: on_move(self.getValue())
+        self.__default_value = default_value
+        self.__label = label
+        self.__color = color
+        self.__thickness = thickness
+
+    def placeRaw(self, parent_id: ItemID) -> None:
+        self.setItemID(
+            dpg.add_drag_point(
+                label=self.__label,
+                parent=parent_id,
+                callback=self.__callback,
+                default_value=self.__default_value,
+                color=self.__color,
+                thickness=self.__thickness
+            )
+        )
+
+    def _cleanup(self) -> None:
+        del self.__callback
+        del self.__default_value,
+        del self.__label
+        del self.__color,
+        del self.__thickness
 
 
 class Axis(DPGItem, Placeable):
@@ -150,6 +205,8 @@ class Axis(DPGItem, Placeable):
 
     def placeRaw(self, parent_id: ItemID) -> None:
         self.setItemID(dpg.add_plot_axis(self.__type, parent=parent_id))
+
+    def _cleanup(self) -> None:
         del self.__type
 
 
@@ -161,4 +218,6 @@ class LineSeries(VariableDPGItem[tuple[Iterable[float], Iterable[float]]], Place
 
     def placeRaw(self, parent_id: ItemID) -> None:
         self.setItemID(dpg.add_line_series(tuple(), tuple(), label=self.__label, parent=parent_id))
+
+    def _cleanup(self) -> None:
         del self.__label

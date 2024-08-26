@@ -4,6 +4,7 @@ from abc import ABC
 from abc import abstractmethod
 
 type ItemID = int | str
+type Color3i = tuple[int, int, int]
 
 
 class Item(ABC):
@@ -43,7 +44,11 @@ class Placeable(Item):
 
     def place(self, parent: Item = None) -> Placeable:
         self.placeRaw(0 if parent is None else parent.getItemID())
+        self._cleanup()
         return self
+
+    def _cleanup(self) -> None:
+        pass
 
     @abstractmethod
     def placeRaw(self, parent_id: ItemID) -> None:

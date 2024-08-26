@@ -5,9 +5,11 @@ from dearpygui import dearpygui as dpg
 
 from app.ui.custom.widgets import Border
 from app.ui.custom.widgets import ItemID
+from app.ui.custom.widgets import SpinboxInt
 from app.ui.dpg.impl import Axis
 from app.ui.dpg.impl import Button
 from app.ui.dpg.impl import CollapsingHeader
+from app.ui.dpg.impl import DragPoint
 from app.ui.dpg.impl import FileDialog
 from app.ui.dpg.impl import Group
 from app.ui.dpg.impl import LineSeries
@@ -25,8 +27,8 @@ class CircleItem(CollapsingHeader):
         self.__offset_x = SliderInt((-500, 500), "offset x", self.redraw)
         self.__offset_y = SliderInt((-500, 500), "offset y", self.redraw)
 
-        self.__rotate = SliderInt((0, 360), "rotate", self.redraw, default_value=45)
-        self.__end_angle = SliderInt((0, 360), "end angle", self.redraw, default_value=270)
+        self.__rotate = SpinboxInt("rotate", self.redraw, (0, 360), default_value=45, step=15)
+        self.__end_angle = SpinboxInt("end angle", self.redraw, (0, 360), default_value=270, step=15)
 
         self.series = LineSeries(figure_name)
 
@@ -72,6 +74,7 @@ class Canvas(Plot):
         super().placeRaw(parent_id)
         self.add(self.axis)
         self.add(self.border)
+        self.add(DragPoint())
 
 
 class App:

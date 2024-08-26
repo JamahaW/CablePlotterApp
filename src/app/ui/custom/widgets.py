@@ -105,6 +105,7 @@ class SpinboxInt(VariableItem[int], Group):
         self.__slider = SliderInt(value_range, None, on_change, default_value=default_value)
         self.__increment_button = Button("[+]", lambda: self.changeValue(step))
         self.__decrement_button = Button("[-]", lambda: self.changeValue(-step))
+        self.__on_change = on_change
 
     def setValue(self, value: int) -> None:
         self.__slider.setValue(value)
@@ -113,13 +114,10 @@ class SpinboxInt(VariableItem[int], Group):
         return self.__slider.getValue()
 
     def changeValue(self, delta: int) -> None:
-        self.setValue(max(min(self.getValue() + delta, self.__slider.getMaxValue()), self.__slider.getMinValue()))
+        value = max(min(self.getValue() + delta, self.__slider.getMaxValue()), self.__slider.getMinValue())
+        self.setValue(value)
+        self.__on_change(value)
 
     def placeRaw(self, parent_id: ItemID) -> None:
         super().placeRaw(parent_id)
-        self.addItems((
-            self.__label,
-            self.__decrement_button,
-            self.__slider,
-            self.__increment_button,
-        ))
+        self.add(self.__decrement_button).add(self.__slider).add(self.__increment_button).add(self.__label)

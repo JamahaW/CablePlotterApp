@@ -70,6 +70,11 @@ class Slider[T: (float, int)](VariableDPGItem[T], Placeable, ABC):
         self._default_value = default_value
         self._min_value, self._max_value = value_range
 
+    def _cleanup(self) -> None:
+        del self._callback
+        del self._label
+        del self._default_value
+
     def getMaxValue(self) -> T:
         return self._max_value
 
