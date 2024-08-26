@@ -177,6 +177,14 @@ class DragPoint(VariableDPGItem[tuple[float, float]], Placeable):
         self.__color = color
         self.__thickness = thickness
 
+    def getValue(self) -> tuple[float, float]:
+        value = super().getValue()
+        x, y, *trash = value
+        return x, y
+
+    def setValue(self, value: tuple[float, float]) -> None:
+        super().setValue((*value, 0, 0))
+
     def placeRaw(self, parent_id: ItemID) -> None:
         self.setItemID(
             dpg.add_drag_point(
@@ -197,7 +205,7 @@ class DragPoint(VariableDPGItem[tuple[float, float]], Placeable):
         del self.__thickness
 
 
-class Axis(DPGItem, Placeable):
+class Axis(DPGItem, Placeable, Container):
 
     def __init__(self, axis_type: int) -> None:
         super().__init__()
