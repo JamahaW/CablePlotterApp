@@ -1,56 +1,52 @@
-from abc import ABC
+from __future__ import annotations
+
 from pathlib import Path
 from typing import Callable
 from typing import Iterable
 
 from dearpygui import dearpygui as dpg
 
-from app_dpg.ui.abc import ContainerDPGItem
-from app_dpg.ui.abc import DPGItem
-from app_dpg.ui.abc import ItemID
-from app_dpg.ui.abc import PlaceableItem
-from app_dpg.ui.abc import VariableDPGItem
+from app.ui.abc import Container
+from app.ui.abc import ItemID
+from app.ui.abc import Placeable
+from app.ui.dpg.abc import DPGItem
+from app.ui.dpg.abc import Slider
+from app.ui.dpg.abc import VariableDPGItem
 
 
-class Group(ContainerDPGItem):
+class Group(DPGItem, Container, Placeable):
 
-    def __init__(
-            self,
-            *,
-            horizontal: bool = False,
-            **kwargs
-    ) -> None:
+    def __init__(self, **kwargs) -> None:
         super().__init__()
         self.__kwargs = kwargs
-        self.__horizontal = horizontal
 
     def placeRaw(self, parent_id: ItemID) -> None:
-        self.dpg_item_id = dpg.add_group(
+        self.setItemID(dpg.add_group(
             parent=parent_id,
-            horizontal=self.__horizontal,
             **self.__kwargs
-        )
+        ))
 
 
-class CollapsingHeader(ContainerDPGItem):
+class CollapsingHeader(Container, DPGItem, Placeable):
 
     def __init__(self, label: str) -> None:
         super().__init__()
         self.__label = label
 
     def placeRaw(self, parent_id: ItemID) -> None:
-        self.dpg_item_id = dpg.add_collapsing_header(label=self.__label, parent=parent_id)
+        self.setItemID(dpg.add_collapsing_header(label=self.__label, parent=parent_id))
+        del self.__label
 
 
-class Plot(ContainerDPGItem):
+class Plot(Container, DPGItem, Placeable):
 
     def placeRaw(self, parent_id: ItemID) -> None:
-        with dpg.plot(width=-1, height=-1, equal_aspects=True, anti_aliased=True) as plot:
-            self.dpg_item_id = plot
+        with dpg.plot(width=-1, height=-1, equal_aspects=True, anti_aliased=True, parent=parent_id) as plot:
+            self.setItemID(plot)
             dpg.add_plot_legend(horizontal=True)
 
 
-class Text(VariableDPGItem[str], PlaceableItem):
+class Text(VariableDPGItem[str], Placeable):
 
     def __init__(self, label: str) -> None:
         super().__init__()
@@ -58,58 +54,36 @@ class Text(VariableDPGItem[str], PlaceableItem):
 
     def placeRaw(self, parent_id: ItemID) -> None:
         dpg.add_text(self.__label, parent=parent_id)
-
-
-class Slider[T: (float, int)](VariableDPGItem[T], PlaceableItem, ABC):
-
-    def __init__(
-            self,
-            value_range: tuple[T, T],
-            label: str = None,
-            on_change: Callable[[T], None] = None,
-            *,
-            default_value: T = 0
-    ):
-        super().__init__()
-        self.callback = None if on_change is None else lambda: on_change(self.getValue())
-        self.label = label
-        self.default_value = default_value
-        self.min_value, self.max_value = value_range
-
-    def getMaxValue(self) -> T:
-        return self.max_value
-
-    def getMinValue(self) -> T:
-        return self.min_value
+        del self.__label
 
 
 class SliderInt(Slider[int]):
 
     def placeRaw(self, parent_id: ItemID) -> None:
-        self.dpg_item_id = dpg.add_slider_int(
-            label=self.label,
-            callback=self.callback,
+        self.setItemID(dpg.add_slider_int(
+            label=self._label,
+            callback=self._callback,
             min_value=self.getMinValue(),
             max_value=self.getMaxValue(),
             parent=parent_id,
-            default_value=self.default_value
-        )
+            default_value=self._default_value,
+        ))
 
 
 class SliderFloat(Slider[float]):
 
     def placeRaw(self, parent_id: ItemID) -> None:
-        self.dpg_item_id = dpg.add_slider_double(
-            label=self.label,
-            callback=self.callback,
+        self.setItemID(dpg.add_slider_double(
+            label=self._label,
+            callback=self._callback,
             min_value=self.getMinValue(),
             max_value=self.getMaxValue(),
             parent=parent_id,
-            default_value=self.default_value
-        )
+            default_value=self._default_value
+        ))
 
 
-class Button(DPGItem, PlaceableItem):
+class Button(DPGItem, Placeable):
 
     def __init__(self, label: str, on_click: Callable[[], None]) -> None:
         super().__init__()
@@ -117,11 +91,7 @@ class Button(DPGItem, PlaceableItem):
         self.__callback = lambda: on_click()
 
     def placeRaw(self, parent_id: ItemID) -> None:
-        self.dpg_item_id = dpg.add_button(
-            label=self.__label,
-            callback=self.__callback,
-            parent=parent_id
-        )
+        self.setItemID(dpg.add_button(label=self.__label, callback=self.__callback, parent=parent_id))
 
 
 class FileDialog(DPGItem):
@@ -147,13 +117,13 @@ class FileDialog(DPGItem):
                 default_path=default_path,
                 modal=True
         ) as f:
-            self.dpg_item_id = f
+            self.setItemID(f)
 
             for extension, text in extensions:
                 dpg.add_file_extension(f".{extension}", color=(255, 160, 80, 255), custom_text=f"[{text}]")
 
 
-class DragLine(VariableDPGItem[float], PlaceableItem):
+class DragLine(VariableDPGItem[float], Placeable):
     CANVAS_BORDER_COLOR = (255, 0X74, 0)
 
     def __init__(self, is_vertical: bool, on_change: Callable[[float], None] = None) -> None:
@@ -162,29 +132,33 @@ class DragLine(VariableDPGItem[float], PlaceableItem):
         self.__on_change = None if on_change is None else lambda x: on_change(dpg.get_value(x))
 
     def placeRaw(self, parent_id: ItemID) -> None:
-        self.dpg_item_id = dpg.add_drag_line(
+        self.setItemID(dpg.add_drag_line(
             color=self.CANVAS_BORDER_COLOR,
             vertical=self.__is_vertical,
             callback=self.__on_change,
             parent=parent_id
-        )
+        ))
+        del self.__is_vertical
+        del self.__on_change
 
 
-class Axis(DPGItem, PlaceableItem):
+class Axis(DPGItem, Placeable):
 
     def __init__(self, axis_type: int) -> None:
         super().__init__()
         self.__type = axis_type
 
     def placeRaw(self, parent_id: ItemID) -> None:
-        self.dpg_item_id = dpg.add_plot_axis(self.__type, parent=parent_id)
+        self.setItemID(dpg.add_plot_axis(self.__type, parent=parent_id))
+        del self.__type
 
 
-class LineSeries(VariableDPGItem[tuple[Iterable[float], Iterable[float]]], PlaceableItem):
+class LineSeries(VariableDPGItem[tuple[Iterable[float], Iterable[float]]], Placeable):
 
     def __init__(self, label: str) -> None:
         super().__init__()
         self.__label = label
 
     def placeRaw(self, parent_id: ItemID) -> None:
-        self.dpg_item_id = dpg.add_line_series(tuple(), tuple(), label=self.__label, parent=parent_id)
+        self.setItemID(dpg.add_line_series(tuple(), tuple(), label=self.__label, parent=parent_id))
+        del self.__label

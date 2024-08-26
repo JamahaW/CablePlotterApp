@@ -13,8 +13,8 @@ from bytelang.registries import EnvironmentsRegistry
 from bytelang.registries import PackageRegistry
 from bytelang.registries import PrimitivesRegistry
 from bytelang.registries import ProfileRegistry
-from bytelang.sourcegenerator import InstructionSourceGenerator
-from bytelang.sourcegenerator import Language
+from bytelang.source_generator import InstructionSourceGenerator
+from bytelang.source_generator import Language
 
 type AnyPath = str | PathLike
 

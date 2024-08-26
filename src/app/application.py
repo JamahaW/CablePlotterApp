@@ -3,32 +3,32 @@ from pathlib import Path
 
 from dearpygui import dearpygui as dpg
 
-from app_dpg.ui.abc import PlaceableItem
-from app_dpg.ui.dpg import Axis
-from app_dpg.ui.dpg import Button
-from app_dpg.ui.dpg import FileDialog
-from app_dpg.ui.dpg import Group
-from app_dpg.ui.dpg import CollapsingHeader
-from app_dpg.ui.dpg import LineSeries
-from app_dpg.ui.dpg import Plot
-from app_dpg.ui.dpg import SliderInt
-from app_dpg.ui.widgets import Border
-from app_dpg.ui.widgets import ItemID
-from app_dpg.ui.widgets import SpinBoxInt
+from app.ui.custom.widgets import Border
+from app.ui.custom.widgets import ItemID
+from app.ui.dpg.impl import Axis
+from app.ui.dpg.impl import Button
+from app.ui.dpg.impl import CollapsingHeader
+from app.ui.dpg.impl import FileDialog
+from app.ui.dpg.impl import Group
+from app.ui.dpg.impl import LineSeries
+from app.ui.dpg.impl import Plot
+from app.ui.dpg.impl import SliderInt
 
 
-class CircleItem(PlaceableItem):
+class CircleItem(CollapsingHeader):
 
     def __init__(self, figure_name: str) -> None:
+        super().__init__(figure_name)
         self.__scale_x = SliderInt((0, 500), "scale x", self.redraw, default_value=200)
         self.__scale_y = SliderInt((0, 500), "scale y", self.redraw, default_value=200)
+
         self.__offset_x = SliderInt((-500, 500), "offset x", self.redraw)
         self.__offset_y = SliderInt((-500, 500), "offset y", self.redraw)
+
         self.__rotate = SliderInt((0, 360), "rotate", self.redraw, default_value=45)
         self.__end_angle = SliderInt((0, 360), "end angle", self.redraw, default_value=270)
 
         self.series = LineSeries(figure_name)
-        self.control_panel = CollapsingHeader(figure_name)
 
     def redraw(self, _=None):
         R = range(self.__end_angle.getValue() + 1)
@@ -39,26 +39,39 @@ class CircleItem(PlaceableItem):
 
         self.series.setValue((x, y))
 
+    def delete(self) -> None:
+        super().delete()
+        self.series.delete()
+
     def placeRaw(self, parent_id: ItemID) -> None:
-        self.control_panel.placeRaw(parent_id)
-        self.control_panel.add(self.__offset_x)
-        self.control_panel.add(self.__offset_y)
-        self.control_panel.add(self.__scale_x)
-        self.control_panel.add(self.__scale_y)
-        self.control_panel.add(self.__rotate)
-        self.control_panel.add(self.__end_angle)
+        super().placeRaw(parent_id)
+
+        pos = Group(horizontal=True)
+        self.add(pos)
+        pos.add(self.__offset_x)
+        pos.add(self.__offset_y)
+
+        scale = Group(horizontal=True)
+        self.add(scale)
+        scale.add(self.__scale_x)
+        scale.add(self.__scale_y)
+
+        self.add(self.__rotate)
+        self.add(self.__end_angle)
+        self.add(Button("[X]", self.delete))
 
 
-class Canvas(PlaceableItem):
+class Canvas(Plot):
 
     def __init__(self) -> None:
+        super().__init__()
         self.axis = Axis(dpg.mvXAxis)
         self.border = Border(50)
-        self.plot = Plot()
 
     def placeRaw(self, parent_id: ItemID) -> None:
-        self.plot.placeRaw(parent_id)
-        self.plot.addItems((self.axis, self.border))
+        super().placeRaw(parent_id)
+        self.add(self.axis)
+        self.add(self.border)
 
 
 class App:
@@ -71,7 +84,7 @@ class App:
         )
 
         self.canvas = Canvas()
-        self.test_container_item = Group()
+        self.test_container_item = Group(width=60)
 
         self.items_count = 0
 
@@ -87,32 +100,28 @@ class App:
         print(paths)
 
     def build(self) -> None:
-        with dpg.window() as main_window:
+        with (dpg.window() as main_window):
             dpg.set_primary_window(main_window, True)
 
             with dpg.group(horizontal=True):
                 with dpg.group(width=200):
-                    CollapsingHeader("Main").place().add(Button("Open", self.file_dialog.show)).add(SpinBoxInt("spinbox"))
-                    CollapsingHeader("Library").place().addItems((Button("Add", self.addCircleItem), self.test_container_item))
+                    CollapsingHeader("Main").place().add(Button("Open", self.file_dialog.show))
+                    CollapsingHeader("Library").place().add(Button("Add", self.addCircleItem)).add(self.test_container_item)
 
                 self.canvas.place()
 
         self.canvas.border.setSize(1200, 1200)
 
 
-if __name__ == '__main__':
+def start_application(app_title: str, window_width: int, window_height: int) -> None:
     dpg.create_context()
-    dpg.create_viewport(title="title", width=1600, height=900)
-
+    dpg.create_viewport(title=app_title, width=window_width, height=window_height)
     app = App()
     app.build()
-
     dpg.setup_dearpygui()
     dpg.show_viewport()
-
     # dpg.show_implot_demo()
     # dpg.show_font_manager()
     # dpg.show_style_editor()
-
     dpg.start_dearpygui()
     dpg.destroy_context()

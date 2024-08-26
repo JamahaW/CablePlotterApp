@@ -7,10 +7,10 @@ from os import PathLike
 from typing import Iterable
 from typing import Optional
 
-from bytelang.codegenerator import ByteCodeGenerator
-from bytelang.codegenerator import CodeGenerator
-from bytelang.codegenerator import CodeInstruction
-from bytelang.codegenerator import ProgramData
+from bytelang.code_generator import ByteCodeGenerator
+from bytelang.code_generator import CodeGenerator
+from bytelang.code_generator import CodeInstruction
+from bytelang.code_generator import ProgramData
 from bytelang.content import PrimitiveType
 from bytelang.handlers import BasicErrorHandler
 from bytelang.parsers import Parser
