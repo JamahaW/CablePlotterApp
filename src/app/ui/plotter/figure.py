@@ -14,6 +14,7 @@ from app.ui.custom.widgets import SpinboxInt
 from app.ui.dpg.impl import Axis
 from app.ui.dpg.impl import Button
 from app.ui.dpg.impl import Checkbox
+from app.ui.dpg.impl import CollapsingHeader
 from app.ui.dpg.impl import DragPoint
 from app.ui.dpg.impl import LineSeries
 from app.ui.dpg.impl import Plot
@@ -71,12 +72,28 @@ class WorkFieldFigure(Figure):
         super().__init__(self.__WORK_FIELD_VERTICES, label)
         self.__border = Border(self.__onSizeChanged, step=50)
 
-    def getTransformedVertices(self) -> tuple[list[float], list[float]]:
-        size_x, size_y = self.getSize()
-        return (
-            [x * size_x for x in self.source_vertices_x],
-            [y * size_y for y in self.source_vertices_y],
-        )
+        self.__left_dead_zone_spinbox = SpinboxInt("Left", (0, 500), self.__onLeftDeadZoneChanged, step=10)
+        self.__right_dead_zone_spinbox = SpinboxInt("Right", (0, 500), self.__onRightDeadZoneChanged, step=10)
+        self.__bottom_dead_zone_spinbox = SpinboxInt("Bottom", (0, 500), self.__onBottomDeadZoneChanged, step=10)
+        self.__top_dead_zone_spinbox = SpinboxInt("Top", (0, 500), self.__onTopDeadZoneChanged, step=10)
+
+    def getBottomDeadZone(self) -> int:
+        return self.__bottom_dead_zone_spinbox.getValue()
+
+    def getTopDeadZone(self) -> int:
+        return self.__top_dead_zone_spinbox.getValue()
+
+    def getLeftDeadZone(self) -> int:
+        return self.__left_dead_zone_spinbox.getValue()
+
+    def getRightDeadZone(self) -> int:
+        return self.__right_dead_zone_spinbox.getValue()
+
+    def setDeadZone(self, left: int, right: int, top: int, bottom: int) -> None:
+        self.__left_dead_zone_spinbox.setValue(left)
+        self.__right_dead_zone_spinbox.setValue(right)
+        self.__top_dead_zone_spinbox.setValue(top)
+        self.__bottom_dead_zone_spinbox.setValue(bottom)
 
     def setSize(self, size: tuple[float, float]) -> None:
         super().setSize(size)
@@ -86,8 +103,46 @@ class WorkFieldFigure(Figure):
         canvas.axis.add(self)
         canvas.add(self.__border)
 
+    def getTransformedVertices(self) -> tuple[list[float], list[float]]:
+        size_x, size_y = self.getSize()
+
+        left_dead_zone = self.getLeftDeadZone()
+        right_dead_zone = self.getRightDeadZone()
+        top_dead_zone = self.getTopDeadZone()
+        bottom_dead_zone = self.getBottomDeadZone()
+
+        area_width = size_x - left_dead_zone - right_dead_zone
+        area_height = size_y - top_dead_zone - bottom_dead_zone
+
+        offset_x = (left_dead_zone - right_dead_zone) / 2
+        offset_y = (bottom_dead_zone - top_dead_zone) / 2
+
+        return (
+            [x * area_width + offset_x for x in self.source_vertices_x],
+            [y * area_height + offset_y for y in self.source_vertices_y],
+        )
+
+    def placeRaw(self, parent_id: ItemID) -> None:
+        super().placeRaw(parent_id)
+
+        dead_zone_header = CollapsingHeader("DeadZone")
+        self.add(dead_zone_header)
+        dead_zone_header.add(self.__left_dead_zone_spinbox).add(self.__right_dead_zone_spinbox).add(self.__top_dead_zone_spinbox).add(self.__bottom_dead_zone_spinbox)
+
     def __onSizeChanged(self, new_size: tuple[float, float]) -> None:
         super().setSize(new_size)
+        self.update()
+
+    def __onLeftDeadZoneChanged(self, _) -> None:
+        self.update()
+
+    def __onRightDeadZoneChanged(self, _) -> None:
+        self.update()
+
+    def __onBottomDeadZoneChanged(self, _) -> None:
+        self.update()
+
+    def __onTopDeadZoneChanged(self, _) -> None:
         self.update()
 
 

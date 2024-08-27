@@ -54,6 +54,7 @@ class App:
 
         self.canvas.attachFigure(self.work_field)
         self.work_field.setSize((1000, 1000))
+        self.work_field.setDeadZone(150, 150, 100, 300)
 
 
 def start_application(app_title: str, window_width: int, window_height: int) -> None:
