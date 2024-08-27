@@ -10,38 +10,37 @@ from app.ui.dpg.impl import FileDialog
 from app.ui.dpg.impl import Group
 from app.ui.plotter.figure import Canvas
 from app.ui.plotter.figure import TransformableFigure
-from app.ui.plotter.figure import WorkFieldFigure
+from app.ui.plotter.figure import WorkAreaFigure
 
 
 class App:
 
     def __init__(self) -> None:
         self.file_dialog = FileDialog(
-            "Select Image file", self.on_image_selected,
+            "Select Image file", self.onImageFileSelected,
             (("png", "Image"),),
             r"A:\Program\Python3\CablePlotterApp\res\images"
         )
 
-        self.work_field = WorkFieldFigure("Work Field")
-
+        self.work_area = WorkAreaFigure("Work Area")
         self.canvas = Canvas()
 
-        self.items_count = 0
+        self.__temp_items_count = 0
 
-    def addCircleItem(self) -> None:
+    def __temp_addCircleItem(self) -> None:
         R = range(0, 271, 1)
         vertices = (
             [math.cos(math.radians(i)) for i in R],
             [math.sin(math.radians(i)) for i in R]
         )
 
-        circle = TransformableFigure(vertices, f"Figure: Test:{self.items_count}")
-        self.items_count += 1
+        circle = TransformableFigure(vertices, f"Figure: Test:{self.__temp_items_count}")
+        self.__temp_items_count += 1
 
         self.canvas.attachFigure(circle)
 
     @staticmethod
-    def on_image_selected(paths: tuple[Path, ...]) -> None:
+    def onImageFileSelected(paths: tuple[Path, ...]) -> None:
         print(paths)
 
     def build(self) -> None:
@@ -49,12 +48,13 @@ class App:
             dpg.set_primary_window(main_window, True)
 
             with dpg.group():
-                Group(horizontal=True).place().add(Button("Open", self.file_dialog.show)).add(Button("Add", self.addCircleItem))
+                Group(horizontal=True).place().add(Button("Open", self.file_dialog.show)).add(Button("Add", self.__temp_addCircleItem))
                 self.canvas.place()
 
-        self.canvas.attachFigure(self.work_field)
-        self.work_field.setSize((1000, 1000))
-        self.work_field.setDeadZone(150, 150, 100, 300)
+        self.canvas.attachFigure(self.work_area)
+
+        self.work_area.setDeadZone(150, 150, 100, 300)
+        self.work_area.setSize((1000, 1000))
 
 
 def start_application(app_title: str, window_width: int, window_height: int) -> None:

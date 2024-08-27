@@ -62,14 +62,14 @@ class Canvas(Plot):
         figure.attachIntoCanvas(self)
 
 
-class WorkFieldFigure(Figure):
-    __WORK_FIELD_VERTICES: Final[tuple[Iterable[float], Iterable[float]]] = (
+class WorkAreaFigure(Figure):
+    __WORK_AREA_VERTICES: Final[tuple[Iterable[float], Iterable[float]]] = (
         (0.5, 0.5, -0.5, -0.5, 0.5),
         (0.5, -0.5, -0.5, 0.5, 0.5)
     )
 
     def __init__(self, label: str):
-        super().__init__(self.__WORK_FIELD_VERTICES, label)
+        super().__init__(self.__WORK_AREA_VERTICES, label)
         self.__border = Border(self.__onSizeChanged, step=50)
 
         self.__left_dead_zone_spinbox = SpinboxInt("Left", (0, 500), self.__onLeftDeadZoneChanged, step=10)
