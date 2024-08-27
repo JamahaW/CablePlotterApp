@@ -49,7 +49,7 @@ class Plot(Container, DPGItem, Placeable):
     def placeRaw(self, parent_id: ItemID) -> None:
         with dpg.plot(width=-1, height=-1, equal_aspects=True, anti_aliased=True, parent=parent_id) as plot:
             self.setItemID(plot)
-            dpg.add_plot_legend()
+            dpg.add_plot_legend(outside=True)
 
 
 class Text(VariableDPGItem[str], Placeable):

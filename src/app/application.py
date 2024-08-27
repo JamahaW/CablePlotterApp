@@ -22,6 +22,8 @@ class App:
             r"A:\Program\Python3\CablePlotterApp\res\images"
         )
 
+        self.work_field = WorkFieldFigure("Work Field")
+
         self.canvas = Canvas()
 
         self.items_count = 0
@@ -48,12 +50,10 @@ class App:
 
             with dpg.group():
                 Group(horizontal=True).place().add(Button("Open", self.file_dialog.show)).add(Button("Add", self.addCircleItem))
-
                 self.canvas.place()
 
-        work_field_figure = WorkFieldFigure("Work Field")
-        self.canvas.attachFigure(work_field_figure)
-        work_field_figure.setSize((1000, 1000))
+        self.canvas.attachFigure(self.work_field)
+        self.work_field.setSize((1000, 1000))
 
 
 def start_application(app_title: str, window_width: int, window_height: int) -> None:
