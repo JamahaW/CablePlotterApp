@@ -71,3 +71,28 @@ class VariableItem[T](ABC):
     @abstractmethod
     def getValue(self) -> T:
         pass
+
+
+class RangedItem[T: (int, float)](VariableItem, ABC):
+    """Item with defined value range"""
+
+    @abstractmethod
+    def setMinValue(self, value: T) -> None:
+        pass
+
+    @abstractmethod
+    def setMaxValue(self, value: T) -> None:
+        pass
+
+    @abstractmethod
+    def getMinValue(self) -> T:
+        pass
+
+    @abstractmethod
+    def getMaxValue(self) -> T:
+        pass
+
+    def setRange(self, value_range: tuple[T, T]) -> None:
+        min_value, max_value = value_range
+        self.setMaxValue(max_value)
+        self.setMinValue(min_value)

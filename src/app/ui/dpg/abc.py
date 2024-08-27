@@ -1,14 +1,12 @@
 from __future__ import annotations
 
-from abc import ABC
-from typing import Callable
 from typing import Optional
 
 from dearpygui import dearpygui as dpg
 
 from app.ui.abc import Item
 from app.ui.abc import ItemID
-from app.ui.abc import Placeable
+from app.ui.abc import RangedItem
 from app.ui.abc import VariableItem
 
 
@@ -42,8 +40,11 @@ class DPGItem(Item):
     def delete(self) -> None:
         dpg.delete_item(self.__dpg_item_id)
 
-    def configure(self, **kwargs) -> None:
+    def setConfiguration(self, **kwargs) -> None:
         dpg.configure_item(self.__dpg_item_id, **kwargs)
+
+    def getConfiguration(self) -> dict[str, float | int | bool | str]:
+        return dpg.get_item_configuration(self.__dpg_item_id)
 
 
 class VariableDPGItem[T](DPGItem, VariableItem[T]):
@@ -54,29 +55,18 @@ class VariableDPGItem[T](DPGItem, VariableItem[T]):
         return dpg.get_value(self.getItemID())
 
 
-class Slider[T: (float, int)](VariableDPGItem[T], Placeable, ABC):
-
-    def __init__(
-            self,
-            value_range: tuple[T, T],
-            label: str = None,
-            on_change: Callable[[T], None] = None,
-            *,
-            default_value: T = 0
-    ):
-        super().__init__()
-        self._callback = None if on_change is None else lambda: on_change(self.getValue())
-        self._label = label
-        self._default_value = default_value
-        self._min_value, self._max_value = value_range
-
-    def _cleanup(self) -> None:
-        del self._callback
-        del self._label
-        del self._default_value
-
-    def getMaxValue(self) -> T:
-        return self._max_value
+class RangedDPGItem[T](RangedItem, VariableDPGItem):
 
     def getMinValue(self) -> T:
-        return self._min_value
+        return self.getConfiguration().get("min_value")
+
+    def getMaxValue(self) -> T:
+        return self.getConfiguration().get("max_value")
+
+    def setMinValue(self, value: T) -> None:
+        self.setConfiguration(min_value=value)
+        super().setMinValue(value)
+
+    def setMaxValue(self, value: T) -> None:
+        self.setConfiguration(max_value=value)
+        super().setMaxValue(value)

@@ -11,7 +11,7 @@ from app.ui.abc import Container
 from app.ui.abc import ItemID
 from app.ui.abc import Placeable
 from app.ui.dpg.abc import DPGItem
-from app.ui.dpg.abc import Slider
+from app.ui.dpg.abc import RangedDPGItem
 from app.ui.dpg.abc import VariableDPGItem
 
 
@@ -65,30 +65,38 @@ class Text(VariableDPGItem[str], Placeable):
         del self.__label
 
 
-class SliderInt(Slider[int]):
+class SliderInt[T: (float, int)](Placeable, RangedDPGItem[T]):
+
+    def __init__(
+            self,
+            value_range: tuple[T, T],
+            label: str = None,
+            on_change: Callable[[T], None] = None,
+            *,
+            default_value: T = 0
+    ):
+        super().__init__()
+        self.__callback = None if on_change is None else lambda: on_change(self.getValue())
+        self.__label = label
+        self.__default_value = default_value
+        self.__min_value, self.__max_value = value_range
 
     def placeRaw(self, parent_id: ItemID) -> None:
         self.setItemID(dpg.add_slider_int(
-            label=self._label,
-            callback=self._callback,
-            min_value=self.getMinValue(),
-            max_value=self.getMaxValue(),
+            label=self.__label,
+            callback=self.__callback,
+            min_value=self.__min_value,
+            max_value=self.__max_value,
             parent=parent_id,
-            default_value=self._default_value,
+            default_value=self.__default_value,
         ))
 
-
-class SliderFloat(Slider[float]):
-
-    def placeRaw(self, parent_id: ItemID) -> None:
-        self.setItemID(dpg.add_slider_double(
-            label=self._label,
-            callback=self._callback,
-            min_value=self.getMinValue(),
-            max_value=self.getMaxValue(),
-            parent=parent_id,
-            default_value=self._default_value
-        ))
+    def _cleanup(self) -> None:
+        del self.__callback
+        del self.__label
+        del self.__default_value
+        del self.__min_value
+        del self.__max_value
 
 
 class Button(DPGItem, Placeable):

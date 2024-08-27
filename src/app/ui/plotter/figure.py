@@ -72,10 +72,10 @@ class WorkAreaFigure(Figure):
         super().__init__(self.__WORK_AREA_VERTICES, label)
         self.__border = Border(self.__onSizeChanged, step=50)
 
-        self.__left_dead_zone_spinbox = SpinboxInt("Left", (0, 500), self.__onLeftDeadZoneChanged, step=10)
-        self.__right_dead_zone_spinbox = SpinboxInt("Right", (0, 500), self.__onRightDeadZoneChanged, step=10)
-        self.__bottom_dead_zone_spinbox = SpinboxInt("Bottom", (0, 500), self.__onBottomDeadZoneChanged, step=10)
-        self.__top_dead_zone_spinbox = SpinboxInt("Top", (0, 500), self.__onTopDeadZoneChanged, step=10)
+        self.__left_dead_zone_spinbox = SpinboxInt("Left", self.__onLeftDeadZoneChanged, step=50)
+        self.__right_dead_zone_spinbox = SpinboxInt("Right", self.__onRightDeadZoneChanged, step=50)
+        self.__bottom_dead_zone_spinbox = SpinboxInt("Bottom", self.__onBottomDeadZoneChanged, step=50)
+        self.__top_dead_zone_spinbox = SpinboxInt("Top", self.__onTopDeadZoneChanged, step=50)
 
     def getBottomDeadZone(self) -> int:
         return self.__bottom_dead_zone_spinbox.getValue()
@@ -131,6 +131,15 @@ class WorkAreaFigure(Figure):
 
     def __onSizeChanged(self, new_size: tuple[float, float]) -> None:
         super().setSize(new_size)
+        new_width, new_height = new_size
+        half_width = int(new_width // 2)
+        half_height = int(new_height // 2)
+
+        self.__left_dead_zone_spinbox.setMaxValue(half_width)
+        self.__right_dead_zone_spinbox.setMaxValue(half_width)
+        self.__top_dead_zone_spinbox.setMaxValue(half_height)
+        self.__bottom_dead_zone_spinbox.setMaxValue(half_height)
+
         self.update()
 
     def __onLeftDeadZoneChanged(self, _) -> None:
@@ -227,7 +236,7 @@ class TransformableFigure(Figure):
     def placeRaw(self, parent_id: ItemID) -> None:
         super().placeRaw(parent_id)
         self.add(self.__status_text)
-        self.add(SpinboxInt("rotation", (0, 360), self.__onRotationChanged, step=15, default_value=0))
+        self.add(SpinboxInt("rotation", self.__onRotationChanged, value_range=(0, 360), step=15, default_value=0))
         self.add(self.__set_controls_visible_checkbox)
         self.add(Button("[Remove]", self.delete))
 
