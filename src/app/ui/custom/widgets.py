@@ -2,13 +2,8 @@ from typing import Callable
 
 from app.ui.abc import ItemID
 from app.ui.abc import Placeable
-from app.ui.abc import RangedItem
 from app.ui.abc import VariableItem
-from app.ui.dpg.impl import Button
 from app.ui.dpg.impl import DragLine
-from app.ui.dpg.impl import Group
-from app.ui.dpg.impl import SliderInt
-from app.ui.dpg.impl import Text
 
 
 class BorderLinePair(Placeable, VariableItem[float]):
@@ -108,43 +103,3 @@ class Border(Placeable, VariableItem[tuple[float, float]]):
     def placeRaw(self, parent_id: ItemID) -> None:
         self.__width_lines.placeRaw(parent_id)
         self.__height_lines.placeRaw(parent_id)
-
-
-class SpinboxInt(Group, RangedItem[int]):
-
-    def __init__(self, label: str, on_change: Callable[[int], None] = None, *, value_range: tuple[int, int] = (0, 100), step: int = 1, default_value: int = 0):
-        super().__init__(horizontal=True)
-        self.__label = Text(label)
-        self.__slider = SliderInt(value_range, None, on_change, default_value=default_value)
-        self.__increment_button = Button("[+]", lambda: self.changeValue(step))
-        self.__decrement_button = Button("[-]", lambda: self.changeValue(-step))
-        self.__on_change = on_change
-
-    def setMaxValue(self, value: int) -> None:
-        self.__slider.setMaxValue(value)
-
-    def setMinValue(self, value: int) -> None:
-        self.__slider.setMinValue(value)
-
-    def getMinValue(self) -> int:
-        return self.__slider.getMinValue()
-
-    def getMaxValue(self) -> int:
-        return self.__slider.getMaxValue()
-
-    def setValue(self, value: int) -> None:
-        self.__slider.setValue(value)
-
-    def getValue(self) -> int:
-        return self.__slider.getValue()
-
-    def changeValue(self, delta: int) -> None:
-        value = max(min(self.getValue() + delta, self.__slider.getMaxValue()), self.__slider.getMinValue())
-        self.setValue(value)
-
-        if self.__on_change is not None:
-            self.__on_change(value)
-
-    def placeRaw(self, parent_id: ItemID) -> None:
-        super().placeRaw(parent_id)
-        self.add(self.__decrement_button).add(self.__slider).add(self.__increment_button).add(self.__label)

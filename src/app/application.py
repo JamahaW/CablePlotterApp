@@ -7,7 +7,7 @@ from dearpygui import dearpygui as dpg
 
 from app.ui.dpg.impl import Button
 from app.ui.dpg.impl import FileDialog
-from app.ui.dpg.impl import Group
+from app.ui.dpg.impl import Menu
 from app.ui.plotter.figure import Canvas
 from app.ui.plotter.figure import TransformableFigure
 from app.ui.plotter.figure import WorkAreaFigure
@@ -44,17 +44,30 @@ class App:
         print(paths)
 
     def build(self) -> None:
-        with (dpg.window() as main_window):
+        with dpg.window() as main_window:
             dpg.set_primary_window(main_window, True)
 
-            with dpg.group():
-                Group(horizontal=True).place().add(Button("Open", self.file_dialog.show)).add(Button("Add", self.__temp_addCircleItem))
-                self.canvas.place()
+            with dpg.menu_bar():
+                Menu("File").place().add(Button("Open", self.file_dialog.show))
+                Button("Temp Add Figure", self.__temp_addCircleItem).place()
+                dpg.add_separator()
+                (
+                    Menu("Show").place()
+                    .add(Button("show_implot_demo", dpg.show_implot_demo))
+                    .add(Button("show_font_manager", dpg.show_font_manager))
+                    .add(Button("show_style_editor", dpg.show_style_editor))
+                    .add(Button("show_imgui_demo", dpg.show_imgui_demo))
+                    .add(Button("show_item_registry", dpg.show_item_registry))
+                    .add(Button("show_metrics", dpg.show_metrics))
+                    .add(Button("show_debug", dpg.show_debug))
+                )
+
+            self.canvas.place()
 
         self.canvas.attachFigure(self.work_area)
 
-        self.work_area.setDeadZone(150, 150, 100, 300)
-        self.work_area.setSize((1000, 1000))
+        self.work_area.setDeadZone(150, 150, 100, 300, -120)
+        self.work_area.setSize((1200, 1000))
 
 
 def start_application(app_title: str, window_width: int, window_height: int) -> None:
@@ -64,8 +77,5 @@ def start_application(app_title: str, window_width: int, window_height: int) -> 
     app.build()
     dpg.setup_dearpygui()
     dpg.show_viewport()
-    # dpg.show_implot_demo()
-    # dpg.show_font_manager()
-    # dpg.show_style_editor()
     dpg.start_dearpygui()
     dpg.destroy_context()

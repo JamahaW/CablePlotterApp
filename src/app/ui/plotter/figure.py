@@ -10,12 +10,12 @@ from dearpygui import dearpygui as dpg
 
 from app.ui.abc import ItemID
 from app.ui.custom.widgets import Border
-from app.ui.custom.widgets import SpinboxInt
 from app.ui.dpg.impl import Axis
 from app.ui.dpg.impl import Button
 from app.ui.dpg.impl import Checkbox
 from app.ui.dpg.impl import CollapsingHeader
 from app.ui.dpg.impl import DragPoint
+from app.ui.dpg.impl import InputInt
 from app.ui.dpg.impl import LineSeries
 from app.ui.dpg.impl import Plot
 from app.ui.dpg.impl import Text
@@ -72,28 +72,33 @@ class WorkAreaFigure(Figure):
         super().__init__(self.__WORK_AREA_VERTICES, label)
         self.__border = Border(self.__onSizeChanged, step=50)
 
-        self.__left_dead_zone_spinbox = SpinboxInt("Left", self.__onLeftDeadZoneChanged, step=50)
-        self.__right_dead_zone_spinbox = SpinboxInt("Right", self.__onRightDeadZoneChanged, step=50)
-        self.__bottom_dead_zone_spinbox = SpinboxInt("Bottom", self.__onBottomDeadZoneChanged, step=50)
-        self.__top_dead_zone_spinbox = SpinboxInt("Top", self.__onTopDeadZoneChanged, step=50)
+        self.__left_dead_zone_input = InputInt("Left", self.__onDeadZoneChanged, step=50)
+        self.__right_dead_zone_input = InputInt("Right", self.__onDeadZoneChanged, step=50)
+        self.__bottom_dead_zone_input = InputInt("Bottom", self.__onDeadZoneChanged, step=50)
+        self.__top_dead_zone_input = InputInt("Top", self.__onDeadZoneChanged, step=50)
+        self.__vertical_offset_input = InputInt("Tool Vertical Offset", self.__onDeadZoneChanged, step=10, value_range=(-100, 100))
 
     def getBottomDeadZone(self) -> int:
-        return self.__bottom_dead_zone_spinbox.getValue()
+        return self.__bottom_dead_zone_input.getValue()
 
     def getTopDeadZone(self) -> int:
-        return self.__top_dead_zone_spinbox.getValue()
+        return self.__top_dead_zone_input.getValue()
 
     def getLeftDeadZone(self) -> int:
-        return self.__left_dead_zone_spinbox.getValue()
+        return self.__left_dead_zone_input.getValue()
 
     def getRightDeadZone(self) -> int:
-        return self.__right_dead_zone_spinbox.getValue()
+        return self.__right_dead_zone_input.getValue()
 
-    def setDeadZone(self, left: int, right: int, top: int, bottom: int) -> None:
-        self.__left_dead_zone_spinbox.setValue(left)
-        self.__right_dead_zone_spinbox.setValue(right)
-        self.__top_dead_zone_spinbox.setValue(top)
-        self.__bottom_dead_zone_spinbox.setValue(bottom)
+    def getVerticalOffset(self) -> int:
+        return self.__vertical_offset_input.getValue()
+
+    def setDeadZone(self, left: int, right: int, top: int, bottom: int, vertical_offset: int) -> None:
+        self.__left_dead_zone_input.setValue(left)
+        self.__right_dead_zone_input.setValue(right)
+        self.__top_dead_zone_input.setValue(top)
+        self.__bottom_dead_zone_input.setValue(bottom)
+        self.__vertical_offset_input.setValue(vertical_offset)
 
     def setSize(self, size: tuple[float, float]) -> None:
         super().setSize(size)
@@ -115,7 +120,7 @@ class WorkAreaFigure(Figure):
         area_height = size_y - top_dead_zone - bottom_dead_zone
 
         offset_x = (left_dead_zone - right_dead_zone) / 2
-        offset_y = (bottom_dead_zone - top_dead_zone) / 2
+        offset_y = (bottom_dead_zone - top_dead_zone) / 2 + self.getVerticalOffset()
 
         return (
             [x * area_width + offset_x for x in self.source_vertices_x],
@@ -127,7 +132,14 @@ class WorkAreaFigure(Figure):
 
         dead_zone_header = CollapsingHeader("DeadZone")
         self.add(dead_zone_header)
-        dead_zone_header.add(self.__left_dead_zone_spinbox).add(self.__right_dead_zone_spinbox).add(self.__top_dead_zone_spinbox).add(self.__bottom_dead_zone_spinbox)
+        (
+            dead_zone_header
+            .add(self.__left_dead_zone_input)
+            .add(self.__right_dead_zone_input)
+            .add(self.__top_dead_zone_input)
+            .add(self.__bottom_dead_zone_input)
+            .add(self.__vertical_offset_input)
+        )
 
     def __onSizeChanged(self, new_size: tuple[float, float]) -> None:
         super().setSize(new_size)
@@ -135,23 +147,14 @@ class WorkAreaFigure(Figure):
         half_width = int(new_width // 2)
         half_height = int(new_height // 2)
 
-        self.__left_dead_zone_spinbox.setMaxValue(half_width)
-        self.__right_dead_zone_spinbox.setMaxValue(half_width)
-        self.__top_dead_zone_spinbox.setMaxValue(half_height)
-        self.__bottom_dead_zone_spinbox.setMaxValue(half_height)
+        self.__left_dead_zone_input.setMaxValue(half_width)
+        self.__right_dead_zone_input.setMaxValue(half_width)
+        self.__top_dead_zone_input.setMaxValue(half_height)
+        self.__bottom_dead_zone_input.setMaxValue(half_height)
 
         self.update()
 
-    def __onLeftDeadZoneChanged(self, _) -> None:
-        self.update()
-
-    def __onRightDeadZoneChanged(self, _) -> None:
-        self.update()
-
-    def __onBottomDeadZoneChanged(self, _) -> None:
-        self.update()
-
-    def __onTopDeadZoneChanged(self, _) -> None:
+    def __onDeadZoneChanged(self, _) -> None:
         self.update()
 
 
@@ -183,7 +186,7 @@ class TransformableFigure(Figure):
 
         self.__position_point = DragPoint(self.__onPositionChanged, label="Position")
         self.__size_point = DragPoint(self.__onSizeChanged, label="Size", default_value=self.getSize())
-        self.__set_controls_visible_checkbox = Checkbox(self.__onSetControlsVisibleChanged, label="Controls Visible", default_value=True)
+        self.__set_controls_visible_checkbox = Checkbox(self.__onSetControlsVisibleChanged, label="Controls Visibility", default_value=True)
         self.__status_text = FigureStatusText()
 
     def setRotation(self, angle: int) -> None:
@@ -236,9 +239,9 @@ class TransformableFigure(Figure):
     def placeRaw(self, parent_id: ItemID) -> None:
         super().placeRaw(parent_id)
         self.add(self.__status_text)
-        self.add(SpinboxInt("rotation", self.__onRotationChanged, value_range=(0, 360), step=15, default_value=0))
+        self.add(InputInt("Rotation", self.__onRotationChanged, value_range=(0, 360), step=15, default_value=0))
         self.add(self.__set_controls_visible_checkbox)
-        self.add(Button("[Remove]", self.delete))
+        self.add(Button("Remove", self.delete))
 
     def __onPositionChanged(self, new_position: tuple[float, float]) -> None:
         position_x, position_y = new_position

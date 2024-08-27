@@ -4,11 +4,7 @@ dpg.create_context()
 
 with dpg.window(label="Tutorial", width=400, height=400):
     # create plot
-    text = dpg.add_slider_int(max_value=10, min_value=-10)
-
-    dpg.configure_item(text, min_value=-1000)
-
-    print(dpg.get_item_configuration(text).get("min_value"))
+    dpg.add_input_int(callback=lambda x: print(dpg.get_value(x)))
 
     # dpg.set_value(text, True)
 
