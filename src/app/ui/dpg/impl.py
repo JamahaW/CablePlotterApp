@@ -49,17 +49,17 @@ class Plot(Container, DPGItem, Placeable):
     def placeRaw(self, parent_id: ItemID) -> None:
         with dpg.plot(width=-1, height=-1, equal_aspects=True, anti_aliased=True, parent=parent_id) as plot:
             self.setItemID(plot)
-            dpg.add_plot_legend(horizontal=True)
+            dpg.add_plot_legend()
 
 
 class Text(VariableDPGItem[str], Placeable):
 
-    def __init__(self, label: str) -> None:
+    def __init__(self, label: str = None) -> None:
         super().__init__()
         self.__label = label
 
     def placeRaw(self, parent_id: ItemID) -> None:
-        dpg.add_text(self.__label, parent=parent_id)
+        self.setItemID(dpg.add_text(self.__label, parent=parent_id))
 
     def _cleanup(self) -> None:
         del self.__label
@@ -218,7 +218,7 @@ class Axis(DPGItem, Placeable, Container):
         del self.__type
 
 
-class LineSeries(VariableDPGItem[tuple[Iterable[float], Iterable[float]]], Placeable):
+class LineSeries(VariableDPGItem[tuple[Iterable[float], Iterable[float]]], Placeable, Container):
 
     def __init__(self, label: str = None) -> None:
         super().__init__()
@@ -229,3 +229,32 @@ class LineSeries(VariableDPGItem[tuple[Iterable[float], Iterable[float]]], Place
 
     def _cleanup(self) -> None:
         del self.__label
+
+
+class Checkbox(VariableDPGItem[bool], Placeable):
+
+    def __init__(
+            self,
+            on_change: Callable[[bool], None] = None,
+            *,
+            label: str = None,
+            default_value: bool = False
+    ):
+        super().__init__()
+
+        self.__callback = None if on_change is None else lambda: on_change(self.getValue())
+        self.__label = label
+        self.__default_value = default_value
+
+    def placeRaw(self, parent_id: ItemID) -> None:
+        self.setItemID(dpg.add_checkbox(
+            label=self.__label,
+            parent=parent_id,
+            callback=self.__callback,
+            default_value=self.__default_value
+        ))
+
+    def _cleanup(self) -> None:
+        del self.__callback
+        del self.__label
+        del self.__default_value

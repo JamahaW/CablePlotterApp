@@ -99,7 +99,7 @@ class Border(Placeable):
 
 class SpinboxInt(VariableItem[int], Group):
 
-    def __init__(self, label: str, on_change: Callable[[int], None] = None, value_range: tuple[int, int] = (0, 100), *, step: int = 1, default_value: int = 0):
+    def __init__(self, label: str, value_range: tuple[int, int] = (0, 100), on_change: Callable[[int], None] = None, *, step: int = 1, default_value: int = 0):
         super().__init__(horizontal=True)
         self.__label = Text(label)
         self.__slider = SliderInt(value_range, None, on_change, default_value=default_value)
@@ -116,7 +116,9 @@ class SpinboxInt(VariableItem[int], Group):
     def changeValue(self, delta: int) -> None:
         value = max(min(self.getValue() + delta, self.__slider.getMaxValue()), self.__slider.getMinValue())
         self.setValue(value)
-        self.__on_change(value)
+
+        if self.__on_change is not None:
+            self.__on_change(value)
 
     def placeRaw(self, parent_id: ItemID) -> None:
         super().placeRaw(parent_id)
