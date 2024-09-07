@@ -28,10 +28,10 @@ class App:
         self.__temp_items_count = 0
 
     def __temp_addCircleItem(self) -> None:
-        R = range(0, 271, 1)
+        r = range(0, 271, 1)
         vertices = (
-            [math.cos(math.radians(i)) for i in R],
-            [math.sin(math.radians(i)) for i in R]
+            [math.cos(math.radians(i)) for i in r],
+            [math.sin(math.radians(i)) for i in r]
         )
 
         circle = TransformableFigure(vertices, f"Figure: Test:{self.__temp_items_count}")
@@ -62,7 +62,12 @@ class App:
                     .add(Button("show_debug", dpg.show_debug))
                 )
 
-            self.canvas.place()
+            with dpg.tab_bar() as tabs:
+                with dpg.tab(label="Canvas"):
+                    self.canvas.place()
+
+                with dpg.tab(label="Foo"):
+                    Button("bar", lambda: print(dpg.get_value(tabs))).place()
 
         self.canvas.attachFigure(self.work_area)
 
@@ -73,8 +78,7 @@ class App:
 def start_application(app_title: str, window_width: int, window_height: int) -> None:
     dpg.create_context()
     dpg.create_viewport(title=app_title, width=window_width, height=window_height)
-    app = App()
-    app.build()
+    App().build()
     dpg.setup_dearpygui()
     dpg.show_viewport()
     dpg.start_dearpygui()
