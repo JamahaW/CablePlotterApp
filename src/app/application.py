@@ -13,6 +13,29 @@ from app.ui.plotter.figure import TransformableFigure
 from app.ui.plotter.figure import WorkAreaFigure
 
 
+class FigureRegistry:
+
+    def __init__(self, canvas: Canvas) -> None:
+        self.__temp_items_count: int = 0
+        self.canvas = canvas
+        self.figures = list[TransformableFigure]()
+
+    def add(self, figure: TransformableFigure) -> None:
+        self.figures.append(figure)
+        self.canvas.attachFigure(figure)
+
+    def demoAdd(self) -> None:
+        r = range(0, 271, 1)
+        vertices = (
+            [math.cos(math.radians(i)) for i in r],
+            [math.sin(math.radians(i)) for i in r]
+        )
+
+        circle = TransformableFigure(vertices, f"Figure: Test:{self.__temp_items_count}")
+        self.__temp_items_count += 1
+        self.add(circle)
+
+
 class App:
 
     def __init__(self) -> None:
@@ -23,21 +46,7 @@ class App:
         )
 
         self.work_area = WorkAreaFigure("Work Area")
-        self.canvas = Canvas()
-
-        self.__temp_items_count = 0
-
-    def __temp_addCircleItem(self) -> None:
-        r = range(0, 271, 1)
-        vertices = (
-            [math.cos(math.radians(i)) for i in r],
-            [math.sin(math.radians(i)) for i in r]
-        )
-
-        circle = TransformableFigure(vertices, f"Figure: Test:{self.__temp_items_count}")
-        self.__temp_items_count += 1
-
-        self.canvas.attachFigure(circle)
+        self.figure_registry = FigureRegistry(Canvas())
 
     @staticmethod
     def onImageFileSelected(paths: tuple[Path, ...]) -> None:
@@ -49,8 +58,14 @@ class App:
 
             with dpg.menu_bar():
                 Menu("File").place().add(Button("Open", self.file_dialog.show))
-                Button("Temp Add Figure", self.__temp_addCircleItem).place()
+
+                (
+                    Menu("dev").place()
+                    .add(Button("app demo figure", self.figure_registry.demoAdd))
+                )
+
                 dpg.add_separator()
+
                 (
                     Menu("Show").place()
                     .add(Button("show_implot_demo", dpg.show_implot_demo))
@@ -64,15 +79,25 @@ class App:
 
             with dpg.tab_bar() as tabs:
                 with dpg.tab(label="Canvas"):
-                    self.canvas.place()
+                    self.figure_registry.canvas.place()
 
                 with dpg.tab(label="Foo"):
                     Button("bar", lambda: print(dpg.get_value(tabs))).place()
 
-        self.canvas.attachFigure(self.work_area)
+        self.figure_registry.canvas.attachFigure(self.work_area)
 
         self.work_area.setDeadZone(150, 150, 100, 300, -120)
         self.work_area.setSize((1200, 1000))
+
+        with dpg.theme() as global_theme:
+            with dpg.theme_component(dpg.mvAll):
+                dpg.add_theme_style(dpg.mvStyleVar_FrameRounding, 6)
+                dpg.add_theme_style(dpg.mvStyleVar_WindowRounding, 6)
+                dpg.add_theme_style(dpg.mvStyleVar_GrabRounding, 6)
+                dpg.add_theme_style(dpg.mvStyleVar_ScrollbarRounding, 6)
+                dpg.add_theme_style(dpg.mvStyleVar_PopupRounding, 6)
+
+        dpg.bind_theme(global_theme)
 
 
 def start_application(app_title: str, window_width: int, window_height: int) -> None:

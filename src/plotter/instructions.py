@@ -8,13 +8,13 @@ __BEGIN_CODE = f"""
 __END_CODE = """
 # END_CODE begin
 
-exit
+quit
 
 # END_CODE end"""
 
-__MOVE_CODE = """move_to {x} {y}"""
+__MOVE_CODE = """set_position {x} {y}"""
 
-__SET_SPEED = """set_motors_speed {speed}"""
+__SET_SPEED = """set_speed {speed}"""
 
 
 def enc_code() -> str:

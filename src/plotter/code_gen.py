@@ -51,9 +51,9 @@ class PlotterCodeGenerator:
 
 
 if __name__ == '__main__':
-    p = [
+    path = [
         (100, 100)
     ]
 
-    log = PlotterCodeGenerator().run(p, RES_FOLDER / "out/test.blc")
+    log = PlotterCodeGenerator().run(path, RES_FOLDER / "out/test.blc")
     print(log)
