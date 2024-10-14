@@ -45,14 +45,18 @@ class PlotterCodeGenerator:
             return result.getInfoLog(log_flag)
 
     def run(self, positions: Iterable[tuple[int, int]], out_file: PathLike | str) -> str:
-        self.__generateCode(positions)
+        # self.__generateCode(positions)
         result = self.bytelang.compile(self.SOURCE_FILE, out_file)
         return self.__getLog(result)
 
 
 if __name__ == '__main__':
     path = [
-        (100, 100)
+        (100, 100),
+        (100, -100),
+        (-100, -100),
+        (-100, 100),
+        (100, 100),
     ]
 
     log = PlotterCodeGenerator().run(path, RES_FOLDER / "out/test.blc")

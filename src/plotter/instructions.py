@@ -12,7 +12,10 @@ quit
 
 # END_CODE end"""
 
-__MOVE_CODE = """set_position {x} {y}"""
+__MOVE_CODE = """
+set_position {x} {y}
+delay_ms 1000
+"""
 
 __SET_SPEED = """set_speed {speed}"""
 

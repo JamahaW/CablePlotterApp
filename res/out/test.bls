@@ -4,8 +4,117 @@
 .env esp32_env
 
 # BEGIN_CODE end
-set_speed 8
-set_position 100 100
+set_speed 6
+set_active_tool 0
+
+set_active_tool 1
+delay_ms 200
+set_active_tool 2
+delay_ms 200
+set_active_tool 3
+delay_ms 200
+set_active_tool 0
+
+delay_ms 1000
+
+set_position 0 300
+delay_ms 800
+set_active_tool 1
+delay_ms 200
+set_active_tool 2
+delay_ms 200
+set_active_tool 3
+delay_ms 200
+set_active_tool 0
+
+delay_ms 1000
+
+
+set_position 300 300
+delay_ms 800
+set_active_tool 1
+delay_ms 200
+set_active_tool 2
+delay_ms 200
+set_active_tool 3
+delay_ms 200
+set_active_tool 0
+
+delay_ms 1000
+
+set_position 300 0
+delay_ms 800
+set_active_tool 1
+delay_ms 200
+set_active_tool 2
+delay_ms 200
+set_active_tool 3
+delay_ms 200
+set_active_tool 0
+
+delay_ms 1000
+
+set_position 300 -300
+delay_ms 800
+set_active_tool 1
+delay_ms 200
+set_active_tool 2
+delay_ms 200
+set_active_tool 3
+delay_ms 200
+set_active_tool 0
+
+delay_ms 1000
+
+set_position 0 -300
+delay_ms 800
+set_active_tool 1
+delay_ms 200
+set_active_tool 2
+delay_ms 200
+set_active_tool 3
+delay_ms 200
+set_active_tool 0
+
+delay_ms 1000
+
+set_position -300 -300
+delay_ms 800
+set_active_tool 1
+delay_ms 200
+set_active_tool 2
+delay_ms 200
+set_active_tool 3
+delay_ms 200
+set_active_tool 0
+
+delay_ms 1000
+
+set_position -300 0
+delay_ms 800
+set_active_tool 1
+delay_ms 200
+set_active_tool 2
+delay_ms 200
+set_active_tool 3
+delay_ms 200
+set_active_tool 0
+
+delay_ms 1000
+
+set_position -300 300
+delay_ms 800
+set_active_tool 1
+delay_ms 200
+set_active_tool 2
+delay_ms 200
+set_active_tool 3
+delay_ms 200
+set_active_tool 0
+
+delay_ms 1000
+
+set_position -300 300
 
 # END_CODE begin
 
