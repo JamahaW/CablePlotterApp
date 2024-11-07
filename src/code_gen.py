@@ -5,11 +5,8 @@ from typing import Optional
 
 from bytelang import ByteLang
 from bytelang import CompileResultLegacy
-from bytelang import EnvironmentsRegistry
-from bytelang import PackageRegistry
 from bytelang import PrimitivesRegistry
-from bytelang import ProfileRegistry
-from bytelang.result import LogFlag
+from bytelang.impl.result import LogFlag
 from bytelang.tools import FileTool
 from bytelang.tools import StringBuilder
 from plotter.instructions import begin_code

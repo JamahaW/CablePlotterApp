@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from dataclasses import dataclass
 
-from bytelang.abc.content import Content
+from bytelang.dto.content import Content
 from bytelang.dto.content.instructions import EnvironmentInstruction
 from bytelang.dto.content.profile import Profile
 

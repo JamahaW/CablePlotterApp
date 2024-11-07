@@ -5,7 +5,7 @@ from typing import ClassVar
 from typing import Final
 from typing import Optional
 
-from bytelang.abc.content import Content
+from bytelang.dto.content import Content
 from bytelang.dto.content.primitive import PrimitiveType
 from bytelang.dto.content.profile import Profile
 from bytelang.tools import ReprTool

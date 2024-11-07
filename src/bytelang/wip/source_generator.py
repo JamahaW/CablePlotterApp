@@ -10,13 +10,13 @@ from pathlib import Path
 from typing import Iterable
 from typing import Optional
 
-from bytelang import Environment
+from bytelang.dto.content.environment import Environment
 from bytelang.dto.content.instructions import EnvironmentInstruction
 from bytelang.dto.content.instructions import EnvironmentInstructionArgument
 from bytelang.dto.content.primitive import PrimitiveType
-from bytelang.interpreters import Interpreter
-from bytelang.registries import PrimitivesRegistry
+from bytelang.impl.registries import PrimitivesRegistry
 from bytelang.tools import ReprTool
+from bytelang.wip.interpreters import Interpreter
 
 
 # TODO Не затирать предыдущие реализации инструкций, если они и не изменились. Если какая-то реализация в новой версии пропала, то собрать их в отдельном TXT файле

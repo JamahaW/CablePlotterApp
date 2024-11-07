@@ -3,30 +3,15 @@ from __future__ import annotations
 from dataclasses import dataclass
 from enum import Flag
 from enum import auto
-from typing import BinaryIO
-from typing import TextIO
 
 from bytelang import ErrorHandler
-from bytelang.code_generator import CodeInstruction
-from bytelang.code_generator import ProgramData
-from bytelang.parsers import Parser
-from bytelang.statement import Statement
+from bytelang.abc.parsers import Parser
+from bytelang.abc.result import Result
+from bytelang.gen.code_generator import ProgramData
+from bytelang.gen.instruction import CodeInstruction
+from bytelang.impl.parsers.statement.statement import Statement
 from bytelang.tools import ReprTool
 from bytelang.tools import StringBuilder
-
-
-@dataclass(frozen=True, repr=False)
-class Result:
-    """Результат работы компилятора ByteLang"""
-
-    source_stream: TextIO
-    bytecode_stream: BinaryIO
-
-    def isOK(self) -> bool:
-        """Получить статус"""
-
-    def getMessage(self) -> str:
-        """Получить сообщение результата"""
 
 
 class LogFlag(Flag):

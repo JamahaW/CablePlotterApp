@@ -6,7 +6,7 @@ from os import PathLike
 from typing import Callable
 from typing import Optional
 
-from bytelang import Environment
+from bytelang.dto.content.environment import Environment
 from bytelang.dto.content.primitive import PrimitiveType
 from bytelang.impl.registries import PrimitivesRegistry
 from bytelang.tools import FileTool

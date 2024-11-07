@@ -3,7 +3,7 @@ from __future__ import annotations
 from dataclasses import dataclass
 from typing import Optional
 
-from bytelang.abc.content import Content
+from bytelang.dto.content import Content
 from bytelang.dto.content.primitive import PrimitiveType
 
 

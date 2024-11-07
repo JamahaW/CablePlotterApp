@@ -1,70 +1,29 @@
 from __future__ import annotations
 
 from dataclasses import dataclass
-from struct import error
-from typing import AnyStr
-from typing import BinaryIO
 from typing import Callable
-from typing import IO
 from typing import Iterable
 from typing import Optional
 
 from bytelang.dto.content.environment import Environment
-from bytelang.dto.content.instructions import EnvironmentInstruction
 from bytelang.dto.content.instructions import EnvironmentInstructionArgument
 from bytelang.dto.content.primitive import PrimitiveType
 from bytelang.dto.content.primitive import PrimitiveWriteType
-from bytelang.dto.content.profile import Profile
-from bytelang.handlers import BasicErrorHandler
+from bytelang.gen.instruction import CodeInstruction
+from bytelang.gen.directive import Directive
+from bytelang.gen.directive import DirectiveArgument
+from bytelang.handlers.error import BasicErrorHandler
+from bytelang.impl.parsers.statement.statement import ArgumentValueType
+from bytelang.impl.parsers.statement.statement import Statement
+from bytelang.impl.parsers.statement.statement import StatementType
+from bytelang.impl.parsers.statement.statement import UniversalArgument
 from bytelang.impl.registries import EnvironmentsRegistry
 from bytelang.impl.registries import PrimitivesRegistry
-from bytelang.statement import ArgumentValueType
-from bytelang.statement import Statement
-from bytelang.statement import StatementType
-from bytelang.statement import UniversalArgument
 from bytelang.tools import Filter
 from bytelang.tools import ReprTool
 
 
 # TODO выбрать названия лучше
-
-@dataclass(frozen=True, kw_only=True)
-class CodeInstruction:
-    """Инструкция кода"""
-
-    instruction: EnvironmentInstruction
-    """Используемая инструкция"""
-    arguments: tuple[bytes, ...]
-    """Запакованные аргументы"""
-    address: int
-    """адрес расположения инструкции"""
-
-    def write(self, instruction_index: PrimitiveType) -> bytes:
-        return instruction_index.write(self.instruction.index) + b"".join(self.arguments)
-
-    def __repr__(self) -> str:
-        args_s = ReprTool.iter((f"({arg_t}){ReprTool.prettyBytes(arg_v)}" for arg_t, arg_v in zip(self.instruction.arguments, self.arguments)), l_paren="{ ", r_paren=" }")
-        return f"{self.instruction.generalInfo()} {args_s}"
-
-
-@dataclass(frozen=True)
-class DirectiveArgument:
-    """Параметры аргумента директивы"""
-
-    name: str
-    """Имя параметра (для вывода ошибок)"""
-    type: ArgumentValueType
-    """Маска принимаемых типов"""
-
-
-@dataclass(frozen=True)
-class Directive:
-    """Конфигурация директивы"""
-
-    handler: Callable[[Statement], None]
-    """Обработчик директивы"""
-    arguments: tuple[DirectiveArgument, ...]
-    """Параметры аргументов."""
 
 
 @dataclass(frozen=True, kw_only=True)
@@ -85,15 +44,6 @@ class Variable:
 
     def __repr__(self) -> str:
         return f"{self.primitive!s} {self.identifier}@{self.address} = {ReprTool.prettyBytes(self.value)}"
-
-
-@dataclass(frozen=True, kw_only=True)
-class ProgramData:
-    environment: Environment
-    start_address: int
-    variables: tuple[Variable, ...]
-    constants: dict[str, UniversalArgument]
-    marks: dict[int, str]
 
 
 class CodeGenerator:
@@ -314,56 +264,10 @@ class CodeGenerator:
         return ProgramData(environment=self.__env, start_address=self.__variable_offset, variables=tuple(self.__variables.values()), constants=self.__constants, marks=self.__marks_address)
 
 
-class CountingStream:
-
-    def __init__(self, stream: IO) -> None:
-        self.__stream = stream
-        self.__bytes_written = 0
-
-    def write(self, data: AnyStr) -> None:
-        self.__stream.write(data)
-        self.__bytes_written += len(data)
-
-    def getBytesWritten(self) -> int:
-        return self.__bytes_written
-
-
-class ByteCodeWriter:
-
-    def __init__(self, error_handler: BasicErrorHandler) -> None:
-        self.__error_handler = error_handler.getChild(self.__class__.__name__)
-
-    def run(self, instructions: Iterable[CodeInstruction], program_data: ProgramData, bytecode_output_stream: BinaryIO) -> None:
-        profile = program_data.environment.profile
-        out = CountingStream(bytecode_output_stream)
-
-        self.__writeStartBlock(out, program_data)
-        self.__writeVariablesBlock(out, program_data)
-        self.__writeInstructionsBlock(out, instructions, profile)
-
-        self.__checkProgram(out, profile)
-
-    def __writeStartBlock(self, out: CountingStream, program_data: ProgramData) -> None:
-        try:
-            program_start_data = program_data.environment.profile.pointer_heap.write(program_data.start_address)
-            out.write(program_start_data)
-
-        except error as e:
-            self.__error_handler.write(f"Область Heap вне допустимого размера: {e}")
-
-    def __checkProgram(self, out: CountingStream, profile: Profile) -> None:
-        if profile.max_program_length is None:
-            return
-
-        if out.getBytesWritten() < profile.max_program_length:
-            return
-
-        self.__error_handler.write(f"program size ({out.getBytesWritten()}) out of {profile.max_program_length}")
-
-    @staticmethod
-    def __writeInstructionsBlock(out: CountingStream, instructions: Iterable[CodeInstruction], profile: Profile):
-        out.write(b"".join(map(lambda ins: ins.write(profile.instruction_index), instructions)))
-
-    @staticmethod
-    def __writeVariablesBlock(out: CountingStream, program_data: ProgramData) -> None:
-        out.write(b"".join(map(lambda v: v.value, program_data.variables)))
+@dataclass(frozen=True, kw_only=True)
+class ProgramData:
+    environment: Environment
+    start_address: int
+    variables: tuple[Variable, ...]
+    constants: dict[str, UniversalArgument]
+    marks: dict[int, str]

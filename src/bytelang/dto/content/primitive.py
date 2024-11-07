@@ -6,7 +6,7 @@ from enum import auto
 from struct import Struct
 from typing import ClassVar
 
-from bytelang.abc.content import Content
+from bytelang.dto.content import Content
 
 
 class PrimitiveWriteType(Enum):

@@ -5,7 +5,7 @@ from __future__ import annotations
 from abc import ABC
 from abc import abstractmethod
 
-from bytelang.statement import Statement
+from bytelang.impl.parsers.statement.statement import Statement
 from bytelang.tools import ReprTool
 
 
