@@ -5,7 +5,7 @@ from typing import Iterable
 from typing import Optional
 from typing import TextIO
 
-from bytelang.tools import Filter
+from bytelang.tools.filters import Filter
 
 
 class Parser[T](ABC):

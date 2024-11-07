@@ -1,52 +1,11 @@
 from __future__ import annotations
 
-import json
-from io import StringIO
-from os import PathLike
-from pathlib import Path
 from typing import Iterable
 from typing import Mapping
-from typing import Optional
 
 
-class Filter:
-
-    @staticmethod
-    def notNone[T](i: Iterable[Optional[T]]) -> Iterable[T]:
-        return filter(None.__ne__, i)
-
-
-class FileTool:
-    """Обёртка для работы с файлами"""
-
-    @classmethod
-    def read(cls, filepath: str) -> str:
-        with open(filepath, "rt") as f:
-            return f.read()
-
-    @classmethod
-    def readBytes(cls, filepath: str) -> bytes:
-        with open(filepath, "rb") as f:
-            return f.read()
-
-    @classmethod
-    def readJSON(cls, filepath: str | Path) -> dict | list:
-        with open(filepath) as f:
-            return json.load(f)
-
-    @classmethod
-    def save(cls, filepath: PathLike | str, _data: str):
-        with open(filepath, "wt") as f:
-            f.write(_data)
-
-    @classmethod
-    def saveBytes(cls, filepath: PathLike | str, _data: bytes):
-        with open(filepath, "wb") as f:
-            f.write(_data)
-
-
-# TODO ref
 class ReprTool:
+    # TODO ref
 
     @staticmethod
     def __viewMode(obj: object, _repr: bool) -> str:
@@ -79,26 +38,3 @@ class ReprTool:
     @staticmethod
     def prettyBytes(b: bytes) -> str:
         return b.hex("_", 2).upper()
-
-
-class FixedStringIO(StringIO):
-    @property
-    def name(self) -> str:
-        return self.__class__.__name__
-
-
-class StringBuilder(FixedStringIO):
-
-    def __init__(self) -> None:
-        super().__init__()
-
-    def append(self, obj: object, end: str = "\n") -> StringBuilder:
-        self.write(obj.__str__())
-        self.write(end)
-        return self
-
-    def __str__(self) -> str:
-        return self.getvalue()
-
-    def toString(self) -> str:
-        return self.__str__()

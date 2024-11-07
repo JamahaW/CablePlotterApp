@@ -11,7 +11,7 @@ from typing import Final
 from typing import Iterable
 from typing import Optional
 
-from bytelang.tools import FileTool
+from bytelang.tools.filetool import FileTool
 
 
 class Registry[K, T](ABC):

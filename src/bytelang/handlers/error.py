@@ -6,7 +6,7 @@ from abc import ABC
 from abc import abstractmethod
 
 from bytelang.impl.parsers.statement.statement import Statement
-from bytelang.tools import ReprTool
+from bytelang.tools.reprtool import ReprTool
 
 
 class BasicErrorHandler(ABC):

@@ -8,7 +8,7 @@ from typing import Optional
 from bytelang.dto.content import Content
 from bytelang.dto.content.primitive import PrimitiveType
 from bytelang.dto.content.profile import Profile
-from bytelang.tools import ReprTool
+from bytelang.tools.reprtool import ReprTool
 
 
 @dataclass(frozen=True, kw_only=True)

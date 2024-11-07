@@ -18,8 +18,8 @@ from bytelang.dto.content.primitive import PrimitiveType
 from bytelang.dto.content.primitive import PrimitiveWriteType
 from bytelang.dto.content.profile import Profile
 from bytelang.abc.parsers import Parser
-from bytelang.tools import FileTool
-from bytelang.tools import ReprTool
+from bytelang.tools.filetool import FileTool
+from bytelang.tools.reprtool import ReprTool
 
 # TODO сделать каталоговым реестром и файл как namespace
 

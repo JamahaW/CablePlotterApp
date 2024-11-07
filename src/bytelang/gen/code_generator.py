@@ -19,8 +19,8 @@ from bytelang.impl.parsers.statement.statement import StatementType
 from bytelang.impl.parsers.statement.statement import UniversalArgument
 from bytelang.impl.registries import EnvironmentsRegistry
 from bytelang.impl.registries import PrimitivesRegistry
-from bytelang.tools import Filter
-from bytelang.tools import ReprTool
+from bytelang.tools.filters import Filter
+from bytelang.tools.reprtool import ReprTool
 
 
 # TODO выбрать названия лучше

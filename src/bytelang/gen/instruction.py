@@ -4,7 +4,7 @@ from dataclasses import dataclass
 
 from bytelang.dto.content.instructions import EnvironmentInstruction
 from bytelang.dto.content.primitive import PrimitiveType
-from bytelang.tools import ReprTool
+from bytelang.tools.reprtool import ReprTool
 
 
 @dataclass(frozen=True, kw_only=True)

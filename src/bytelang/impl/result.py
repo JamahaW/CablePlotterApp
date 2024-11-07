@@ -10,8 +10,8 @@ from bytelang.abc.result import Result
 from bytelang.gen.code_generator import ProgramData
 from bytelang.gen.instruction import CodeInstruction
 from bytelang.impl.parsers.statement.statement import Statement
-from bytelang.tools import ReprTool
-from bytelang.tools import StringBuilder
+from bytelang.tools.reprtool import ReprTool
+from bytelang.tools.string import StringBuilder
 
 
 class LogFlag(Flag):

@@ -8,7 +8,7 @@ from enum import auto
 from typing import Optional
 from bytelang.impl.parsers.statement.regex import Regex
 
-from bytelang.tools import ReprTool
+from bytelang.tools.reprtool import ReprTool
 
 
 class StatementType(Enum):
