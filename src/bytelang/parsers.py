@@ -68,7 +68,7 @@ class StatementParser(Parser[Statement]):
         args = tuple(self.__matchStatementArg(lexeme, i, index, line) for i, lexeme in enumerate(lexemes))
         _type, head = self.__matchStatementType(first, index, line)
 
-        if self.__err.failed():
+        if self.__err.isFailed():
             return
 
         return Statement(type=_type, line=line, index=index, head=head, arguments=args)

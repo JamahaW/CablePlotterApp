@@ -20,7 +20,7 @@ class BasicErrorHandler(ABC):
         """Подготовка к работе"""
         self.__failed = False
 
-    def failed(self) -> bool:
+    def isFailed(self) -> bool:
         """
         Перед критическими действиями нужно проверить,
         что этапы выше были выполнены без ошибок

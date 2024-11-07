@@ -16,8 +16,8 @@ from bytelang.content import PrimitiveType
 from bytelang.content import PrimitiveWriteType
 from bytelang.content import Profile
 from bytelang.handlers import BasicErrorHandler
-from bytelang.registries import EnvironmentsRegistry
-from bytelang.registries import PrimitivesRegistry
+from bytelang.impl.registries import EnvironmentsRegistry
+from bytelang.impl.registries import PrimitivesRegistry
 from bytelang.statement import ArgumentValueType
 from bytelang.statement import Statement
 from bytelang.statement import StatementType
@@ -114,24 +114,29 @@ class CodeGenerator:
 
         __DIRECTIVE_ARG_ANY = DirectiveArgument("constant value or identifier", ArgumentValueType.ANY)
 
-        self.__DIRECTIVES: dict[str, Directive] = {"env": Directive(self.__directiveSetEnvironment, (DirectiveArgument("environment name", ArgumentValueType.IDENTIFIER),)),
-                                                   "def": Directive(self.__directiveDeclareConstant, (DirectiveArgument("constant name", ArgumentValueType.IDENTIFIER), __DIRECTIVE_ARG_ANY)),
-                                                   "ptr": Directive(self.__directiveDeclarePointer,
-                                                                    (DirectiveArgument(
-                                                                        "pointer identifier",
-                                                                        ArgumentValueType.IDENTIFIER),
-                                                                     DirectiveArgument(
-                                                                         "primitive type",
-                                                                         ArgumentValueType.IDENTIFIER),
-                                                                     __DIRECTIVE_ARG_ANY)), }
+        self.__DIRECTIVES: dict[str, Directive] = {
+            "env": Directive(self.__directiveSetEnvironment, (
+                DirectiveArgument("environment name", ArgumentValueType.IDENTIFIER),)),
+            "def": Directive(self.__directiveDeclareConstant, (
+                DirectiveArgument("constant name", ArgumentValueType.IDENTIFIER), __DIRECTIVE_ARG_ANY)),
+            "ptr": Directive(self.__directiveDeclarePointer, (
+                DirectiveArgument("pointer identifier", ArgumentValueType.IDENTIFIER),
+                DirectiveArgument("primitive type", ArgumentValueType.IDENTIFIER),
+                __DIRECTIVE_ARG_ANY)),
+        }
 
         self.__METHOD_BY_TYPE: dict[StatementType, Callable[[Statement], Optional[CodeInstruction]]] = {StatementType.DIRECTIVE_USE: self.__processDirective,
                                                                                                         StatementType.MARK_DECLARE: self.__processMark,
                                                                                                         StatementType.INSTRUCTION_CALL: self.__processInstruction}
 
     def __checkArgumentCount(self, statement: Statement, need: tuple) -> None:
-        if (need := len(need)) != (got := len(statement.arguments)):
-            self.__err.writeStatement(statement, f"Invalid arg count. Need {need} (got {got})")
+        need_count = len(need)
+        got_count = len(statement.arguments)
+
+        if need_count == got_count:
+            return
+
+        self.__err.writeStatement(statement, f"Invalid arg count. Need {need_count} (got {got_count})")
 
     def __checkNameAvailable(self, statement: Statement, name: str) -> None:
         if self.__env is None:
@@ -152,7 +157,7 @@ class CodeGenerator:
         if value.identifier is not None:
             self.__checkNameExist(statement, value.identifier)
 
-        if self.__err.failed():
+        if self.__err.isFailed():
             return
 
         self.__constants[name] = value
@@ -161,7 +166,7 @@ class CodeGenerator:
         if argument.identifier:
             self.__checkNameExist(statement, argument.identifier)
 
-            if self.__err.failed():
+            if self.__err.isFailed():
                 return
 
             return self.__writeArgumentFromPrimitive(statement, self.__constants[argument.identifier], primitive)
@@ -213,6 +218,7 @@ class CodeGenerator:
 
         if (primitive := self.__primitives.get(typename.identifier)) is None:
             self.__err.writeStatement(statement, f"Unknown primitive type: {primitive}")
+            return
 
         self.__checkNameAvailable(statement, name)
 
@@ -224,7 +230,7 @@ class CodeGenerator:
 
         arg_value = self.__writeArgumentFromPrimitive(statement, init_value, primitive)
 
-        if self.__err.failed():
+        if self.__err.isFailed():
             return
 
         self.__addConstant(statement, name, UniversalArgument.fromInteger(self.__variable_offset))
@@ -241,6 +247,9 @@ class CodeGenerator:
         self.__err.begin()
         self.__checkArgumentCount(statement, directive.arguments)
 
+        if self.__err.isFailed():
+            return
+
         self.__err.begin()
 
         for i, (d_arg, s_arg) in enumerate(zip(directive.arguments, statement.arguments)):
@@ -250,7 +259,7 @@ class CodeGenerator:
             if s_arg.type not in d_arg.type:
                 self.__err.writeStatement(statement, f"Incorrect Directive Argument at {i + 1} type: {s_arg.type}. expected: {d_arg.type} ({d_arg.name})")
 
-        if not self.__err.failed():
+        if not self.__err.isFailed():
             directive.handler(statement)
 
     def __getMarkOffset(self) -> int:
@@ -279,14 +288,14 @@ class CodeGenerator:
         self.__err.begin()
         self.__checkArgumentCount(statement, instruction.arguments)
 
-        if self.__err.failed():
+        if self.__err.isFailed():
             return
 
         self.__err.begin()
 
         code_ins_args = tuple(self.__writeArgumentFromInstructionArg(statement, i + 1, s_arg, i_arg) for i, (i_arg, s_arg) in enumerate(zip(instruction.arguments, statement.arguments)))
 
-        if self.__err.failed():
+        if self.__err.isFailed():
             return
 
         ret = CodeInstruction(instruction=instruction, arguments=code_ins_args, address=self.__getMarkOffset())

@@ -2,14 +2,13 @@
 Различные Реестры контента
 """
 
-from abc import ABC
-from abc import abstractmethod
 from pathlib import Path
 from struct import Struct
-from typing import Final
 from typing import Iterable
 from typing import Optional
 
+from bytelang.abc.registries import CatalogRegistry
+from bytelang.abc.registries import JSONFileRegistry
 from bytelang.content import Environment
 from bytelang.content import EnvironmentInstruction
 from bytelang.content import Package
@@ -22,66 +21,21 @@ from bytelang.parsers import Parser
 from bytelang.tools import FileTool
 from bytelang.tools import ReprTool
 
-
-class Registry[K, T](ABC):
-    """
-    Базовый реестр
-    """
-
-    def __init__(self):
-        self._data = dict[K, T]()
-
-    def getValues(self) -> Iterable[T]:
-        return self._data.values()
-
-    @abstractmethod
-    def get(self, __key: K) -> T:
-        """
-        Получить контент
-        :param __key:
-        :return: None если контент не найден
-        """
-
-
-class JSONFileRegistry[R, T](Registry[str, T]):
-    """
-    Реестр, сразу заполнивший значения из JSON-файла
-    """
-
-    def __init__(self, target_file: Path):
-        super().__init__()
-        self._target_file: Path = target_file
-        self._data = {
-            name: self._parse(name, raw)
-            for name, raw in FileTool.readJSON(self._target_file).items()
-        }
-
-    def get(self, __key: str) -> Optional[T]:
-        if self._target_file is None:
-            raise ValueError("Must select File")
-
-        return self._data.get(__key)
-
-    @abstractmethod
-    def _parse(self, name: str, raw: R) -> T:
-        """
-        Преобразовать сырое представление в объект контента
-        :param raw:
-        :return:
-        """
-
+# TODO сделать каталоговым реестром и файл как namespace
 
 type _PrimitiveRaw = dict[str, int | str]
 
 
-# TODO сделать каталоговым реестром и файл как namespace
-
 class PrimitivesRegistry(JSONFileRegistry[_PrimitiveRaw, PrimitiveType]):
     """Реестр примитивных типов"""
 
-    def __init__(self, target_file: Path):
+    def __init__(self, path: Path):
+        """
+        Реестр примитивных типов
+        :param path: Путь к JSON файлу
+        """
         self._primitives_by_size = dict[tuple[int, PrimitiveWriteType], PrimitiveType]()
-        super().__init__(target_file)
+        super().__init__(path)
 
     def getBySize(self, size: int, write_type: PrimitiveWriteType = PrimitiveWriteType.UNSIGNED) -> PrimitiveType:
         return self._primitives_by_size[size, write_type]
@@ -112,40 +66,6 @@ class PrimitivesRegistry(JSONFileRegistry[_PrimitiveRaw, PrimitiveType]):
         )
 
         return ret
-
-
-class CatalogRegistry[T](Registry[str, T]):
-    """
-    Каталоговый Реестр[T] (ищет файл по имени в каталоге)
-    """
-
-    def __init__(self, target_folder: Path, file_ext: str) -> None:
-        super().__init__()
-        self.__TARGET_FOLDER: Final[Path] = target_folder
-
-        if not self.__TARGET_FOLDER.is_dir():
-            raise ValueError(f"Not a Folder: {target_folder}")
-
-        self.__FILE_EXT: Final[str] = file_ext
-
-    def get(self, name: str) -> T:
-        if self.__TARGET_FOLDER is None:
-            raise ValueError(f"Cannot get {name}! Must set folder")
-
-        if (ret := self._data.get(name)) is None:
-            filepath = str(self.__TARGET_FOLDER / f"{name}.{self.__FILE_EXT}")
-            ret = self._data[name] = self._load(filepath, name)
-
-        return ret
-
-    @abstractmethod
-    def _load(self, filepath: str, name: str) -> T:
-        """
-        Загрузить контент из файла
-        :param filepath: путь к этому контенту
-        :param name: его наименование
-        :return:
-        """
 
 
 class ProfileRegistry(CatalogRegistry[Profile]):
@@ -216,11 +136,11 @@ class PackageRegistry(CatalogRegistry[Package]):
         super().__init__(target_folder, file_ext)
         self.__parser = PackageParser(primitives)
 
-    def _load(self, filepath: str, name: str) -> Package:
+    def _load(self, filepath: Path, name: str) -> Package:
         self.__parser.begin(name)
 
         with open(filepath) as f:
-            return Package(parent=filepath, name=name, instructions=tuple(self.__parser.run(f)))
+            return Package(parent=str(filepath), name=name, instructions=tuple(self.__parser.run(f)))
 
 
 class EnvironmentsRegistry(CatalogRegistry[Environment]):
@@ -230,12 +150,12 @@ class EnvironmentsRegistry(CatalogRegistry[Environment]):
         self.__profiles = profiles
         self.__packages = packages
 
-    def _load(self, filepath: str, name: str) -> Environment:
+    def _load(self, filepath: Path, name: str) -> Environment:
         data = FileTool.readJSON(filepath)
         profile = self.__profiles.get(data["profile"])
 
         return Environment(
-            parent=filepath,
+            parent=str(filepath),
             name=name,
             profile=profile,
             instructions=self.__processPackages(profile, data["packages"])

@@ -10,12 +10,12 @@ from bytelang.code_generator import CodeGenerator
 from bytelang.content import Environment
 from bytelang.handlers import BasicErrorHandler
 from bytelang.handlers import ErrorHandler
+from bytelang.impl.registries import EnvironmentsRegistry
+from bytelang.impl.registries import PackageRegistry
+from bytelang.impl.registries import PrimitivesRegistry
+from bytelang.impl.registries import ProfileRegistry
 from bytelang.interpreters import Interpreter
 from bytelang.parsers import StatementParser
-from bytelang.registries import EnvironmentsRegistry
-from bytelang.registries import PackageRegistry
-from bytelang.registries import PrimitivesRegistry
-from bytelang.registries import ProfileRegistry
 from bytelang.result import LogFlag
 from bytelang.result import Result
 from bytelang.result import ResultError

@@ -8,7 +8,7 @@ from typing import Optional
 
 from bytelang.content import Environment
 from bytelang.content import PrimitiveType
-from bytelang.registries import PrimitivesRegistry
+from bytelang.impl.registries import PrimitivesRegistry
 from bytelang.tools import FileTool
 
 
