@@ -3,7 +3,6 @@ from __future__ import annotations
 from os import PathLike
 from pathlib import Path
 from typing import BinaryIO
-from typing import Optional
 from typing import TextIO
 
 from bytelang.code_generator import ByteCodeWriter
@@ -17,11 +16,10 @@ from bytelang.registries import EnvironmentsRegistry
 from bytelang.registries import PackageRegistry
 from bytelang.registries import PrimitivesRegistry
 from bytelang.registries import ProfileRegistry
-from bytelang.result import CompileResultLegacy
-from bytelang.result import CompileResultLegacy
-from bytelang.source_generator import InstructionSourceGenerator
-from bytelang.source_generator import Language
-from bytelang.tools import FileTool
+from bytelang.result import LogFlag
+from bytelang.result import Result
+from bytelang.result import ResultError
+from bytelang.result import ResultOK
 
 type AnyPath = str | PathLike
 
@@ -49,33 +47,32 @@ class ByteLang:
         self.__primitives_registry = primitives_registry
         self.__environment_registry = environment_registry
 
-    def compile(self, source_input_stream: TextIO, bytecode_output_stream: BinaryIO) -> Optional[CompileResultLegacy]:
+    def compile(self, source_input_stream: TextIO, bytecode_output_stream: BinaryIO, log_flags: LogFlag = LogFlag.ALL) -> Result:
         """
         Скомпилировать исходный код из источника в байткод на выходе
+        :param log_flags: Уровень отображения сообщения компиляции
         :param source_input_stream: Источник исходного кода
         :param bytecode_output_stream: Выход байткода
         :return: Результат компиляции
         """
 
         errors_handler = ErrorHandler()
+        error_result = ResultError(source_input_stream, bytecode_output_stream, errors_handler)
 
         statements = tuple(StatementParser(errors_handler).run(source_input_stream))
 
-        instructions, data = CodeGenerator(errors_handler, self.__environment_registry, self.__primitives_registry).run(statements)
+        if not errors_handler.isSuccess():
+            return error_result
 
-        if data is None:
+        instructions, program_data = CodeGenerator(errors_handler, self.__environment_registry, self.__primitives_registry).run(statements)
+
+        if program_data is None:
             errors_handler.write("Program data is None")
-            return
+            return error_result
 
-        ByteCodeWriter(errors_handler).run(instructions, data, bytecode_output_stream)
+        ByteCodeWriter(errors_handler).run(instructions, program_data, bytecode_output_stream)
 
         if not errors_handler.isSuccess():
-            return
+            return error_result
 
-        return CompileResultLegacy(
-            statements=statements,
-            instructions=instructions,
-            program_data=data,
-            source_stream=source_input_stream,
-            bytecode_stream=bytecode_output_stream
-        )
+        return ResultOK(source_input_stream, bytecode_output_stream, log_flags, statements, instructions, program_data)

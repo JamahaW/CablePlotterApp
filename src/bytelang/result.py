@@ -6,6 +6,7 @@ from enum import auto
 from typing import BinaryIO
 from typing import TextIO
 
+from bytelang import ErrorHandler
 from bytelang.code_generator import CodeInstruction
 from bytelang.code_generator import ProgramData
 from bytelang.parsers import Parser
@@ -14,16 +15,31 @@ from bytelang.tools import ReprTool
 from bytelang.tools import StringBuilder
 
 
-# TODO выбрать подходящее название
+@dataclass(frozen=True, repr=False)
+class Result:
+    """Результат работы компилятора ByteLang"""
 
-# TODO Организовать флаги
+    source_stream: TextIO
+    bytecode_stream: BinaryIO
+
+    def isOK(self) -> bool:
+        """Получить статус"""
+
+    def getMessage(self) -> str:
+        """Получить сообщение результата"""
+
+
 class LogFlag(Flag):
+    # TODO выбрать подходящее название
+    # TODO Организовать флаги
     """Флаги вывода логов компиляции"""
+    PRIMITIVES = auto()
+    """Вывести данные реестра примитивных типов"""
     ENVIRONMENT_INSTRUCTIONS = auto()
     """Вывести инструкции окружения"""
     PROFILE = auto()
     """Вывести данные профиля"""
-    REGISTRIES = ENVIRONMENT_INSTRUCTIONS | PROFILE
+    REGISTRIES = PRIMITIVES | ENVIRONMENT_INSTRUCTIONS | PROFILE
     """Вывести все доступные реестры"""
 
     STATEMENTS = auto()
@@ -47,38 +63,40 @@ class LogFlag(Flag):
     """Всё и сразу"""
 
 
-@dataclass(frozen=True, kw_only=True, repr=False)
-class CompileResultLegacy:
+@dataclass(frozen=True, repr=False)
+class ResultOK(Result):
+    flags: LogFlag
+
     statements: tuple[Statement, ...]
     instructions: tuple[CodeInstruction, ...]
     program_data: ProgramData
 
-    source_stream: TextIO
-    bytecode_stream: BinaryIO
+    def isOK(self) -> bool:
+        return True
 
-    def getInfoLog(self, flags: LogFlag = LogFlag.ALL) -> str:
+    def getMessage(self) -> str:
         sb = StringBuilder()
         env = self.program_data.environment
 
-        if LogFlag.ENVIRONMENT_INSTRUCTIONS in flags:
+        if LogFlag.ENVIRONMENT_INSTRUCTIONS in self.flags:
             sb.append(ReprTool.headed(f"instructions : {env.name}", env.instructions.values()))
 
-        if LogFlag.PROFILE in flags:
+        if LogFlag.PROFILE in self.flags:
             sb.append(ReprTool.title(f"profile : {env.profile.name}")).append(ReprTool.strDict(env.profile.__dict__, _repr=True))
 
-        if LogFlag.STATEMENTS in flags:
+        if LogFlag.STATEMENTS in self.flags:
             sb.append(ReprTool.headed(f"statements : {self.source_stream.name}", self.statements))
 
-        if LogFlag.CONSTANTS in flags:
+        if LogFlag.CONSTANTS in self.flags:
             sb.append(ReprTool.title("constants")).append(ReprTool.strDict(self.program_data.constants))
 
-        if LogFlag.VARIABLES in flags:
+        if LogFlag.VARIABLES in self.flags:
             sb.append(ReprTool.headed("variables", self.program_data.variables))
 
-        if LogFlag.CODE_INSTRUCTIONS in flags:
+        if LogFlag.CODE_INSTRUCTIONS in self.flags:
             sb.append(ReprTool.headed(f"code instructions : {self.source_stream.name}", self.instructions))
 
-        if LogFlag.BYTECODE in flags:
+        if LogFlag.BYTECODE in self.flags:
             self.__writeByteCode(sb)
 
         return sb.toString()
@@ -110,3 +128,14 @@ class CompileResultLegacy:
                     self.__writeComment(sb, ins)
 
                 sb.append(f"{address:04X}: {byte:02X}")
+
+
+@dataclass(frozen=True, repr=False)
+class ResultError(Result):
+    error_handler: ErrorHandler
+
+    def isOK(self) -> bool:
+        return False
+
+    def getMessage(self) -> str:
+        return self.error_handler.getLog()

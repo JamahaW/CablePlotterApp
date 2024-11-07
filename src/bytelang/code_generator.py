@@ -134,6 +134,10 @@ class CodeGenerator:
             self.__err.writeStatement(statement, f"Invalid arg count. Need {need} (got {got})")
 
     def __checkNameAvailable(self, statement: Statement, name: str) -> None:
+        if self.__env is None:
+            self.__err.writeStatement(statement, f"Невозможно проверить идентификатор {name}, окружение не выбрано")
+            return
+
         if name in self.__constants.keys() or name in self.__env.instructions.keys():
             self.__err.writeStatement(statement, f"Идентификатор {name} уже используется")
 
@@ -253,6 +257,10 @@ class CodeGenerator:
         return self.__variable_offset + self.__mark_offset_isolated
 
     def __processMark(self, statement: Statement) -> None:
+        if self.__env is None:
+            self.__err.writeStatement(statement, "Невозможно создать метку пока не выбрано окружение")
+            return
+
         mark_offset = self.__getMarkOffset()
         self.__marks_address[mark_offset] = statement.head
         self.__addConstant(statement, statement.head, UniversalArgument.fromInteger(mark_offset))
