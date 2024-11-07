@@ -4,7 +4,7 @@ from typing import Iterable
 from typing import Optional
 
 from bytelang import ByteLang
-from bytelang import CompileResult
+from bytelang import CompileResultLegacy
 from bytelang import EnvironmentsRegistry
 from bytelang import PackageRegistry
 from bytelang import PrimitivesRegistry
@@ -42,7 +42,7 @@ class PlotterCodeGenerator:
         builder.append(enc_code())
         FileTool.save(self.SOURCE_FILEPATH, builder.toString())
 
-    def __getLog(self, result: Optional[CompileResult], log_flag: LogFlag = LogFlag.ALL) -> str:
+    def __getLog(self, result: Optional[CompileResultLegacy], log_flag: LogFlag = LogFlag.ALL) -> str:
         if result is None:
             return self.bytelang.getErrorsLog()
         else:

@@ -48,7 +48,7 @@ class LogFlag(Flag):
 
 
 @dataclass(frozen=True, kw_only=True, repr=False)
-class CompileResult:
+class CompileResultLegacy:
     statements: tuple[Statement, ...]
     instructions: tuple[CodeInstruction, ...]
     program_data: ProgramData
