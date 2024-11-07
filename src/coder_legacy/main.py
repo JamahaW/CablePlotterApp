@@ -4,7 +4,7 @@ from tkinter import *
 from tkinter import filedialog
 from tkinter import scrolledtext
 
-from plotter.code_gen import PlotterCodeGenerator
+from code_gen import PlotterCodeGenerator
 from printcoder import Vector2
 from printcoder import VertexGenerator
 

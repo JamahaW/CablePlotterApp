@@ -4,117 +4,6011 @@
 .env esp32_env
 
 # BEGIN_CODE end
-set_speed 6
-set_active_tool 0
-
+set_speed 8
 set_active_tool 1
-delay_ms 200
-set_active_tool 2
-delay_ms 200
-set_active_tool 3
-delay_ms 200
+set_position 0 0
+
+set_position 0 0
+
+set_position 0 0
+
+set_position 0 0
+
+set_position 0 0
+
+set_position 0 0
+
+set_position 0 0
+
+set_position 0 0
+
+set_position 0 0
+
+set_position 0 0
+
+set_position 0 0
+
+set_position 0 0
+
+set_position 0 0
+
+set_position 0 0
+
+set_position 0 0
+
+set_position 0 0
+
+set_position 0 0
+
+set_position 0 0
+
+set_position 0 0
+
+set_position 0 1
+
+set_position 0 1
+
+set_position 0 1
+
+set_position 0 1
+
+set_position 1 1
+
+set_position 1 1
+
+set_position 1 1
+
+set_position 1 1
+
+set_position 1 1
+
+set_position 1 1
+
+set_position 1 1
+
+set_position 1 1
+
+set_position 1 1
+
+set_position 1 1
+
+set_position 1 0
+
+set_position 2 0
+
+set_position 2 0
+
+set_position 2 0
+
+set_position 2 0
+
+set_position 2 0
+
+set_position 2 0
+
+set_position 2 0
+
+set_position 2 0
+
+set_position 2 0
+
+set_position 2 0
+
+set_position 2 0
+
+set_position 2 0
+
+set_position 3 0
+
+set_position 3 0
+
+set_position 3 0
+
+set_position 3 0
+
+set_position 3 0
+
+set_position 3 0
+
+set_position 3 0
+
+set_position 3 0
+
+set_position 3 0
+
+set_position 3 0
+
+set_position 3 -1
+
+set_position 3 -1
+
+set_position 3 -1
+
+set_position 3 -1
+
+set_position 3 -1
+
+set_position 3 -1
+
+set_position 3 -2
+
+set_position 3 -2
+
+set_position 3 -2
+
+set_position 3 -2
+
+set_position 3 -2
+
+set_position 3 -2
+
+set_position 3 -2
+
+set_position 3 -3
+
+set_position 3 -3
+
+set_position 3 -3
+
+set_position 3 -3
+
+set_position 3 -3
+
+set_position 3 -3
+
+set_position 2 -4
+
+set_position 2 -4
+
+set_position 2 -4
+
+set_position 2 -4
+
+set_position 2 -4
+
+set_position 2 -4
+
+set_position 2 -4
+
+set_position 2 -5
+
+set_position 1 -5
+
+set_position 1 -5
+
+set_position 1 -5
+
+set_position 1 -5
+
+set_position 1 -5
+
+set_position 1 -5
+
+set_position 0 -5
+
+set_position 0 -5
+
+set_position 0 -6
+
+set_position 0 -6
+
+set_position 0 -6
+
+set_position 0 -6
+
+set_position 0 -6
+
+set_position 0 -6
+
+set_position 0 -6
+
+set_position 0 -6
+
+set_position -1 -6
+
+set_position -1 -6
+
+set_position -1 -6
+
+set_position -1 -6
+
+set_position -2 -6
+
+set_position -2 -6
+
+set_position -2 -6
+
+set_position -2 -6
+
+set_position -3 -6
+
+set_position -3 -6
+
+set_position -3 -6
+
+set_position -3 -6
+
+set_position -4 -6
+
+set_position -4 -6
+
+set_position -4 -6
+
+set_position -4 -5
+
+set_position -5 -5
+
+set_position -5 -5
+
+set_position -5 -5
+
+set_position -5 -5
+
+set_position -5 -5
+
+set_position -6 -5
+
+set_position -6 -4
+
+set_position -6 -4
+
+set_position -6 -4
+
+set_position -7 -4
+
+set_position -7 -4
+
+set_position -7 -3
+
+set_position -7 -3
+
+set_position -7 -3
+
+set_position -7 -3
+
+set_position -8 -3
+
+set_position -8 -2
+
+set_position -8 -2
+
+set_position -8 -2
+
+set_position -8 -1
+
+set_position -8 -1
+
+set_position -8 -1
+
+set_position -9 -1
+
+set_position -9 0
+
+set_position -9 0
+
+set_position -9 0
+
+set_position -9 0
+
+set_position -9 0
+
+set_position -9 0
+
+set_position -9 1
+
+set_position -9 1
+
+set_position -9 1
+
+set_position -9 2
+
+set_position -9 2
+
+set_position -9 2
+
+set_position -9 3
+
+set_position -9 3
+
+set_position -9 3
+
+set_position -9 4
+
+set_position -9 4
+
+set_position -9 4
+
+set_position -9 5
+
+set_position -8 5
+
+set_position -8 5
+
+set_position -8 6
+
+set_position -8 6
+
+set_position -8 6
+
+set_position -8 7
+
+set_position -7 7
+
+set_position -7 7
+
+set_position -7 8
+
+set_position -7 8
+
+set_position -7 8
+
+set_position -6 8
+
+set_position -6 9
+
+set_position -6 9
+
+set_position -5 9
+
+set_position -5 9
+
+set_position -5 10
+
+set_position -5 10
+
+set_position -4 10
+
+set_position -4 10
+
+set_position -4 11
+
+set_position -3 11
+
+set_position -3 11
+
+set_position -2 11
+
+set_position -2 11
+
+set_position -2 11
+
+set_position -1 12
+
+set_position -1 12
+
+set_position -1 12
+
+set_position 0 12
+
+set_position 0 12
+
+set_position 0 12
+
+set_position 0 12
+
+set_position 1 12
+
+set_position 1 12
+
+set_position 1 12
+
+set_position 2 12
+
+set_position 2 12
+
+set_position 3 12
+
+set_position 3 12
+
+set_position 4 12
+
+set_position 4 12
+
+set_position 4 12
+
+set_position 5 12
+
+set_position 5 12
+
+set_position 6 11
+
+set_position 6 11
+
+set_position 7 11
+
+set_position 7 11
+
+set_position 7 11
+
+set_position 8 10
+
+set_position 8 10
+
+set_position 9 10
+
+set_position 9 10
+
+set_position 9 9
+
+set_position 10 9
+
+set_position 10 9
+
+set_position 11 9
+
+set_position 11 8
+
+set_position 11 8
+
+set_position 12 7
+
+set_position 12 7
+
+set_position 12 7
+
+set_position 12 6
+
+set_position 13 6
+
+set_position 13 5
+
+set_position 13 5
+
+set_position 14 5
+
+set_position 14 4
+
+set_position 14 4
+
+set_position 14 3
+
+set_position 14 3
+
+set_position 15 2
+
+set_position 15 2
+
+set_position 15 1
+
+set_position 15 1
+
+set_position 15 0
+
+set_position 15 0
+
+set_position 15 0
+
+set_position 15 0
+
+set_position 15 -1
+
+set_position 15 -1
+
+set_position 15 -2
+
+set_position 15 -2
+
+set_position 15 -3
+
+set_position 15 -4
+
+set_position 15 -4
+
+set_position 15 -5
+
+set_position 15 -5
+
+set_position 15 -6
+
+set_position 15 -6
+
+set_position 14 -7
+
+set_position 14 -7
+
+set_position 14 -8
+
+set_position 14 -8
+
+set_position 13 -9
+
+set_position 13 -9
+
+set_position 13 -10
+
+set_position 13 -10
+
+set_position 12 -11
+
+set_position 12 -11
+
+set_position 12 -12
+
+set_position 11 -12
+
+set_position 11 -13
+
+set_position 10 -13
+
+set_position 10 -13
+
+set_position 10 -14
+
+set_position 9 -14
+
+set_position 9 -15
+
+set_position 8 -15
+
+set_position 8 -15
+
+set_position 7 -16
+
+set_position 7 -16
+
+set_position 6 -16
+
+set_position 6 -17
+
+set_position 5 -17
+
+set_position 4 -17
+
+set_position 4 -17
+
+set_position 3 -17
+
+set_position 3 -18
+
+set_position 2 -18
+
+set_position 2 -18
+
+set_position 1 -18
+
+set_position 0 -18
+
+set_position 0 -18
+
+set_position 0 -18
+
+set_position -1 -18
+
+set_position -1 -18
+
+set_position -2 -18
+
+set_position -3 -18
+
+set_position -3 -18
+
+set_position -4 -18
+
+set_position -4 -18
+
+set_position -5 -18
+
+set_position -6 -18
+
+set_position -6 -18
+
+set_position -7 -18
+
+set_position -8 -17
+
+set_position -8 -17
+
+set_position -9 -17
+
+set_position -9 -17
+
+set_position -10 -16
+
+set_position -11 -16
+
+set_position -11 -16
+
+set_position -12 -15
+
+set_position -12 -15
+
+set_position -13 -15
+
+set_position -13 -14
+
+set_position -14 -14
+
+set_position -15 -13
+
+set_position -15 -13
+
+set_position -16 -12
+
+set_position -16 -12
+
+set_position -16 -11
+
+set_position -17 -11
+
+set_position -17 -10
+
+set_position -18 -10
+
+set_position -18 -9
+
+set_position -19 -8
+
+set_position -19 -8
+
+set_position -19 -7
+
+set_position -19 -7
+
+set_position -20 -6
+
+set_position -20 -5
+
+set_position -20 -5
+
+set_position -21 -4
+
+set_position -21 -3
+
+set_position -21 -2
+
+set_position -21 -2
+
+set_position -21 -1
+
+set_position -21 0
+
+set_position -21 0
+
+set_position -21 0
+
+set_position -21 1
+
+set_position -21 2
+
+set_position -21 2
+
+set_position -21 3
+
+set_position -21 4
+
+set_position -21 5
+
+set_position -21 5
+
+set_position -21 6
+
+set_position -21 7
+
+set_position -21 8
+
+set_position -20 8
+
+set_position -20 9
+
+set_position -20 10
+
+set_position -20 10
+
+set_position -19 11
+
+set_position -19 12
+
+set_position -19 13
+
+set_position -18 13
+
+set_position -18 14
+
+set_position -17 14
+
+set_position -17 15
+
+set_position -16 16
+
+set_position -16 16
+
+set_position -15 17
+
+set_position -15 17
+
+set_position -14 18
+
+set_position -14 19
+
+set_position -13 19
+
+set_position -12 20
+
+set_position -12 20
+
+set_position -11 21
+
+set_position -10 21
+
+set_position -10 21
+
+set_position -9 22
+
+set_position -8 22
+
+set_position -8 22
+
+set_position -7 23
+
+set_position -6 23
+
+set_position -5 23
+
+set_position -4 24
+
+set_position -4 24
+
+set_position -3 24
+
+set_position -2 24
+
+set_position -1 24
+
+set_position 0 24
+
+set_position 0 25
+
+set_position 0 25
+
+set_position 1 25
+
+set_position 2 25
+
+set_position 3 25
+
+set_position 4 24
+
+set_position 5 24
+
+set_position 5 24
+
+set_position 6 24
+
+set_position 7 24
+
+set_position 8 24
+
+set_position 9 24
+
+set_position 10 23
+
+set_position 10 23
+
+set_position 11 23
+
+set_position 12 22
+
+set_position 13 22
+
+set_position 14 22
+
+set_position 14 21
+
+set_position 15 21
+
+set_position 16 20
+
+set_position 17 20
+
+set_position 17 19
+
+set_position 18 19
+
+set_position 19 18
+
+set_position 19 17
+
+set_position 20 17
+
+set_position 21 16
+
+set_position 21 15
+
+set_position 22 15
+
+set_position 22 14
+
+set_position 23 13
+
+set_position 23 12
+
+set_position 24 12
+
+set_position 24 11
+
+set_position 25 10
+
+set_position 25 9
+
+set_position 25 8
+
+set_position 26 8
+
+set_position 26 7
+
+set_position 26 6
+
+set_position 27 5
+
+set_position 27 4
+
+set_position 27 3
+
+set_position 27 2
+
+set_position 27 1
+
+set_position 28 0
+
+set_position 28 0
+
+set_position 28 -1
+
+set_position 28 -2
+
+set_position 28 -2
+
+set_position 28 -3
+
+set_position 28 -4
+
+set_position 27 -5
+
+set_position 27 -6
+
+set_position 27 -7
+
+set_position 27 -8
+
+set_position 27 -9
+
+set_position 26 -10
+
+set_position 26 -11
+
+set_position 26 -12
+
+set_position 25 -13
+
+set_position 25 -14
+
+set_position 25 -15
+
+set_position 24 -15
+
+set_position 24 -16
+
+set_position 23 -17
+
+set_position 23 -18
+
+set_position 22 -19
+
+set_position 21 -19
+
+set_position 21 -20
+
+set_position 20 -21
+
+set_position 19 -22
+
+set_position 19 -22
+
+set_position 18 -23
+
+set_position 17 -24
+
+set_position 16 -24
+
+set_position 16 -25
+
+set_position 15 -26
+
+set_position 14 -26
+
+set_position 13 -27
+
+set_position 12 -27
+
+set_position 11 -28
+
+set_position 10 -28
+
+set_position 9 -28
+
+set_position 8 -29
+
+set_position 7 -29
+
+set_position 6 -30
+
+set_position 5 -30
+
+set_position 4 -30
+
+set_position 3 -30
+
+set_position 2 -30
+
+set_position 1 -31
+
+set_position 0 -31
+
+set_position 0 -31
+
+set_position -1 -31
+
+set_position -2 -31
+
+set_position -3 -31
+
+set_position -4 -31
+
+set_position -5 -31
+
+set_position -6 -30
+
+set_position -7 -30
+
+set_position -8 -30
+
+set_position -9 -30
+
+set_position -10 -30
+
+set_position -11 -29
+
+set_position -12 -29
+
+set_position -13 -29
+
+set_position -14 -28
+
+set_position -15 -28
+
+set_position -16 -27
+
+set_position -17 -27
+
+set_position -18 -26
+
+set_position -19 -25
+
+set_position -20 -25
+
+set_position -21 -24
+
+set_position -22 -24
+
+set_position -23 -23
+
+set_position -23 -22
+
+set_position -24 -21
+
+set_position -25 -21
+
+set_position -26 -20
+
+set_position -26 -19
+
+set_position -27 -18
+
+set_position -28 -17
+
+set_position -28 -16
+
+set_position -29 -15
+
+set_position -30 -14
+
+set_position -30 -13
+
+set_position -31 -12
+
+set_position -31 -11
+
+set_position -31 -10
+
+set_position -32 -9
+
+set_position -32 -8
+
+set_position -33 -7
+
+set_position -33 -6
+
+set_position -33 -5
+
+set_position -33 -4
+
+set_position -34 -3
+
+set_position -34 -1
+
+set_position -34 0
+
+set_position -34 0
+
+set_position -34 1
+
+set_position -34 2
+
+set_position -34 3
+
+set_position -34 5
+
+set_position -34 6
+
+set_position -34 7
+
+set_position -33 8
+
+set_position -33 9
+
+set_position -33 10
+
+set_position -32 11
+
+set_position -32 13
+
+set_position -32 14
+
+set_position -31 15
+
+set_position -31 16
+
+set_position -30 17
+
+set_position -30 18
+
+set_position -29 19
+
+set_position -29 20
+
+set_position -28 21
+
+set_position -27 22
+
+set_position -27 23
+
+set_position -26 24
+
+set_position -25 25
+
+set_position -24 26
+
+set_position -23 27
+
+set_position -22 27
+
+set_position -22 28
+
+set_position -21 29
+
+set_position -20 30
+
+set_position -19 30
+
+set_position -18 31
+
+set_position -17 32
+
+set_position -15 32
+
+set_position -14 33
+
+set_position -13 34
+
+set_position -12 34
+
+set_position -11 35
+
+set_position -10 35
+
+set_position -9 35
+
+set_position -8 36
+
+set_position -6 36
+
+set_position -5 36
+
+set_position -4 37
+
+set_position -3 37
+
+set_position -1 37
+
+set_position 0 37
+
+set_position 0 37
+
+set_position 1 37
+
+set_position 3 37
+
+set_position 4 37
+
+set_position 5 37
+
+set_position 6 37
+
+set_position 8 37
+
+set_position 9 36
+
+set_position 10 36
+
+set_position 11 36
+
+set_position 13 35
+
+set_position 14 35
+
+set_position 15 35
+
+set_position 16 34
+
+set_position 17 34
+
+set_position 19 33
+
+set_position 20 32
+
+set_position 21 32
+
+set_position 22 31
+
+set_position 23 30
+
+set_position 24 30
+
+set_position 25 29
+
+set_position 26 28
+
+set_position 27 27
+
+set_position 28 26
+
+set_position 29 25
+
+set_position 30 24
+
+set_position 31 23
+
+set_position 32 22
+
+set_position 32 21
+
+set_position 33 20
+
+set_position 34 19
+
+set_position 35 18
+
+set_position 35 17
+
+set_position 36 16
+
+set_position 37 14
+
+set_position 37 13
+
+set_position 38 12
+
+set_position 38 11
+
+set_position 38 9
+
+set_position 39 8
+
+set_position 39 7
+
+set_position 39 5
+
+set_position 40 4
+
+set_position 40 3
+
+set_position 40 1
+
+set_position 40 0
+
+set_position 40 0
+
+set_position 40 -2
+
+set_position 40 -3
+
+set_position 40 -4
+
+set_position 40 -6
+
+set_position 40 -7
+
+set_position 40 -9
+
+set_position 39 -10
+
+set_position 39 -11
+
+set_position 39 -13
+
+set_position 38 -14
+
+set_position 38 -15
+
+set_position 37 -17
+
+set_position 37 -18
+
+set_position 36 -19
+
+set_position 36 -20
+
+set_position 35 -22
+
+set_position 34 -23
+
+set_position 33 -24
+
+set_position 33 -25
+
+set_position 32 -26
+
+set_position 31 -27
+
+set_position 30 -28
+
+set_position 29 -30
+
+set_position 28 -31
+
+set_position 27 -32
+
+set_position 26 -33
+
+set_position 25 -33
+
+set_position 24 -34
+
+set_position 23 -35
+
+set_position 22 -36
+
+set_position 20 -37
+
+set_position 19 -38
+
+set_position 18 -38
+
+set_position 17 -39
+
+set_position 15 -39
+
+set_position 14 -40
+
+set_position 13 -41
+
+set_position 11 -41
+
+set_position 10 -41
+
+set_position 9 -42
+
+set_position 7 -42
+
+set_position 6 -43
+
+set_position 4 -43
+
+set_position 3 -43
+
+set_position 1 -43
+
+set_position 0 -43
+
+set_position -1 -43
+
+set_position -2 -43
+
+set_position -4 -43
+
+set_position -5 -43
+
+set_position -6 -43
+
+set_position -8 -43
+
+set_position -9 -43
+
+set_position -11 -42
+
+set_position -12 -42
+
+set_position -14 -42
+
+set_position -15 -41
+
+set_position -17 -41
+
+set_position -18 -40
+
+set_position -19 -40
+
+set_position -21 -39
+
+set_position -22 -38
+
+set_position -23 -37
+
+set_position -25 -37
+
+set_position -26 -36
+
+set_position -27 -35
+
+set_position -28 -34
+
+set_position -30 -33
+
+set_position -31 -32
+
+set_position -32 -31
+
+set_position -33 -30
+
+set_position -34 -29
+
+set_position -35 -28
+
+set_position -36 -27
+
+set_position -37 -26
+
+set_position -38 -24
+
+set_position -39 -23
+
+set_position -40 -22
+
+set_position -40 -20
+
+set_position -41 -19
+
+set_position -42 -18
+
+set_position -42 -16
+
+set_position -43 -15
+
+set_position -44 -13
+
+set_position -44 -12
+
+set_position -45 -10
+
+set_position -45 -9
+
+set_position -45 -7
+
+set_position -46 -6
+
+set_position -46 -4
+
+set_position -46 -3
+
+set_position -46 -1
+
+set_position -46 0
+
+set_position -46 1
+
+set_position -46 2
+
+set_position -46 4
+
+set_position -46 6
+
+set_position -46 7
+
+set_position -46 9
+
+set_position -46 10
+
+set_position -45 12
+
+set_position -45 13
+
+set_position -44 15
+
+set_position -44 16
+
+set_position -43 18
+
+set_position -43 19
+
+set_position -42 21
+
+set_position -42 22
+
+set_position -41 24
+
+set_position -40 25
+
+set_position -39 27
+
+set_position -38 28
+
+set_position -37 29
+
+set_position -36 31
+
+set_position -35 32
+
+set_position -34 33
+
+set_position -33 34
+
+set_position -32 35
+
+set_position -31 37
+
+set_position -30 38
+
+set_position -28 39
+
+set_position -27 40
+
+set_position -26 41
+
+set_position -24 42
+
+set_position -23 42
+
+set_position -22 43
+
+set_position -20 44
+
+set_position -19 45
+
+set_position -17 45
+
+set_position -16 46
+
+set_position -14 47
+
+set_position -13 47
+
+set_position -11 48
+
+set_position -9 48
+
+set_position -8 48
+
+set_position -6 49
+
+set_position -4 49
+
+set_position -3 49
+
+set_position -1 49
+
+set_position 0 50
+
+set_position 1 50
+
+set_position 3 50
+
+set_position 5 49
+
+set_position 6 49
+
+set_position 8 49
+
+set_position 10 49
+
+set_position 11 49
+
+set_position 13 48
+
+set_position 15 48
+
+set_position 16 47
+
+set_position 18 47
+
+set_position 19 46
+
+set_position 21 46
+
+set_position 23 45
+
+set_position 24 44
+
+set_position 26 43
+
+set_position 27 43
+
+set_position 29 42
+
+set_position 30 41
+
+set_position 31 40
+
+set_position 33 39
+
+set_position 34 38
+
+set_position 35 36
+
+set_position 37 35
+
+set_position 38 34
+
+set_position 39 33
+
+set_position 40 32
+
+set_position 41 30
+
+set_position 42 29
+
+set_position 43 27
+
+set_position 44 26
+
+set_position 45 24
+
+set_position 46 23
+
+set_position 47 21
+
+set_position 48 20
+
+set_position 48 18
+
+set_position 49 17
+
+set_position 50 15
+
+set_position 50 13
+
+set_position 51 12
+
+set_position 51 10
+
+set_position 52 8
+
+set_position 52 6
+
+set_position 52 5
+
+set_position 52 3
+
+set_position 53 1
+
+set_position 53 0
+
+set_position 53 -2
+
+set_position 53 -3
+
+set_position 53 -5
+
+set_position 52 -7
+
+set_position 52 -9
+
+set_position 52 -10
+
+set_position 52 -12
+
+set_position 51 -14
+
+set_position 51 -16
+
+set_position 50 -17
+
+set_position 50 -19
+
+set_position 49 -21
+
+set_position 48 -22
+
+set_position 48 -24
+
+set_position 47 -26
+
+set_position 46 -27
+
+set_position 45 -29
+
+set_position 44 -31
+
+set_position 43 -32
+
+set_position 42 -34
+
+set_position 41 -35
+
+set_position 40 -36
+
+set_position 39 -38
+
+set_position 37 -39
+
+set_position 36 -40
+
+set_position 35 -42
+
+set_position 33 -43
+
+set_position 32 -44
+
+set_position 30 -45
+
+set_position 29 -46
+
+set_position 27 -47
+
+set_position 26 -48
+
+set_position 24 -49
+
+set_position 22 -50
+
+set_position 21 -51
+
+set_position 19 -51
+
+set_position 17 -52
+
+set_position 16 -53
+
+set_position 14 -53
+
+set_position 12 -54
+
+set_position 10 -54
+
+set_position 8 -55
+
+set_position 7 -55
+
+set_position 5 -55
+
+set_position 3 -56
+
+set_position 1 -56
+
+set_position 0 -56
+
+set_position -2 -56
+
+set_position -4 -56
+
+set_position -6 -56
+
+set_position -8 -55
+
+set_position -9 -55
+
+set_position -11 -55
+
+set_position -13 -55
+
+set_position -15 -54
+
+set_position -17 -54
+
+set_position -19 -53
+
+set_position -20 -52
+
+set_position -22 -52
+
+set_position -24 -51
+
+set_position -26 -50
+
+set_position -28 -49
+
+set_position -29 -49
+
+set_position -31 -48
+
+set_position -32 -47
+
+set_position -34 -45
+
+set_position -36 -44
+
+set_position -37 -43
+
+set_position -39 -42
+
+set_position -40 -41
+
+set_position -42 -39
+
+set_position -43 -38
+
+set_position -44 -36
+
+set_position -45 -35
+
+set_position -47 -33
+
+set_position -48 -32
+
+set_position -49 -30
+
+set_position -50 -29
+
+set_position -51 -27
+
+set_position -52 -25
+
+set_position -53 -24
+
+set_position -54 -22
+
+set_position -54 -20
+
+set_position -55 -18
+
+set_position -56 -16
+
+set_position -56 -14
+
+set_position -57 -12
+
+set_position -57 -11
+
+set_position -58 -9
+
+set_position -58 -7
+
+set_position -58 -5
+
+set_position -59 -3
+
+set_position -59 -1
+
+set_position -59 0
+
+set_position -59 2
+
+set_position -59 4
+
+set_position -59 6
+
+set_position -59 8
+
+set_position -58 10
+
+set_position -58 12
+
+set_position -58 14
+
+set_position -57 16
+
+set_position -57 18
+
+set_position -56 20
+
+set_position -55 22
+
+set_position -55 24
+
+set_position -54 26
+
+set_position -53 27
+
+set_position -52 29
+
+set_position -51 31
+
+set_position -50 33
+
+set_position -49 35
+
+set_position -48 36
+
+set_position -47 38
+
+set_position -45 39
+
+set_position -44 41
+
+set_position -43 42
+
+set_position -41 44
+
+set_position -40 45
+
+set_position -38 47
+
+set_position -37 48
+
+set_position -35 49
+
+set_position -33 51
+
+set_position -32 52
+
+set_position -30 53
+
+set_position -28 54
+
+set_position -26 55
+
+set_position -25 56
+
+set_position -23 57
+
+set_position -21 58
+
+set_position -19 58
+
+set_position -17 59
+
+set_position -15 60
+
+set_position -13 60
+
+set_position -11 61
+
+set_position -9 61
+
+set_position -7 61
+
+set_position -5 62
+
+set_position -3 62
+
+set_position -1 62
+
+set_position 1 62
+
+set_position 3 62
+
+set_position 5 62
+
+set_position 7 62
+
+set_position 9 62
+
+set_position 11 61
+
+set_position 13 61
+
+set_position 15 61
+
+set_position 17 60
+
+set_position 19 59
+
+set_position 21 59
+
+set_position 23 58
+
+set_position 25 57
+
+set_position 27 57
+
+set_position 29 56
+
+set_position 31 55
+
+set_position 33 54
+
+set_position 35 53
+
+set_position 37 51
+
+set_position 38 50
+
+set_position 40 49
+
+set_position 42 48
+
+set_position 43 46
+
+set_position 45 45
+
+set_position 46 43
+
+set_position 48 42
+
+set_position 49 40
+
+set_position 51 38
+
+set_position 52 37
+
+set_position 53 35
+
+set_position 55 33
+
+set_position 56 31
+
+set_position 57 29
+
+set_position 58 28
+
+set_position 59 26
+
+set_position 60 24
+
+set_position 61 22
+
+set_position 61 20
+
+set_position 62 18
+
+set_position 63 15
+
+set_position 63 13
+
+set_position 64 11
+
+set_position 64 9
+
+set_position 64 7
+
+set_position 65 5
+
+set_position 65 3
+
+set_position 65 0
+
+set_position 65 -1
+
+set_position 65 -3
+
+set_position 65 -5
+
+set_position 65 -7
+
+set_position 65 -10
+
+set_position 64 -12
+
+set_position 64 -14
+
+set_position 63 -16
+
+set_position 63 -18
+
+set_position 62 -21
+
+set_position 62 -23
+
+set_position 61 -25
+
+set_position 60 -27
+
+set_position 59 -29
+
+set_position 58 -31
+
+set_position 57 -33
+
+set_position 56 -35
+
+set_position 55 -37
+
+set_position 54 -39
+
+set_position 52 -40
+
+set_position 51 -42
+
+set_position 50 -44
+
+set_position 48 -46
+
+set_position 47 -47
+
+set_position 45 -49
+
+set_position 43 -50
+
+set_position 42 -52
+
+set_position 40 -53
+
+set_position 38 -55
+
+set_position 36 -56
+
+set_position 35 -57
+
+set_position 33 -59
+
+set_position 31 -60
+
+set_position 29 -61
+
+set_position 27 -62
+
+set_position 25 -63
+
+set_position 22 -64
+
+set_position 20 -64
+
+set_position 18 -65
+
+set_position 16 -66
+
+set_position 14 -66
+
+set_position 11 -67
+
+set_position 9 -67
+
+set_position 7 -68
+
+set_position 5 -68
+
+set_position 2 -68
+
+set_position 0 -68
+
+set_position -1 -68
+
+set_position -4 -68
+
+set_position -6 -68
+
+set_position -8 -68
+
+set_position -10 -68
+
+set_position -13 -67
+
+set_position -15 -67
+
+set_position -17 -66
+
+set_position -20 -66
+
+set_position -22 -65
+
+set_position -24 -65
+
+set_position -26 -64
+
+set_position -28 -63
+
+set_position -30 -62
+
+set_position -33 -61
+
+set_position -35 -60
+
+set_position -37 -59
+
+set_position -39 -57
+
+set_position -41 -56
+
+set_position -43 -55
+
+set_position -44 -53
+
+set_position -46 -52
+
+set_position -48 -50
+
+set_position -50 -49
+
+set_position -51 -47
+
+set_position -53 -45
+
+set_position -55 -44
+
+set_position -56 -42
+
+set_position -58 -40
+
+set_position -59 -38
+
+set_position -60 -36
+
+set_position -61 -34
+
+set_position -63 -32
+
+set_position -64 -30
+
+set_position -65 -28
+
+set_position -66 -25
+
+set_position -67 -23
+
+set_position -67 -21
+
+set_position -68 -19
+
+set_position -69 -16
+
+set_position -69 -14
+
+set_position -70 -12
+
+set_position -70 -9
+
+set_position -71 -7
+
+set_position -71 -5
+
+set_position -71 -2
+
+set_position -71 0
+
+set_position -71 2
+
+set_position -71 4
+
+set_position -71 6
+
+set_position -71 9
+
+set_position -71 11
+
+set_position -70 14
+
+set_position -70 16
+
+set_position -69 18
+
+set_position -69 21
+
+set_position -68 23
+
+set_position -67 25
+
+set_position -66 28
+
+set_position -66 30
+
+set_position -65 32
+
+set_position -64 34
+
+set_position -62 36
+
+set_position -61 39
+
+set_position -60 41
+
+set_position -58 43
+
+set_position -57 45
+
+set_position -56 47
+
+set_position -54 49
+
+set_position -52 50
+
+set_position -51 52
+
+set_position -49 54
+
+set_position -47 56
+
+set_position -45 57
+
+set_position -43 59
+
+set_position -41 60
+
+set_position -39 62
+
+set_position -37 63
+
+set_position -35 64
+
+set_position -33 66
+
+set_position -31 67
+
+set_position -29 68
+
+set_position -26 69
+
+set_position -24 70
+
+set_position -22 71
+
+set_position -19 71
+
+set_position -17 72
+
+set_position -14 73
+
+set_position -12 73
+
+set_position -9 74
+
+set_position -7 74
+
+set_position -5 74
+
+set_position -2 74
+
+set_position 0 75
+
+set_position 2 75
+
+set_position 5 74
+
+set_position 7 74
+
+set_position 10 74
+
+set_position 12 74
+
+set_position 15 73
+
+set_position 17 73
+
+set_position 20 72
+
+set_position 22 72
+
+set_position 24 71
+
+set_position 27 70
+
+set_position 29 69
+
+set_position 32 68
+
+set_position 34 67
+
+set_position 36 66
+
+set_position 38 65
+
+set_position 41 64
+
+set_position 43 62
+
+set_position 45 61
+
+set_position 47 59
+
+set_position 49 58
+
+set_position 51 56
+
+set_position 53 54
+
+set_position 55 53
+
+set_position 56 51
+
+set_position 58 49
+
+set_position 60 47
+
+set_position 61 45
+
+set_position 63 43
+
+set_position 65 41
+
+set_position 66 39
+
+set_position 67 36
+
+set_position 69 34
+
+set_position 70 32
+
+set_position 71 29
+
+set_position 72 27
+
+set_position 73 25
+
+set_position 74 22
+
+set_position 74 20
+
+set_position 75 17
+
+set_position 76 15
+
+set_position 76 12
+
+set_position 77 10
+
+set_position 77 7
+
+set_position 77 4
+
+set_position 78 2
+
+set_position 78 0
+
+set_position 78 -2
+
+set_position 78 -5
+
+set_position 77 -8
+
+set_position 77 -10
+
+set_position 77 -13
+
+set_position 76 -16
+
+set_position 76 -18
+
+set_position 75 -21
+
+set_position 75 -23
+
+set_position 74 -26
+
+set_position 73 -28
+
+set_position 72 -31
+
+set_position 71 -33
+
+set_position 70 -36
+
+set_position 69 -38
+
+set_position 67 -40
+
+set_position 66 -43
+
+set_position 65 -45
+
+set_position 63 -47
+
+set_position 62 -49
+
+set_position 60 -51
+
+set_position 58 -53
+
+set_position 56 -55
+
+set_position 55 -57
+
+set_position 53 -59
+
+set_position 51 -61
+
+set_position 49 -63
+
+set_position 47 -64
+
+set_position 44 -66
+
+set_position 42 -67
+
+set_position 40 -69
+
+set_position 38 -70
+
+set_position 35 -71
+
+set_position 33 -73
+
+set_position 30 -74
+
+set_position 28 -75
+
+set_position 25 -76
+
+set_position 23 -77
+
+set_position 20 -78
+
+set_position 18 -78
+
+set_position 15 -79
+
+set_position 12 -79
+
+set_position 10 -80
+
+set_position 7 -80
+
+set_position 4 -80
+
+set_position 2 -81
+
+set_position 0 -81
+
+set_position -3 -81
+
+set_position -6 -81
+
+set_position -8 -80
+
+set_position -11 -80
+
+set_position -14 -80
+
+set_position -16 -79
+
+set_position -19 -79
+
+set_position -22 -78
+
+set_position -24 -77
+
+set_position -27 -77
+
+set_position -30 -76
+
+set_position -32 -75
+
+set_position -35 -74
+
+set_position -37 -73
+
+set_position -40 -71
+
+set_position -42 -70
+
+set_position -45 -69
+
+set_position -47 -67
+
+set_position -49 -65
+
+set_position -51 -64
+
+set_position -54 -62
+
+set_position -56 -60
+
+set_position -58 -58
+
+set_position -60 -56
+
+set_position -62 -54
+
+set_position -63 -52
+
+set_position -65 -50
+
+set_position -67 -48
+
+set_position -69 -46
+
+set_position -70 -44
+
+set_position -72 -41
+
+set_position -73 -39
+
+set_position -74 -36
+
+set_position -76 -34
+
+set_position -77 -31
+
+set_position -78 -29
+
+set_position -79 -26
+
+set_position -80 -23
+
+set_position -81 -21
+
+set_position -81 -18
+
+set_position -82 -15
+
+set_position -83 -12
+
+set_position -83 -10
+
+set_position -83 -7
+
+set_position -84 -4
+
+set_position -84 -1
+
+set_position -84 1
+
+set_position -84 3
+
+set_position -84 6
+
+set_position -84 9
+
+set_position -83 12
+
+set_position -83 15
+
+set_position -82 17
+
+set_position -82 20
+
+set_position -81 23
+
+set_position -80 26
+
+set_position -79 28
+
+set_position -79 31
+
+set_position -77 34
+
+set_position -76 36
+
+set_position -75 39
+
+set_position -74 42
+
+set_position -72 44
+
+set_position -71 47
+
+set_position -69 49
+
+set_position -68 51
+
+set_position -66 54
+
+set_position -64 56
+
+set_position -62 58
+
+set_position -60 60
+
+set_position -58 62
+
+set_position -56 64
+
+set_position -54 66
+
+set_position -52 68
+
+set_position -50 70
+
+set_position -47 71
+
+set_position -45 73
+
+set_position -42 75
+
+set_position -40 76
+
+set_position -37 77
+
+set_position -35 79
+
+set_position -32 80
+
+set_position -29 81
+
+set_position -27 82
+
+set_position -24 83
+
+set_position -21 84
+
+set_position -18 85
+
+set_position -15 85
+
+set_position -13 86
+
+set_position -10 86
+
+set_position -7 87
+
+set_position -4 87
+
+set_position -1 87
+
+set_position 1 87
+
+set_position 4 87
+
+set_position 7 87
+
+set_position 10 87
+
+set_position 13 86
+
+set_position 16 86
+
+set_position 19 85
+
+set_position 21 85
+
+set_position 24 84
+
+set_position 27 83
+
+set_position 30 82
+
+set_position 33 81
+
+set_position 35 80
+
+set_position 38 79
+
+set_position 41 78
+
+set_position 43 76
+
+set_position 46 75
+
+set_position 49 73
+
+set_position 51 72
+
+set_position 53 70
+
+set_position 56 68
+
+set_position 58 66
+
+set_position 60 64
+
+set_position 63 62
+
+set_position 65 60
+
+set_position 67 58
+
+set_position 69 56
+
+set_position 71 54
+
+set_position 72 51
+
+set_position 74 49
+
+set_position 76 46
+
+set_position 77 44
+
+set_position 79 41
+
+set_position 80 38
+
+set_position 82 36
+
+set_position 83 33
+
+set_position 84 30
+
+set_position 85 27
+
+set_position 86 24
+
+set_position 87 22
+
+set_position 88 19
+
+set_position 88 16
+
+set_position 89 13
+
+set_position 89 10
+
+set_position 90 7
+
+set_position 90 4
+
+set_position 90 1
+
+set_position 90 -1
+
+set_position 90 -4
+
+set_position 90 -7
+
+set_position 90 -11
+
+set_position 89 -14
+
+set_position 89 -17
+
+set_position 88 -20
+
+set_position 88 -23
+
+set_position 87 -25
+
+set_position 86 -28
+
+set_position 85 -31
+
+set_position 84 -34
+
+set_position 83 -37
+
+set_position 82 -40
+
+set_position 80 -43
+
+set_position 79 -45
+
+set_position 77 -48
+
+set_position 76 -51
+
+set_position 74 -53
+
+set_position 72 -56
+
+set_position 70 -58
+
+set_position 68 -61
+
+set_position 66 -63
+
+set_position 64 -65
+
+set_position 62 -67
+
+set_position 60 -69
+
+set_position 57 -71
+
+set_position 55 -73
+
+set_position 53 -75
+
+set_position 50 -77
+
+set_position 48 -79
+
+set_position 45 -80
+
+set_position 42 -82
+
+set_position 39 -83
+
+set_position 37 -85
+
+set_position 34 -86
+
+set_position 31 -87
+
+set_position 28 -88
+
+set_position 25 -89
+
+set_position 22 -90
+
+set_position 19 -91
+
+set_position 16 -91
+
+set_position 13 -92
+
+set_position 10 -92
+
+set_position 7 -93
+
+set_position 3 -93
+
+set_position 0 -93
+
+set_position -2 -93
+
+set_position -5 -93
+
+set_position -8 -93
+
+set_position -11 -93
+
+set_position -14 -92
+
+set_position -18 -92
+
+set_position -21 -91
+
+set_position -24 -91
+
+set_position -27 -90
+
+set_position -30 -89
+
+set_position -33 -88
+
+set_position -36 -87
+
+set_position -39 -86
+
+set_position -42 -84
+
+set_position -44 -83
+
+set_position -47 -81
+
+set_position -50 -80
+
+set_position -53 -78
+
+set_position -55 -76
+
+set_position -58 -74
+
+set_position -60 -73
+
+set_position -63 -71
+
+set_position -65 -68
+
+set_position -68 -66
+
+set_position -70 -64
+
+set_position -72 -62
+
+set_position -74 -59
+
+set_position -76 -57
+
+set_position -78 -54
+
+set_position -80 -51
+
+set_position -82 -49
+
+set_position -83 -46
+
+set_position -85 -43
+
+set_position -86 -40
+
+set_position -88 -37
+
+set_position -89 -35
+
+set_position -90 -32
+
+set_position -91 -28
+
+set_position -92 -25
+
+set_position -93 -22
+
+set_position -94 -19
+
+set_position -95 -16
+
+set_position -95 -13
+
+set_position -96 -10
+
+set_position -96 -6
+
+set_position -96 -3
+
+set_position -96 0
+
+set_position -96 2
+
+set_position -96 6
+
+set_position -96 9
+
+set_position -96 12
+
+set_position -95 15
+
+set_position -95 19
+
+set_position -94 22
+
+set_position -94 25
+
+set_position -93 28
+
+set_position -92 31
+
+set_position -91 34
+
+set_position -90 37
+
+set_position -88 40
+
+set_position -87 43
+
+set_position -85 46
+
+set_position -84 49
+
+set_position -82 52
+
+set_position -80 55
+
+set_position -79 58
+
+set_position -77 60
+
+set_position -75 63
+
+set_position -73 65
+
+set_position -70 68
+
+set_position -68 70
+
+set_position -66 72
+
+set_position -63 75
+
+set_position -61 77
+
+set_position -58 79
+
+set_position -56 81
+
+set_position -53 83
+
+set_position -50 85
+
+set_position -47 86
+
+set_position -44 88
+
+set_position -41 89
+
+set_position -38 91
+
+set_position -35 92
+
+set_position -32 93
+
+set_position -29 94
+
+set_position -26 95
+
+set_position -23 96
+
+set_position -19 97
+
+set_position -16 98
+
+set_position -13 98
+
+set_position -10 99
+
+set_position -6 99
+
+set_position -3 99
+
+set_position 0 100
+
+set_position 3 100
+
+set_position 6 99
+
+set_position 10 99
+
+set_position 13 99
+
+set_position 16 98
+
+set_position 20 98
+
+set_position 23 97
+
+set_position 26 96
+
+set_position 29 96
+
+set_position 33 95
+
+set_position 36 93
+
+set_position 39 92
+
+set_position 42 91
+
+set_position 45 90
+
+set_position 48 88
+
+set_position 51 86
+
+set_position 54 85
+
+set_position 57 83
+
+set_position 60 81
+
+set_position 62 79
+
+set_position 65 77
+
+set_position 68 75
+
+set_position 70 72
+
+set_position 73 70
+
+set_position 75 68
+
+set_position 77 65
+
+set_position 80 62
+
+set_position 82 60
+
+set_position 84 57
+
+set_position 86 54
+
+set_position 87 51
+
+set_position 89 48
+
+set_position 91 45
+
+set_position 92 42
+
+set_position 94 39
+
+set_position 95 36
+
+set_position 96 33
+
+set_position 98 30
+
+set_position 99 26
+
+set_position 99 23
+
+set_position 100 20
+
+set_position 101 16
+
+set_position 102 13
+
+set_position 102 9
+
+set_position 102 6
+
+set_position 103 3
+
+set_position 103 0
+
+set_position 103 -3
+
+set_position 103 -7
+
+set_position 102 -10
+
+set_position 102 -14
+
+set_position 101 -17
+
+set_position 101 -21
+
+set_position 100 -24
+
+set_position 99 -27
+
+set_position 98 -31
+
+set_position 97 -34
+
+set_position 96 -37
+
+set_position 95 -41
+
+set_position 94 -44
+
+set_position 92 -47
+
+set_position 91 -50
+
+set_position 89 -53
+
+set_position 87 -56
+
+set_position 85 -59
+
+set_position 83 -62
+
+set_position 81 -65
+
+set_position 79 -67
+
+set_position 77 -70
+
+set_position 74 -73
+
+set_position 72 -75
+
+set_position 69 -78
+
+set_position 67 -80
+
+set_position 64 -82
+
+set_position 61 -84
+
+set_position 58 -87
+
+set_position 55 -89
+
+set_position 52 -90
+
+set_position 49 -92
+
+set_position 46 -94
+
+set_position 43 -95
+
+set_position 40 -97
+
+set_position 37 -98
+
+set_position 33 -100
+
+set_position 30 -101
+
+set_position 27 -102
+
+set_position 23 -103
+
+set_position 20 -103
+
+set_position 16 -104
+
+set_position 13 -105
+
+set_position 9 -105
+
+set_position 6 -105
+
+set_position 2 -106
+
+set_position 0 -106
+
+set_position -4 -106
+
+set_position -8 -106
+
+set_position -11 -105
+
+set_position -15 -105
+
+set_position -18 -104
+
+set_position -22 -104
+
+set_position -25 -103
+
+set_position -29 -102
+
+set_position -32 -101
+
+set_position -36 -100
+
+set_position -39 -99
+
+set_position -42 -98
+
+set_position -46 -96
+
+set_position -49 -95
+
+set_position -52 -93
+
+set_position -55 -91
+
+set_position -58 -89
+
+set_position -61 -87
+
+set_position -64 -85
+
+set_position -67 -83
+
+set_position -70 -81
+
+set_position -73 -79
+
+set_position -75 -76
+
+set_position -78 -74
+
+set_position -80 -71
+
+set_position -83 -68
+
+set_position -85 -66
+
+set_position -87 -63
+
+set_position -89 -60
+
+set_position -91 -57
+
+set_position -93 -54
+
+set_position -95 -51
+
+set_position -97 -47
+
+set_position -98 -44
+
+set_position -100 -41
+
+set_position -101 -37
+
+set_position -103 -34
+
+set_position -104 -31
+
+set_position -105 -27
+
+set_position -106 -23
+
+set_position -107 -20
+
+set_position -107 -16
+
+set_position -108 -13
+
+set_position -108 -9
+
+set_position -109 -5
+
+set_position -109 -2
+
+set_position -109 1
+
+set_position -109 5
+
+set_position -109 8
+
+set_position -108 12
+
+set_position -108 16
+
+set_position -107 19
+
+set_position -107 23
+
+set_position -106 26
+
+set_position -105 30
+
+set_position -104 33
+
+set_position -103 37
+
+set_position -102 40
+
+set_position -100 44
+
+set_position -99 47
+
+set_position -97 51
+
+set_position -96 54
+
+set_position -94 57
+
+set_position -92 60
+
+set_position -90 63
+
+set_position -88 66
+
+set_position -85 69
+
+set_position -83 72
+
+set_position -81 75
+
+set_position -78 78
+
+set_position -75 80
+
+set_position -73 83
+
+set_position -70 85
+
+set_position -67 88
+
+set_position -64 90
+
+set_position -61 92
+
+set_position -58 94
+
+set_position -55 96
+
+set_position -52 98
+
+set_position -48 100
+
+set_position -45 102
+
+set_position -42 103
+
+set_position -38 104
+
+set_position -35 106
+
+set_position -31 107
+
+set_position -27 108
+
+set_position -24 109
+
+set_position -20 110
+
+set_position -16 110
+
+set_position -13 111
+
+set_position -9 111
+
+set_position -5 112
+
+set_position -1 112
+
+set_position 1 112
+
+set_position 5 112
+
+set_position 9 112
+
+set_position 13 111
+
+set_position 16 111
+
+set_position 20 110
+
+set_position 24 110
+
+set_position 28 109
+
+set_position 31 108
+
+set_position 35 107
+
+set_position 39 106
+
+set_position 42 104
+
+set_position 46 103
+
+set_position 49 101
+
+set_position 52 100
+
+set_position 56 98
+
+set_position 59 96
+
+set_position 62 94
+
+set_position 66 92
+
+set_position 69 90
+
+set_position 72 88
+
+set_position 75 85
+
+set_position 78 83
+
+set_position 80 80
+
+set_position 83 77
+
+set_position 86 74
+
+set_position 88 72
+
+set_position 91 69
+
+set_position 93 66
+
+set_position 95 62
+
+set_position 97 59
+
+set_position 99 56
+
+set_position 101 53
+
+set_position 103 49
+
+set_position 105 46
+
+set_position 106 42
+
+set_position 108 39
+
+set_position 109 35
+
+set_position 110 31
+
+set_position 111 28
+
+set_position 112 24
+
+set_position 113 20
+
+set_position 114 16
+
+set_position 114 13
+
+set_position 115 9
+
+set_position 115 5
+
+set_position 115 1
+
+set_position 115 -2
+
+set_position 115 -6
+
+set_position 115 -10
+
+set_position 115 -14
+
+set_position 114 -17
+
+set_position 113 -21
+
+set_position 113 -25
+
+set_position 112 -29
+
+set_position 111 -33
+
+set_position 110 -36
+
+set_position 109 -40
+
+set_position 107 -44
+
+set_position 106 -47
+
+set_position 104 -51
+
+set_position 102 -54
+
+set_position 101 -58
+
+set_position 99 -61
+
+set_position 97 -65
+
+set_position 94 -68
+
+set_position 92 -71
+
+set_position 90 -74
+
+set_position 87 -77
+
+set_position 85 -80
+
+set_position 82 -83
+
+set_position 79 -86
+
+set_position 76 -88
+
+set_position 73 -91
+
+set_position 70 -93
+
+set_position 67 -96
+
+set_position 64 -98
+
+set_position 60 -100
+
+set_position 57 -102
+
+set_position 54 -104
+
+set_position 50 -106
+
+set_position 47 -108
+
+set_position 43 -109
+
+set_position 39 -111
+
+set_position 36 -112
+
+set_position 32 -113
+
+set_position 28 -114
+
+set_position 24 -115
+
+set_position 20 -116
+
+set_position 16 -117
+
+set_position 12 -117
+
+set_position 8 -118
+
+set_position 4 -118
+
+set_position 0 -118
+
+set_position -2 -118
+
+set_position -6 -118
+
+set_position -10 -118
+
+set_position -14 -118
+
+set_position -18 -117
+
+set_position -22 -116
+
+set_position -26 -116
+
+set_position -30 -115
+
+set_position -34 -114
+
+set_position -38 -113
+
+set_position -42 -111
+
+set_position -45 -110
+
+set_position -49 -108
+
+set_position -53 -107
+
+set_position -56 -105
+
+set_position -60 -103
+
+set_position -63 -101
+
+set_position -67 -99
+
+set_position -70 -97
+
+set_position -73 -94
+
+set_position -76 -92
+
+set_position -80 -89
+
+set_position -83 -86
+
+set_position -85 -84
+
+set_position -88 -81
+
+set_position -91 -78
+
+set_position -94 -75
+
+set_position -96 -72
+
+set_position -99 -68
+
+set_position -101 -65
+
+set_position -103 -62
+
+set_position -105 -58
+
+set_position -107 -55
+
+set_position -109 -51
+
+set_position -111 -47
+
+set_position -112 -44
+
+set_position -114 -40
+
+set_position -115 -36
+
+set_position -116 -32
+
+set_position -117 -28
+
+set_position -118 -24
+
+set_position -119 -20
+
+set_position -120 -16
+
+set_position -121 -12
+
+set_position -121 -8
+
+set_position -121 -4
+
+set_position -121 0
+
+set_position -121 3
+
+set_position -121 7
+
+set_position -121 11
+
+set_position -121 15
+
+set_position -120 19
+
+set_position -119 23
+
+set_position -119 27
+
+set_position -118 31
+
+set_position -117 35
+
+set_position -115 39
+
+set_position -114 43
+
+set_position -113 47
+
+set_position -111 51
+
+set_position -109 55
+
+set_position -107 58
+
+set_position -105 62
+
+set_position -103 65
+
+set_position -101 69
+
+set_position -99 72
+
+set_position -96 76
+
+set_position -94 79
+
+set_position -91 82
+
+set_position -88 85
+
+set_position -86 88
+
+set_position -83 91
+
+set_position -79 94
+
+set_position -76 96
+
+set_position -73 99
+
+set_position -70 101
+
+set_position -66 104
+
+set_position -63 106
+
+set_position -59 108
+
+set_position -56 110
+
+set_position -52 112
+
+set_position -48 114
+
+set_position -44 115
+
+set_position -40 117
+
+set_position -36 118
+
+set_position -32 120
+
+set_position -28 121
+
+set_position -24 122
+
+set_position -20 122
+
+set_position -16 123
+
+set_position -12 124
+
+set_position -8 124
+
+set_position -4 124
+
+set_position 0 125
+
+set_position 4 124
+
+set_position 8 124
+
+set_position 12 124
+
+set_position 16 124
+
+set_position 20 123
+
+set_position 25 122
+
+set_position 29 122
+
+set_position 33 121
+
+set_position 37 119
+
+set_position 41 118
+
+set_position 45 117
+
+set_position 49 115
+
+set_position 53 114
+
+set_position 56 112
+
+set_position 60 110
+
+set_position 64 108
+
+set_position 68 106
+
+set_position 71 103
+
+set_position 75 101
+
+set_position 78 99
+
+set_position 81 96
+
+set_position 85 93
+
+set_position 88 90
+
+set_position 91 87
+
+set_position 94 84
+
+set_position 96 81
+
+set_position 99 78
+
+set_position 102 74
+
+set_position 104 71
+
+set_position 107 68
+
+set_position 109 64
+
+set_position 111 60
+
+set_position 113 57
+
+set_position 115 53
+
+set_position 117 49
+
+set_position 119 45
+
+set_position 120 41
+
+set_position 121 37
+
+set_position 123 33
+
+set_position 124 29
+
+set_position 125 24
+
+set_position 126 20
+
+set_position 126 16
+
+set_position 127 12
+
+set_position 127 8
+
+set_position 128 3
+
+set_position 128 0
+
+set_position 128 -4
+
+set_position 127 -9
+
+set_position 127 -13
+
+set_position 127 -17
+
+set_position 126 -21
+
+set_position 125 -26
+
+set_position 124 -30
+
+set_position 123 -34
+
+set_position 122 -38
+
+set_position 121 -42
+
+set_position 120 -46
+
+set_position 118 -50
+
+set_position 116 -54
+
+set_position 114 -58
+
+set_position 112 -62
+
+set_position 110 -66
+
+set_position 108 -70
+
+set_position 106 -73
+
+set_position 103 -77
+
+set_position 101 -80
+
+set_position 98 -84
+
+set_position 95 -87
+
+set_position 92 -90
+
+set_position 89 -93
+
+set_position 86 -96
+
+set_position 83 -99
+
+set_position 79 -102
+
+set_position 76 -105
+
+set_position 72 -107
+
+set_position 69 -110
+
+set_position 65 -112
+
+set_position 61 -114
+
+set_position 57 -116
+
+set_position 54 -118
+
+set_position 50 -120
+
+set_position 46 -122
+
+set_position 41 -123
+
+set_position 37 -125
+
+set_position 33 -126
+
+set_position 29 -127
+
+set_position 25 -128
+
+set_position 20 -129
+
+set_position 16 -129
+
+set_position 12 -130
+
+set_position 7 -130
+
+set_position 3 -131
+
+set_position -1 -131
+
+set_position -5 -131
+
+set_position -9 -131
+
+set_position -14 -130
+
+set_position -18 -130
+
+set_position -23 -129
+
+set_position -27 -128
+
+set_position -31 -127
+
+set_position -35 -126
+
+set_position -40 -125
+
+set_position -44 -124
+
+set_position -48 -122
+
+set_position -52 -121
+
+set_position -56 -119
+
+set_position -60 -117
+
+set_position -64 -115
+
+set_position -68 -113
+
+set_position -72 -110
+
+set_position -76 -108
+
+set_position -79 -105
+
+set_position -83 -103
+
+set_position -86 -100
+
+set_position -90 -97
+
+set_position -93 -94
+
+set_position -96 -91
+
+set_position -99 -88
+
+set_position -102 -84
+
+set_position -105 -81
+
+set_position -108 -77
+
+set_position -110 -74
+
+set_position -113 -70
+
+set_position -115 -66
+
+set_position -117 -62
+
+set_position -119 -58
+
+set_position -121 -54
+
+set_position -123 -50
+
+set_position -125 -46
+
+set_position -126 -42
+
+set_position -128 -38
+
+set_position -129 -33
+
+set_position -130 -29
+
+set_position -131 -25
+
+set_position -132 -20
+
+set_position -133 -16
+
+set_position -133 -11
+
+set_position -134 -7
+
+set_position -134 -2
+
+set_position -134 1
+
+set_position -134 6
+
+set_position -134 10
+
+set_position -133 15
+
+set_position -133 19
+
+set_position -132 24
+
+set_position -131 28
+
+set_position -130 32
+
+set_position -129 37
+
+set_position -128 41
+
+set_position -126 46
+
+set_position -125 50
+
+set_position -123 54
+
+set_position -121 58
+
+set_position -119 62
+
+set_position -117 66
+
+set_position -115 70
+
+set_position -113 74
+
+set_position -110 78
+
+set_position -108 82
+
+set_position -105 85
+
+set_position -102 89
+
+set_position -99 92
+
+set_position -96 95
+
+set_position -93 99
+
+set_position -89 102
+
+set_position -86 105
+
+set_position -82 108
+
+set_position -79 110
+
+set_position -75 113
+
+set_position -71 116
+
+set_position -67 118
+
+set_position -63 120
+
+set_position -59 122
+
+set_position -55 124
+
+set_position -51 126
+
+set_position -47 128
+
+set_position -42 129
+
+set_position -38 131
+
+set_position -34 132
+
+set_position -29 133
+
+set_position -25 134
+
+set_position -20 135
+
+set_position -16 136
+
+set_position -11 136
+
+set_position -6 137
+
+set_position -2 137
+
+set_position 2 137
+
+set_position 6 137
+
+set_position 11 137
+
+set_position 16 136
+
+set_position 20 136
+
+set_position 25 135
+
+set_position 29 134
+
+set_position 34 133
+
+set_position 38 132
+
+set_position 43 131
+
+set_position 47 129
+
+set_position 51 128
+
+set_position 56 126
+
+set_position 60 124
+
+set_position 64 122
+
+set_position 68 120
+
+set_position 72 117
+
+set_position 76 115
+
+set_position 80 112
+
+set_position 84 110
+
+set_position 88 107
+
+set_position 91 104
+
+set_position 95 101
+
+set_position 98 98
+
+set_position 101 94
+
+set_position 104 91
+
+set_position 108 87
+
+set_position 110 84
+
+set_position 113 80
+
+set_position 116 76
+
+set_position 119 72
+
+set_position 121 68
+
+set_position 123 64
+
+set_position 125 60
+
+set_position 127 56
+
+set_position 129 52
+
+set_position 131 47
+
+set_position 133 43
+
+set_position 134 38
+
+set_position 135 34
+
+set_position 137 29
+
+set_position 137 25
+
+set_position 138 20
+
+set_position 139 15
+
+set_position 140 11
+
+set_position 140 6
+
+set_position 140 1
+
+set_position 140 -2
+
+set_position 140 -7
+
+set_position 140 -12
+
+set_position 139 -17
+
+set_position 139 -21
+
+set_position 138 -26
+
+set_position 137 -31
+
+set_position 136 -35
+
+set_position 135 -40
+
+set_position 133 -44
+
+set_position 132 -49
+
+set_position 130 -53
+
+set_position 128 -58
+
+set_position 127 -62
+
+set_position 124 -66
+
+set_position 122 -70
+
+set_position 120 -74
+
+set_position 117 -78
+
+set_position 115 -82
+
+set_position 112 -86
+
+set_position 109 -90
+
+set_position 106 -94
+
+set_position 103 -97
+
+set_position 99 -101
+
+set_position 96 -104
+
+set_position 93 -107
+
+set_position 89 -110
+
+set_position 85 -113
+
+set_position 81 -116
+
+set_position 77 -119
+
+set_position 73 -122
+
+set_position 69 -124
+
+set_position 65 -126
+
+set_position 61 -129
+
+set_position 57 -131
+
+set_position 52 -132
+
+set_position 48 -134
+
+set_position 43 -136
+
+set_position 39 -137
+
+set_position 34 -139
+
+set_position 29 -140
+
+set_position 25 -141
+
+set_position 20 -142
+
+set_position 15 -142
+
+set_position 10 -143
+
+set_position 6 -143
+
+set_position 1 -143
+
+set_position -3 -143
+
+set_position -8 -143
+
+set_position -13 -143
+
+set_position -18 -142
+
+set_position -22 -142
+
+set_position -27 -141
+
+set_position -32 -140
+
+set_position -37 -139
+
+set_position -41 -138
+
+set_position -46 -136
+
+set_position -50 -135
+
+set_position -55 -133
+
+set_position -59 -131
+
+set_position -64 -129
+
+set_position -68 -127
+
+set_position -72 -125
+
+set_position -77 -122
+
+set_position -81 -120
+
+set_position -85 -117
+
+set_position -89 -114
+
+set_position -92 -111
+
+set_position -96 -108
+
+set_position -100 -105
+
+set_position -103 -101
+
+set_position -107 -98
+
+set_position -110 -94
+
+set_position -113 -90
+
+set_position -116 -87
+
+set_position -119 -83
+
+set_position -122 -79
+
+set_position -125 -75
+
+set_position -127 -70
+
+set_position -129 -66
+
+set_position -132 -62
+
+set_position -134 -57
+
+set_position -136 -53
+
+set_position -137 -48
+
+set_position -139 -44
+
+set_position -140 -39
+
+set_position -142 -34
+
+set_position -143 -29
+
+set_position -144 -25
+
+set_position -145 -20
+
+set_position -145 -15
+
+set_position -146 -10
+
+set_position -146 -5
+
+set_position -146 0
+
+set_position -146 4
+
+set_position -146 9
+
+set_position -146 14
+
+set_position -145 19
+
+set_position -145 23
+
+set_position -144 28
+
+set_position -143 33
+
+set_position -142 38
+
+set_position -140 43
+
+set_position -139 47
+
+set_position -137 52
+
+set_position -136 57
+
+set_position -134 61
+
+set_position -132 66
+
+set_position -129 70
+
+set_position -127 75
+
+set_position -124 79
+
+set_position -122 83
+
+set_position -119 87
+
+set_position -116 91
+
+set_position -113 95
+
+set_position -110 99
+
+set_position -106 102
+
+set_position -103 106
+
+set_position -99 109
+
+set_position -96 113
+
+set_position -92 116
+
+set_position -88 119
+
+set_position -84 122
+
+set_position -80 125
+
+set_position -76 128
+
+set_position -71 130
+
+set_position -67 132
+
+set_position -62 135
+
+set_position -58 137
+
+set_position -53 139
+
+set_position -49 141
+
+set_position -44 142
+
+set_position -39 144
+
+set_position -34 145
+
+set_position -29 146
+
+set_position -24 147
+
+set_position -20 148
+
+set_position -15 149
+
+set_position -10 149
+
+set_position -5 149
+
+set_position 0 150
+
+set_position 5 149
+
+set_position 10 149
+
+set_position 15 149
+
+set_position 20 148
+
+set_position 25 148
+
+set_position 30 147
+
+set_position 34 146
+
+set_position 39 145
+
+set_position 44 143
+
+set_position 49 142
+
+set_position 54 140
+
+set_position 59 138
+
+set_position 63 136
+
+set_position 68 134
+
+set_position 72 132
+
+set_position 77 129
+
+set_position 81 127
+
+set_position 85 124
+
+set_position 89 121
+
+set_position 94 118
+
+set_position 97 115
+
+set_position 101 112
+
+set_position 105 108
+
+set_position 109 105
+
+set_position 112 101
+
+set_position 116 97
+
+set_position 119 93
+
+set_position 122 89
+
+set_position 125 85
+
+set_position 128 81
+
+set_position 131 77
+
+set_position 133 72
+
+set_position 136 68
+
+set_position 138 63
+
+set_position 140 59
+
+set_position 142 54
+
+set_position 144 49
+
+set_position 145 44
+
+set_position 147 39
+
+set_position 148 34
+
+set_position 149 29
+
+set_position 150 24
+
+set_position 151 19
+
+set_position 152 14
+
+set_position 152 9
+
+set_position 153 4
+
+set_position 153 0
+
+set_position 153 -5
+
+set_position 152 -10
+
+set_position 152 -16
+
+set_position 151 -21
+
+set_position 151 -26
+
+set_position 150 -31
+
+set_position 149 -36
+
+set_position 148 -41
+
+set_position 146 -46
+
+set_position 145 -51
+
+set_position 143 -56
+
+set_position 141 -60
+
+set_position 139 -65
+
+set_position 137 -70
+
+set_position 134 -74
+
+set_position 132 -79
+
+set_position 129 -83
+
+set_position 126 -88
+
+set_position 123 -92
+
+set_position 120 -96
+
+set_position 117 -100
+
+set_position 114 -104
+
+set_position 110 -108
+
+set_position 106 -111
+
+set_position 103 -115
+
+set_position 99 -118
+
+set_position 95 -122
+
+set_position 91 -125
+
+set_position 86 -128
+
+set_position 82 -131
+
+set_position 78 -134
+
+set_position 73 -136
+
+set_position 69 -139
+
+set_position 64 -141
+
+set_position 59 -143
+
+set_position 54 -145
+
+set_position 49 -147
+
+set_position 44 -149
+
+set_position 39 -150
+
+set_position 34 -151
+
+set_position 29 -152
+
+set_position 24 -153
+
+set_position 19 -154
+
+set_position 14 -155
+
+set_position 9 -155
+
+set_position 3 -156
+
+set_position -1 -156
+
+set_position -6 -156
+
+set_position -11 -155
+
+set_position -17 -155
+
+set_position -22 -154
+
+set_position -27 -154
+
+set_position -32 -153
+
+set_position -37 -152
+
+set_position -42 -150
+
+set_position -47 -149
+
+set_position -52 -147
+
+set_position -57 -145
+
+set_position -62 -144
+
+set_position -67 -141
+
+set_position -72 -139
+
+set_position -76 -137
+
+set_position -81 -134
+
+set_position -86 -131
+
+set_position -90 -128
+
+set_position -94 -125
+
+set_position -98 -122
+
+set_position -103 -119
+
+set_position -107 -115
+
+set_position -110 -112
+
+set_position -114 -108
+
+set_position -118 -104
+
+set_position -121 -100
+
+set_position -125 -96
+
+set_position -128 -92
+
+set_position -131 -88
+
+set_position -134 -83
+
+set_position -137 -79
+
+set_position -139 -74
+
+set_position -142 -69
+
+set_position -144 -65
+
+set_position -146 -60
+
+set_position -148 -55
+
+set_position -150 -50
+
+set_position -152 -45
+
+set_position -153 -40
+
+set_position -155 -34
+
+set_position -156 -29
+
+set_position -157 -24
+
+set_position -157 -19
+
+set_position -158 -13
+
+set_position -159 -8
+
+set_position -159 -3
+
+set_position -159 2
+
+set_position -159 7
+
+set_position -159 12
+
+set_position -158 18
+
+set_position -157 23
+
+set_position -157 28
+
+set_position -156 33
+
+set_position -155 39
+
+set_position -153 44
+
+set_position -152 49
+
+set_position -150 54
+
+set_position -148 59
+
+set_position -146 64
+
+set_position -144 69
+
+set_position -142 74
+
+set_position -139 79
+
+set_position -136 83
+
+set_position -134 88
+
+set_position -131 92
+
+set_position -127 97
+
+set_position -124 101
+
+set_position -121 105
+
+set_position -117 109
+
+set_position -114 113
+
+set_position -110 117
+
+set_position -106 121
+
+set_position -102 124
+
+set_position -97 127
+
+set_position -93 131
+
+set_position -89 134
+
+set_position -84 137
+
+set_position -80 140
+
+set_position -75 142
+
+set_position -70 145
+
+set_position -65 147
+
+set_position -60 149
+
+set_position -55 151
+
+set_position -50 153
+
+set_position -45 155
+
+set_position -40 156
+
+set_position -35 158
+
+set_position -29 159
+
+set_position -24 160
+
+set_position -18 161
+
+set_position -13 161
+
+set_position -8 162
+
+set_position -2 162
+
+set_position 2 162
+
+set_position 8 162
+
+set_position 13 162
+
+set_position 19 161
+
+set_position 24 160
+
+set_position 29 160
+
+set_position 35 159
+
+set_position 40 157
+
+set_position 45 156
+
+set_position 51 154
+
+set_position 56 153
+
+set_position 61 151
+
+set_position 66 149
+
+set_position 71 146
+
+set_position 76 144
+
+set_position 81 141
+
+set_position 85 139
+
+set_position 90 136
+
+set_position 95 133
+
+set_position 99 130
+
+set_position 103 126
+
+set_position 108 123
+
+set_position 112 119
+
+set_position 116 115
+
+set_position 120 111
+
+set_position 123 107
+
+set_position 127 103
+
+set_position 130 99
+
+set_position 134 94
+
+set_position 137 90
+
+set_position 140 85
+
+set_position 143 81
+
+set_position 145 76
+
+set_position 148 71
+
+set_position 150 66
+
+set_position 153 61
+
+set_position 155 56
+
+set_position 156 50
+
+set_position 158 45
+
+set_position 160 40
+
+set_position 161 35
+
+set_position 162 29
+
+set_position 163 24
+
+set_position 164 18
+
+set_position 164 13
+
+set_position 165 7
+
+set_position 165 2
+
+set_position 165 -3
+
+set_position 165 -9
+
+set_position 165 -14
+
+set_position 164 -20
+
+set_position 163 -25
+
+set_position 163 -31
+
+set_position 161 -36
+
+set_position 160 -41
+
+set_position 159 -47
+
+set_position 157 -52
+
+set_position 155 -57
+
+set_position 153 -63
+
+set_position 151 -68
+
+set_position 149 -73
+
+set_position 146 -78
+
+set_position 144 -83
+
+set_position 141 -88
+
+set_position 138 -92
+
+set_position 135 -97
+
+set_position 132 -102
+
+set_position 128 -106
+
+set_position 125 -110
+
+set_position 121 -114
+
+set_position 117 -118
+
+set_position 113 -122
+
+set_position 109 -126
+
+set_position 105 -130
+
+set_position 100 -133
+
+set_position 96 -137
+
+set_position 91 -140
+
+set_position 86 -143
+
+set_position 82 -146
+
+set_position 77 -149
+
+set_position 72 -151
+
+set_position 67 -153
+
+set_position 61 -156
+
+set_position 56 -158
+
+set_position 51 -160
+
+set_position 45 -161
+
+set_position 40 -163
+
+set_position 34 -164
+
+set_position 29 -165
+
+set_position 23 -166
+
+set_position 18 -167
+
+set_position 12 -168
+
+set_position 7 -168
+
+set_position 1 -168
+
+set_position -4 -168
+
+set_position -9 -168
+
+set_position -15 -168
+
+set_position -21 -167
+
+set_position -26 -166
+
+set_position -32 -166
+
+set_position -37 -164
+
+set_position -43 -163
+
+set_position -48 -162
+
+set_position -54 -160
+
+set_position -59 -158
+
+set_position -65 -156
+
+set_position -70 -154
+
+set_position -75 -151
+
+set_position -80 -149
+
+set_position -85 -146
+
+set_position -90 -143
+
+set_position -95 -140
+
+set_position -99 -137
+
+set_position -104 -134
+
+set_position -108 -130
+
+set_position -113 -126
+
+set_position -117 -123
+
+set_position -121 -119
+
+set_position -125 -115
+
+set_position -129 -110
+
+set_position -133 -106
+
+set_position -136 -102
+
+set_position -140 -97
+
+set_position -143 -92
+
+set_position -146 -87
+
+set_position -149 -82
+
+set_position -152 -77
+
+set_position -154 -72
+
+set_position -157 -67
+
+set_position -159 -62
+
+set_position -161 -56
+
+set_position -163 -51
+
+set_position -165 -46
+
+set_position -166 -40
+
+set_position -167 -34
+
+set_position -169 -29
+
+set_position -169 -23
+
+set_position -170 -17
+
+set_position -171 -12
+
+set_position -171 -6
+
+set_position -171 0
+
+set_position -171 5
+
+set_position -171 10
+
+set_position -171 16
+
+set_position -170 22
+
+set_position -169 28
+
+set_position -168 33
+
+set_position -167 39
+
+set_position -166 44
+
+set_position -164 50
+
+set_position -163 56
+
+set_position -161 61
+
+set_position -159 66
+
+set_position -156 72
+
+set_position -154 77
+
+set_position -151 82
+
+set_position -149 87
+
+set_position -146 92
+
+set_position -142 97
+
+set_position -139 102
+
+set_position -136 107
+
+set_position -132 111
+
+set_position -128 115
+
+set_position -124 120
+
+set_position -120 124
+
+set_position -116 128
+
+set_position -112 132
+
+set_position -107 136
+
+set_position -103 139
+
+set_position -98 143
+
+set_position -93 146
+
+set_position -88 149
+
+set_position -83 152
+
+set_position -78 155
+
+set_position -73 157
+
+set_position -68 160
+
+set_position -62 162
+
+set_position -57 164
+
+set_position -51 166
+
+set_position -46 168
+
+set_position -40 169
+
+set_position -34 171
+
+set_position -29 172
+
+set_position -23 173
+
+set_position -17 173
+
+set_position -11 174
+
+set_position -5 174
+
+set_position 0 175
+
+set_position 5 174
+
+set_position 11 174
+
+set_position 17 174
+
+set_position 23 173
+
+set_position 29 172
+
+set_position 35 171
+
+set_position 40 170
+
+set_position 46 169
+
+set_position 52 167
+
+set_position 57 165
+
+set_position 63 163
+
+set_position 68 161
+
+set_position 74 159
+
+set_position 79 156
+
+set_position 84 154
+
+set_position 89 151
+
+set_position 94 148
+
+set_position 99 145
+
+set_position 104 141
+
+set_position 109 138
+
+set_position 114 134
+
+set_position 118 130
+
+set_position 122 126
+
+set_position 127 122
+
+set_position 131 118
+
+set_position 135 113
+
+set_position 139 109
+
+set_position 142 104
+
+set_position 146 99
+
+set_position 149 94
+
+set_position 152 89
+
+set_position 155 84
+
+set_position 158 79
+
+set_position 161 74
+
+set_position 163 68
+
+set_position 165 63
+
+set_position 167 57
+
+set_position 169 52
+
+set_position 171 46
+
+set_position 172 40
+
+set_position 174 34
+
+set_position 175 28
+
+set_position 176 23
+
+set_position 177 17
+
+set_position 177 11
+
+set_position 177 5
+
+set_position 178 0
+
+set_position 178 -6
+
+set_position 177 -12
+
+set_position 177 -18
+
+set_position 176 -24
+
+set_position 175 -30
+
+set_position 174 -36
+
+set_position 173 -42
+
+set_position 172 -48
+
+set_position 170 -53
+
+set_position 168 -59
+
+set_position 166 -65
+
+set_position 164 -70
+
+set_position 161 -76
+
+set_position 159 -81
+
+set_position 156 -86
+
+set_position 153 -92
+
+set_position 150 -97
+
+set_position 147 -102
+
+set_position 143 -107
+
+set_position 140 -112
+
+set_position 136 -116
+
+set_position 132 -121
+
+set_position 128 -125
+
+set_position 124 -129
+
+set_position 119 -134
+
+set_position 115 -138
+
+set_position 110 -141
+
+set_position 105 -145
+
+set_position 100 -149
+
+set_position 95 -152
+
+set_position 90 -155
+
+set_position 85 -158
+
+set_position 80 -161
+
+set_position 74 -164
+
+set_position 69 -166
+
+set_position 63 -168
+
+set_position 57 -171
+
+set_position 52 -172
+
+set_position 46 -174
+
+set_position 40 -176
+
+set_position 34 -177
+
+set_position 28 -178
+
+set_position 22 -179
+
+set_position 16 -180
+
+set_position 10 -180
+
+set_position 4 -181
+
+set_position -1 -181
+
+set_position -7 -181
+
+set_position -13 -180
+
+set_position -19 -180
+
+set_position -25 -179
+
+set_position -31 -178
+
+set_position -37 -177
+
+set_position -43 -176
+
+set_position -49 -174
+
+set_position -55 -173
+
+set_position -61 -171
+
+set_position -66 -169
+
+set_position -72 -166
+
+set_position -78 -164
+
+set_position -83 -161
+
+set_position -89 -158
+
+set_position -94 -155
+
+set_position -99 -152
+
+set_position -104 -149
+
+set_position -109 -145
+
+set_position -114 -142
+
+set_position -119 -138
+
+set_position -123 -134
+
+set_position -128 -130
+
+set_position -132 -125
+
+set_position -136 -121
+
+set_position -141 -116
+
+set_position -144 -111
+
+set_position -148 -107
+
+set_position -152 -102
+
+set_position -155 -96
+
+set_position -158 -91
+
+set_position -161 -86
+
+set_position -164 -80
+
+set_position -167 -75
+
+set_position -169 -69
+
+set_position -172 -64
+
+set_position -174 -58
+
+set_position -176 -52
+
+set_position -177 -46
+
+set_position -179 -40
+
+set_position -180 -34
+
+set_position -181 -28
+
+set_position -182 -22
+
+set_position -183 -16
+
+set_position -183 -10
+
+set_position -184 -3
+
+set_position -184 2
+
+set_position -184 8
+
+set_position -183 14
+
+set_position -183 20
+
+set_position -182 26
+
+set_position -181 33
+
+set_position -180 39
+
+set_position -179 45
+
+set_position -177 51
+
+set_position -175 57
+
+set_position -173 63
+
+set_position -171 68
+
+set_position -169 74
+
+set_position -166 80
+
+set_position -164 85
+
+set_position -161 91
+
+set_position -158 96
+
+set_position -154 102
+
+set_position -151 107
+
+set_position -147 112
+
+set_position -144 117
+
+set_position -140 121
+
+set_position -136 126
+
+set_position -131 131
+
+set_position -127 135
+
+set_position -122 139
+
+set_position -118 143
+
+set_position -113 147
+
+set_position -108 151
+
+set_position -103 155
+
+set_position -97 158
+
+set_position -92 161
+
+set_position -87 164
+
+set_position -81 167
+
+set_position -75 170
+
+set_position -70 173
+
+set_position -64 175
+
+set_position -58 177
+
+set_position -52 179
+
+set_position -46 181
+
+set_position -40 182
+
+set_position -34 183
+
+set_position -28 185
+
+set_position -21 185
+
+set_position -15 186
+
+set_position -9 187
+
+set_position -3 187
+
+set_position 3 187
+
+set_position 9 187
+
+set_position 15 187
+
+set_position 21 186
+
+set_position 28 185
+
+set_position 34 184
+
+set_position 40 183
+
+set_position 46 182
+
+set_position 52 180
+
+set_position 58 178
+
+set_position 64 176
+
+set_position 70 174
+
+set_position 76 172
+
+set_position 82 169
+
+set_position 88 166
+
+set_position 93 163
+
+set_position 99 160
+
+set_position 104 157
+
+set_position 109 153
+
+set_position 114 149
+
+set_position 119 146
+
+set_position 124 141
+
+set_position 129 137
+
+set_position 133 133
+
+set_position 138 128
+
+set_position 142 124
+
+set_position 146 119
+
+set_position 150 114
+
+set_position 154 109
+
+set_position 158 104
+
+set_position 161 98
+
+set_position 164 93
+
+set_position 168 87
+
+set_position 170 82
+
+set_position 173 76
+
+set_position 176 70
+
+set_position 178 64
+
+set_position 180 58
+
+set_position 182 52
+
+set_position 184 46
+
+set_position 185 40
+
+set_position 187 34
+
+set_position 188 27
+
+set_position 189 21
+
+set_position 189 15
+
+set_position 190 8
+
+set_position 190 2
+
+set_position 190 -3
+
+set_position 190 -10
+
+set_position 190 -16
+
+set_position 189 -23
+
+set_position 188 -29
+
+set_position 187 -35
+
+set_position 186 -42
+
+set_position 184 -48
+
+set_position 183 -54
+
+set_position 181 -60
+
+set_position 179 -66
+
+set_position 177 -72
+
+set_position 174 -78
+
+set_position 171 -84
+
+set_position 169 -90
+
+set_position 165 -95
+
+set_position 162 -101
+
+set_position 159 -106
+
+set_position 155 -112
+
+set_position 151 -117
+
+set_position 147 -122
+
+set_position 143 -127
+
+set_position 139 -132
+
+set_position 135 -136
+
+set_position 130 -141
+
+set_position 125 -145
+
+set_position 120 -149
+
+set_position 115 -153
+
+set_position 110 -157
+
+set_position 105 -161
+
+set_position 99 -164
+
+set_position 94 -168
+
+set_position 88 -171
+
+set_position 82 -174
+
+set_position 76 -176
+
+set_position 71 -179
+
+set_position 65 -181
+
+set_position 58 -183
+
+set_position 52 -185
+
+set_position 46 -187
+
+set_position 40 -189
+
+set_position 33 -190
+
+set_position 27 -191
+
+set_position 21 -192
+
+set_position 14 -193
+
+set_position 8 -193
+
+set_position 1 -193
+
+set_position -4 -193
+
+set_position -11 -193
+
+set_position -17 -193
+
+set_position -24 -192
+
+set_position -30 -191
+
+set_position -37 -190
+
+set_position -43 -189
+
+set_position -49 -187
+
+set_position -56 -186
+
+set_position -62 -184
+
+set_position -68 -181
+
+set_position -74 -179
+
+set_position -80 -177
+
+set_position -86 -174
+
+set_position -92 -171
+
+set_position -98 -168
+
+set_position -103 -164
+
+set_position -109 -161
+
+set_position -114 -157
+
+set_position -119 -153
+
+set_position -125 -149
+
+set_position -130 -145
+
+set_position -134 -141
+
+set_position -139 -136
+
+set_position -144 -131
+
+set_position -148 -127
+
+set_position -152 -122
+
+set_position -156 -116
+
+set_position -160 -111
+
+set_position -164 -106
+
+set_position -167 -100
+
+set_position -171 -95
+
+set_position -174 -89
+
+set_position -177 -83
+
+set_position -180 -77
+
+set_position -182 -71
+
+set_position -185 -65
+
+set_position -187 -59
+
+set_position -189 -52
+
+set_position -190 -46
+
+set_position -192 -40
+
+set_position -193 -33
+
+set_position -194 -27
+
+set_position -195 -20
+
+set_position -196 -13
+
+set_position -196 -7
+
+set_position -196 0
+
+set_position -196 5
+
+set_position -196 12
+
+set_position -196 18
+
+set_position -195 25
+
+set_position -194 32
+
+set_position -193 38
+
+set_position -192 45
+
+set_position -190 51
+
+set_position -188 57
+
+set_position -186 64
+
+set_position -184 70
+
+set_position -182 76
+
+set_position -179 82
+
+set_position -176 88
+
+set_position -173 94
+
+set_position -170 100
+
+set_position -167 106
+
+set_position -163 111
+
+set_position -159 117
+
+set_position -155 122
+
+set_position -151 127
+
+set_position -147 132
+
+set_position -142 137
+
+set_position -138 142
+
+set_position -133 146
+
+set_position -128 151
+
+set_position -123 155
+
+set_position -118 159
+
+set_position -112 163
+
+set_position -107 167
+
+set_position -101 171
+
+set_position -95 174
+
+set_position -90 177
+
+set_position -84 180
+
+set_position -77 183
+
+set_position -71 185
+
+set_position -65 188
+
+set_position -59 190
+
+set_position -52 192
+
+set_position -46 194
+
+set_position -39 195
+
+set_position -33 196
+
+set_position -26 197
+
+set_position -20 198
+
+set_position -13 199
+
+set_position -6 199
+
+set_position 0 200
+
 set_active_tool 0
-
-delay_ms 1000
-
-set_position 0 300
-delay_ms 800
-set_active_tool 1
-delay_ms 200
-set_active_tool 2
-delay_ms 200
-set_active_tool 3
-delay_ms 200
-set_active_tool 0
-
-delay_ms 1000
-
-
-set_position 300 300
-delay_ms 800
-set_active_tool 1
-delay_ms 200
-set_active_tool 2
-delay_ms 200
-set_active_tool 3
-delay_ms 200
-set_active_tool 0
-
-delay_ms 1000
-
-set_position 300 0
-delay_ms 800
-set_active_tool 1
-delay_ms 200
-set_active_tool 2
-delay_ms 200
-set_active_tool 3
-delay_ms 200
-set_active_tool 0
-
-delay_ms 1000
-
-set_position 300 -300
-delay_ms 800
-set_active_tool 1
-delay_ms 200
-set_active_tool 2
-delay_ms 200
-set_active_tool 3
-delay_ms 200
-set_active_tool 0
-
-delay_ms 1000
-
-set_position 0 -300
-delay_ms 800
-set_active_tool 1
-delay_ms 200
-set_active_tool 2
-delay_ms 200
-set_active_tool 3
-delay_ms 200
-set_active_tool 0
-
-delay_ms 1000
-
-set_position -300 -300
-delay_ms 800
-set_active_tool 1
-delay_ms 200
-set_active_tool 2
-delay_ms 200
-set_active_tool 3
-delay_ms 200
-set_active_tool 0
-
-delay_ms 1000
-
-set_position -300 0
-delay_ms 800
-set_active_tool 1
-delay_ms 200
-set_active_tool 2
-delay_ms 200
-set_active_tool 3
-delay_ms 200
-set_active_tool 0
-
-delay_ms 1000
-
-set_position -300 300
-delay_ms 800
-set_active_tool 1
-delay_ms 200
-set_active_tool 2
-delay_ms 200
-set_active_tool 3
-delay_ms 200
-set_active_tool 0
-
-delay_ms 1000
-
-set_position -300 300
 
 # END_CODE begin
 

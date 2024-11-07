@@ -106,12 +106,12 @@ class VertexGenerator:
     #
 
     @staticmethod
-    def spiral(radius: int, steps: int, k=1.0) -> list[Vector2]:
+    def spiral(radius: int, steps: int, k=1.0) -> list:
         K2PI_P = 2 * k * pi / steps
         R_P = radius / steps
 
         return [
-            Vector2(sin(a * K2PI_P) * a * R_P, cos(a * K2PI_P) * a * R_P)
+            (int(sin(a * K2PI_P) * a * R_P), int(cos(a * K2PI_P) * a * R_P))
             for a in range(steps + 1)
         ]
 
