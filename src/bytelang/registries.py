@@ -4,7 +4,6 @@
 
 from abc import ABC
 from abc import abstractmethod
-from os import PathLike
 from pathlib import Path
 from struct import Struct
 from typing import Final
@@ -49,22 +48,16 @@ class JSONFileRegistry[R, T](Registry[str, T]):
     Реестр, сразу заполнивший значения из JSON-файла
     """
 
-    def __init__(self):
+    def __init__(self, target_file: Path):
         super().__init__()
-        self._filepath: Optional[Path] = None
-
-    def setFile(self, filepath: PathLike | str) -> None:
-        self._filepath = Path(filepath)
-        self._data.clear()
-        self._data.update(
-            {
-                name: self._parse(name, raw)
-                for name, raw in FileTool.readJSON(self._filepath).items()
-            }
-        )
+        self._target_file: Path = target_file
+        self._data = {
+            name: self._parse(name, raw)
+            for name, raw in FileTool.readJSON(self._target_file).items()
+        }
 
     def get(self, __key: str) -> Optional[T]:
-        if self._filepath is None:
+        if self._target_file is None:
             raise ValueError("Must select File")
 
         return self._data.get(__key)
@@ -86,12 +79,12 @@ type _PrimitiveRaw = dict[str, int | str]
 class PrimitivesRegistry(JSONFileRegistry[_PrimitiveRaw, PrimitiveType]):
     """Реестр примитивных типов"""
 
-    def __init__(self):
-        super().__init__()
-        self.__primitives_by_size = dict[tuple[int, PrimitiveWriteType], PrimitiveType]()
+    def __init__(self, target_file: Path):
+        self._primitives_by_size = dict[tuple[int, PrimitiveWriteType], PrimitiveType]()
+        super().__init__(target_file)
 
     def getBySize(self, size: int, write_type: PrimitiveWriteType = PrimitiveWriteType.UNSIGNED) -> PrimitiveType:
-        return self.__primitives_by_size[size, write_type]
+        return self._primitives_by_size[size, write_type]
 
     def _parse(self, name: str, raw: _PrimitiveRaw) -> PrimitiveType:
         size = raw["size"]
@@ -99,7 +92,7 @@ class PrimitivesRegistry(JSONFileRegistry[_PrimitiveRaw, PrimitiveType]):
 
         # TODO исправить
 
-        if (size, write_type) in self.__primitives_by_size.keys():
+        if (size, write_type) in self._primitives_by_size.keys():
             raise ValueError(f"type aliases not support: {name}, {raw}")
 
         formats = PrimitiveType.EXPONENT_FORMATS if write_type == PrimitiveWriteType.EXPONENT else PrimitiveType.INTEGER_FORMATS
@@ -110,9 +103,9 @@ class PrimitivesRegistry(JSONFileRegistry[_PrimitiveRaw, PrimitiveType]):
         if write_type == PrimitiveWriteType.SIGNED:
             fmt = fmt.lower()
 
-        ret = self.__primitives_by_size[size, write_type] = PrimitiveType(
+        ret = self._primitives_by_size[size, write_type] = PrimitiveType(
             name=name,
-            parent=self._filepath.stem,
+            parent=self._target_file.stem,
             size=size,
             write_type=write_type,
             packer=Struct(fmt)
@@ -126,26 +119,21 @@ class CatalogRegistry[T](Registry[str, T]):
     Каталоговый Реестр[T] (ищет файл по имени в каталоге)
     """
 
-    def __init__(self, file_ext: str) -> None:
+    def __init__(self, target_folder: Path, file_ext: str) -> None:
         super().__init__()
+        self.__TARGET_FOLDER: Final[Path] = target_folder
+
+        if not self.__TARGET_FOLDER.is_dir():
+            raise ValueError(f"Not a Folder: {target_folder}")
+
         self.__FILE_EXT: Final[str] = file_ext
-        self.__folder: Optional[Path] = None
-
-    def setFolder(self, folder: PathLike | str) -> None:
-        """Установить каталог для загрузки контента"""
-        self.__folder = Path(folder)
-
-        if not self.__folder.is_dir():
-            raise ValueError(f"Not a Folder: {folder}")
-
-        self._data.clear()
 
     def get(self, name: str) -> T:
-        if self.__folder is None:
+        if self.__TARGET_FOLDER is None:
             raise ValueError(f"Cannot get {name}! Must set folder")
 
         if (ret := self._data.get(name)) is None:
-            filepath = str(self.__folder / f"{name}.{self.__FILE_EXT}")
+            filepath = str(self.__TARGET_FOLDER / f"{name}.{self.__FILE_EXT}")
             ret = self._data[name] = self._load(filepath, name)
 
         return ret
@@ -162,8 +150,8 @@ class CatalogRegistry[T](Registry[str, T]):
 
 class ProfileRegistry(CatalogRegistry[Profile]):
 
-    def __init__(self, file_ext: str, primitives: PrimitivesRegistry):
-        super().__init__(file_ext)
+    def __init__(self, target_folder: Path, file_ext: str, primitives: PrimitivesRegistry):
+        super().__init__(target_folder, file_ext)
         self.__primitive_type_registry = primitives
 
     def _load(self, filepath: str, name: str) -> Profile:
@@ -224,8 +212,8 @@ class PackageParser(Parser[PackageInstruction]):
 
 class PackageRegistry(CatalogRegistry[Package]):
 
-    def __init__(self, file_ext: str, primitives: PrimitivesRegistry):
-        super().__init__(file_ext)
+    def __init__(self, target_folder: Path, file_ext: str, primitives: PrimitivesRegistry):
+        super().__init__(target_folder, file_ext)
         self.__parser = PackageParser(primitives)
 
     def _load(self, filepath: str, name: str) -> Package:
@@ -237,8 +225,8 @@ class PackageRegistry(CatalogRegistry[Package]):
 
 class EnvironmentsRegistry(CatalogRegistry[Environment]):
 
-    def __init__(self, file_ext: str, profiles: ProfileRegistry, packages: PackageRegistry) -> None:
-        super().__init__(file_ext)
+    def __init__(self, target_folder: Path, file_ext: str, profiles: ProfileRegistry, packages: PackageRegistry) -> None:
+        super().__init__(target_folder, file_ext)
         self.__profiles = profiles
         self.__packages = packages
 

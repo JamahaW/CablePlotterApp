@@ -318,16 +318,17 @@ class CodeGenerator:
 
     # noinspection PyTypeChecker
     def getProgramData(self) -> Optional[ProgramData]:
-        if self.__env is not None:
-            return ProgramData(
-                environment=self.__env,
-                start_address=self.__variable_offset,
-                variables=tuple(self.__variables.values()),
-                constants=self.__constants,
-                marks=self.__marks_address
-            )
+        if self.__env is None:
+            self.__err.write("must select env")
+            return
 
-        self.__err.write("must select env")
+        return ProgramData(
+            environment=self.__env,
+            start_address=self.__variable_offset,
+            variables=tuple(self.__variables.values()),
+            constants=self.__constants,
+            marks=self.__marks_address
+        )
 
 
 class ByteCodeGenerator:

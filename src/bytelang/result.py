@@ -3,22 +3,13 @@ from __future__ import annotations
 from dataclasses import dataclass
 from enum import Flag
 from enum import auto
-from os import PathLike
 from typing import Iterable
-from typing import Optional
 
-from bytelang.code_generator import ByteCodeGenerator
-from bytelang.code_generator import CodeGenerator
 from bytelang.code_generator import CodeInstruction
 from bytelang.code_generator import ProgramData
 from bytelang.content import PrimitiveType
-from bytelang.handlers import BasicErrorHandler
 from bytelang.parsers import Parser
-from bytelang.parsers import StatementParser
-from bytelang.registries import EnvironmentsRegistry
-from bytelang.registries import PrimitivesRegistry
 from bytelang.statement import Statement
-from bytelang.tools import FileTool
 from bytelang.tools import ReprTool
 from bytelang.tools import StringBuilder
 
@@ -122,35 +113,3 @@ class CompileResult:
                 self.__writeComment(sb, ins)
 
             sb.append(f"{address:04X}: {byte:02X}")
-
-
-class Compiler:
-    """Компилятор ByteLang"""
-
-    def __init__(self, error_handler: BasicErrorHandler, primitives: PrimitivesRegistry, environments: EnvironmentsRegistry):
-        self.__err = error_handler.getChild(self.__class__.__name__)
-        self.__primitives = primitives
-        self.__parser = StatementParser(self.__err)
-        self.__code_generator = CodeGenerator(self.__err, environments, primitives)
-        self.__bytecode_generator = ByteCodeGenerator(self.__err)
-
-    def run(self, source_filepath: PathLike | str, bytecode_filepath: PathLike | str) -> Optional[CompileResult]:
-        with open(source_filepath) as f:
-            statements = tuple(self.__parser.run(f))
-
-        instructions, data = self.__code_generator.run(statements)
-
-        if not (program := self.__bytecode_generator.run(instructions, data)) or not self.__err.success():
-            return
-
-        FileTool.saveBytes(bytecode_filepath, program)
-
-        return CompileResult(
-            primitives=self.__primitives.getValues(),
-            statements=statements,
-            instructions=instructions,
-            program_data=data,
-            bytecode=program,
-            source_filepath=str(source_filepath),
-            bytecode_filepath=str(bytecode_filepath)
-        )
