@@ -9,12 +9,12 @@ from typing import IO
 from typing import Iterable
 from typing import Optional
 
-from bytelang.content import Environment
-from bytelang.content import EnvironmentInstruction
-from bytelang.content import EnvironmentInstructionArgument
-from bytelang.content import PrimitiveType
-from bytelang.content import PrimitiveWriteType
-from bytelang.content import Profile
+from bytelang.dto.content.environment import Environment
+from bytelang.dto.content.instructions import EnvironmentInstruction
+from bytelang.dto.content.instructions import EnvironmentInstructionArgument
+from bytelang.dto.content.primitive import PrimitiveType
+from bytelang.dto.content.primitive import PrimitiveWriteType
+from bytelang.dto.content.profile import Profile
 from bytelang.handlers import BasicErrorHandler
 from bytelang.impl.registries import EnvironmentsRegistry
 from bytelang.impl.registries import PrimitivesRegistry

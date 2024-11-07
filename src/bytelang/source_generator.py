@@ -10,10 +10,10 @@ from pathlib import Path
 from typing import Iterable
 from typing import Optional
 
-from bytelang.content import Environment
-from bytelang.content import EnvironmentInstruction
-from bytelang.content import EnvironmentInstructionArgument
-from bytelang.content import PrimitiveType
+from bytelang import Environment
+from bytelang.dto.content.instructions import EnvironmentInstruction
+from bytelang.dto.content.instructions import EnvironmentInstructionArgument
+from bytelang.dto.content.primitive import PrimitiveType
 from bytelang.interpreters import Interpreter
 from bytelang.registries import PrimitivesRegistry
 from bytelang.tools import ReprTool

@@ -7,14 +7,13 @@ from typing import TextIO
 
 from bytelang.code_generator import ByteCodeWriter
 from bytelang.code_generator import CodeGenerator
-from bytelang.content import Environment
+from bytelang.dto.content.environment import Environment as _Environment
 from bytelang.handlers import BasicErrorHandler
 from bytelang.handlers import ErrorHandler
 from bytelang.impl.registries import EnvironmentsRegistry
 from bytelang.impl.registries import PackageRegistry
 from bytelang.impl.registries import PrimitivesRegistry
 from bytelang.impl.registries import ProfileRegistry
-from bytelang.interpreters import Interpreter
 from bytelang.parsers import StatementParser
 from bytelang.result import LogFlag
 from bytelang.result import Result

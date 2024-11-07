@@ -9,14 +9,14 @@ from typing import Optional
 
 from bytelang.abc.registries import CatalogRegistry
 from bytelang.abc.registries import JSONFileRegistry
-from bytelang.content import Environment
-from bytelang.content import EnvironmentInstruction
-from bytelang.content import Package
-from bytelang.content import PackageInstruction
-from bytelang.content import PackageInstructionArgument
-from bytelang.content import PrimitiveType
-from bytelang.content import PrimitiveWriteType
-from bytelang.content import Profile
+from bytelang.dto.content.environment import Environment
+from bytelang.dto.content.instructions import EnvironmentInstruction
+from bytelang.dto.content.package import Package
+from bytelang.dto.content.instructions import PackageInstruction
+from bytelang.dto.content.instructions import PackageInstructionArgument
+from bytelang.dto.content.primitive import PrimitiveType
+from bytelang.dto.content.primitive import PrimitiveWriteType
+from bytelang.dto.content.profile import Profile
 from bytelang.parsers import Parser
 from bytelang.tools import FileTool
 from bytelang.tools import ReprTool

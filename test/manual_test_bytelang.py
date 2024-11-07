@@ -1,15 +1,7 @@
-from io import StringIO
-
 from bytelang import ByteLang
+from bytelang.tools import FixedStringIO
 
 bytelang = ByteLang.simpleSetup(r"A:\Projects\Вертикальный тросовый плоттер\Код\CablePlotterApp\res\bytelang")
-
-
-class FixedStringIO(StringIO):
-    @property
-    def name(self) -> str:
-        return self.__class__.__name__
-
 
 SOURCE = """
 .env esp32_env

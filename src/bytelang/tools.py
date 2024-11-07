@@ -81,7 +81,13 @@ class ReprTool:
         return b.hex("_", 2).upper()
 
 
-class StringBuilder(StringIO):
+class FixedStringIO(StringIO):
+    @property
+    def name(self) -> str:
+        return self.__class__.__name__
+
+
+class StringBuilder(FixedStringIO):
 
     def __init__(self) -> None:
         super().__init__()
