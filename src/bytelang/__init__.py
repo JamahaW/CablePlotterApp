@@ -41,6 +41,10 @@ class ByteLang:
 
         instructions, data = CodeGenerator(errors_handler, self.__environment_registry, self.__primitives_registry).run(statements)
 
+        if data is None:
+            errors_handler.write("Program data is None")
+            return
+
         ByteCodeWriter(errors_handler).run(instructions, data, bytecode_output_stream)
 
         if not errors_handler.isSuccess():

@@ -14,6 +14,7 @@ from bytelang.content import EnvironmentInstruction
 from bytelang.content import EnvironmentInstructionArgument
 from bytelang.content import PrimitiveType
 from bytelang.content import PrimitiveWriteType
+from bytelang.content import Profile
 from bytelang.handlers import BasicErrorHandler
 from bytelang.registries import EnvironmentsRegistry
 from bytelang.registries import PrimitivesRegistry
@@ -42,10 +43,7 @@ class CodeInstruction:
         return instruction_index.write(self.instruction.index) + b"".join(self.arguments)
 
     def __repr__(self) -> str:
-        args_s = ReprTool.iter((
-            f"({arg_t}){ReprTool.prettyBytes(arg_v)}"
-            for arg_t, arg_v in zip(self.instruction.arguments, self.arguments)
-        ), l_paren="{ ", r_paren=" }")
+        args_s = ReprTool.iter((f"({arg_t}){ReprTool.prettyBytes(arg_v)}" for arg_t, arg_v in zip(self.instruction.arguments, self.arguments)), l_paren="{ ", r_paren=" }")
         return f"{self.instruction.generalInfo()} {args_s}"
 
 
@@ -116,26 +114,20 @@ class CodeGenerator:
 
         __DIRECTIVE_ARG_ANY = DirectiveArgument("constant value or identifier", ArgumentValueType.ANY)
 
-        self.__DIRECTIVES: dict[str, Directive] = {
-            "env": Directive(self.__directiveSetEnvironment, (
-                DirectiveArgument("environment name", ArgumentValueType.IDENTIFIER),
-            )),
-            "def": Directive(self.__directiveDeclareConstant, (
-                DirectiveArgument("constant name", ArgumentValueType.IDENTIFIER),
-                __DIRECTIVE_ARG_ANY
-            )),
-            "ptr": Directive(self.__directiveDeclarePointer, (
-                DirectiveArgument("pointer identifier", ArgumentValueType.IDENTIFIER),
-                DirectiveArgument("primitive type", ArgumentValueType.IDENTIFIER),
-                __DIRECTIVE_ARG_ANY
-            )),
-        }
+        self.__DIRECTIVES: dict[str, Directive] = {"env": Directive(self.__directiveSetEnvironment, (DirectiveArgument("environment name", ArgumentValueType.IDENTIFIER),)),
+                                                   "def": Directive(self.__directiveDeclareConstant, (DirectiveArgument("constant name", ArgumentValueType.IDENTIFIER), __DIRECTIVE_ARG_ANY)),
+                                                   "ptr": Directive(self.__directiveDeclarePointer,
+                                                                    (DirectiveArgument(
+                                                                        "pointer identifier",
+                                                                        ArgumentValueType.IDENTIFIER),
+                                                                     DirectiveArgument(
+                                                                         "primitive type",
+                                                                         ArgumentValueType.IDENTIFIER),
+                                                                     __DIRECTIVE_ARG_ANY)), }
 
-        self.__METHOD_BY_TYPE: dict[StatementType, Callable[[Statement], Optional[CodeInstruction]]] = {
-            StatementType.DIRECTIVE_USE: self.__processDirective,
-            StatementType.MARK_DECLARE: self.__processMark,
-            StatementType.INSTRUCTION_CALL: self.__processInstruction
-        }
+        self.__METHOD_BY_TYPE: dict[StatementType, Callable[[Statement], Optional[CodeInstruction]]] = {StatementType.DIRECTIVE_USE: self.__processDirective,
+                                                                                                        StatementType.MARK_DECLARE: self.__processMark,
+                                                                                                        StatementType.INSTRUCTION_CALL: self.__processInstruction}
 
     def __checkArgumentCount(self, statement: Statement, need: tuple) -> None:
         if (need := len(need)) != (got := len(statement.arguments)):
@@ -185,10 +177,7 @@ class CodeGenerator:
                 return
 
             if var.primitive.size < i_arg.pointing_type.size:
-                self.__err.writeStatement(
-                    statement,
-                    f"Аргумент ({i}): Размер переменной {var} меньше размера указателя примитивного типа аргумента {i_arg}. Передача значения будет с ошибками"
-                )
+                self.__err.writeStatement(statement, f"Аргумент ({i}): Размер переменной {var} меньше размера указателя примитивного типа аргумента {i_arg}. Передача значения будет с ошибками")
                 return
 
         return self.__writeArgumentFromPrimitive(statement, u_arg, i_arg.primitive_type)
@@ -236,12 +225,7 @@ class CodeGenerator:
 
         self.__addConstant(statement, name, UniversalArgument.fromInteger(self.__variable_offset))
 
-        self.__variables[name] = Variable(
-            address=self.__variable_offset,
-            identifier=name,
-            primitive=primitive,
-            value=arg_value
-        )
+        self.__variables[name] = Variable(address=self.__variable_offset, identifier=name, primitive=primitive, value=arg_value)
 
         self.__variable_offset += primitive.size
 
@@ -292,10 +276,7 @@ class CodeGenerator:
 
         self.__err.begin()
 
-        code_ins_args = tuple(
-            self.__writeArgumentFromInstructionArg(statement, i + 1, s_arg, i_arg)
-            for i, (i_arg, s_arg) in enumerate(zip(instruction.arguments, statement.arguments))
-        )
+        code_ins_args = tuple(self.__writeArgumentFromInstructionArg(statement, i + 1, s_arg, i_arg) for i, (i_arg, s_arg) in enumerate(zip(instruction.arguments, statement.arguments)))
 
         if self.__err.failed():
             return
@@ -305,10 +286,7 @@ class CodeGenerator:
         return ret
 
     def run(self, statements: Iterable[Statement]) -> tuple[tuple[CodeInstruction, ...], Optional[ProgramData]]:
-        return (
-            tuple(Filter.notNone(self.__METHOD_BY_TYPE[s.type](s) for s in statements)),
-            self.getProgramData()
-        )
+        return tuple(Filter.notNone(self.__METHOD_BY_TYPE[s.type](s) for s in statements)), self.getProgramData()
 
     # noinspection PyTypeChecker
     def getProgramData(self) -> Optional[ProgramData]:
@@ -316,13 +294,7 @@ class CodeGenerator:
             self.__err.write("must select env")
             return
 
-        return ProgramData(
-            environment=self.__env,
-            start_address=self.__variable_offset,
-            variables=tuple(self.__variables.values()),
-            constants=self.__constants,
-            marks=self.__marks_address
-        )
+        return ProgramData(environment=self.__env, start_address=self.__variable_offset, variables=tuple(self.__variables.values()), constants=self.__constants, marks=self.__marks_address)
 
 
 class CountingStream:
@@ -342,36 +314,39 @@ class CountingStream:
 class ByteCodeWriter:
 
     def __init__(self, error_handler: BasicErrorHandler) -> None:
-        self.__err = error_handler.getChild(self.__class__.__name__)
+        self.__error_handler = error_handler.getChild(self.__class__.__name__)
 
-    def run(self, instructions: Iterable[CodeInstruction], data: Optional[ProgramData], bytecode_output_stream: BinaryIO) -> None:
-        if data is None:
-            self.__err.write("Program data is None")
-            return
-
-        profile = data.environment.profile
-
-        try:
-            program_start_data = profile.pointer_heap.write(data.start_address)
-
-        except error as e:
-            self.__err.write(f"Область Heap вне допустимого размера: {e}")
-            return
-
+    def run(self, instructions: Iterable[CodeInstruction], program_data: ProgramData, bytecode_output_stream: BinaryIO) -> None:
+        profile = program_data.environment.profile
         out = CountingStream(bytecode_output_stream)
 
-        out.write(program_start_data)
+        self.__writeStartBlock(out, program_data)
+        self.__writeVariablesBlock(out, program_data)
+        self.__writeInstructionsBlock(out, instructions, profile)
 
-        for variable in data.variables:
-            out.write(variable.value)
+        self.__checkProgram(out, profile)
 
-        for ins in instructions:
-            out.write(ins.write(profile.instruction_index))
+    def __writeStartBlock(self, out: CountingStream, program_data: ProgramData) -> None:
+        try:
+            program_start_data = program_data.environment.profile.pointer_heap.write(program_data.start_address)
+            out.write(program_start_data)
 
+        except error as e:
+            self.__error_handler.write(f"Область Heap вне допустимого размера: {e}")
+
+    def __checkProgram(self, out: CountingStream, profile: Profile) -> None:
         if profile.max_program_length is None:
             return
 
         if out.getBytesWritten() < profile.max_program_length:
             return
 
-        self.__err.write(f"program size ({out.getBytesWritten()}) out of {profile.max_program_length}")
+        self.__error_handler.write(f"program size ({out.getBytesWritten()}) out of {profile.max_program_length}")
+
+    @staticmethod
+    def __writeInstructionsBlock(out: CountingStream, instructions: Iterable[CodeInstruction], profile: Profile):
+        out.write(b"".join(map(lambda ins: ins.write(profile.instruction_index), instructions)))
+
+    @staticmethod
+    def __writeVariablesBlock(out: CountingStream, program_data: ProgramData) -> None:
+        out.write(b"".join(map(lambda v: v.value, program_data.variables)))
