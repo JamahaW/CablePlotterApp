@@ -2,7 +2,10 @@ from __future__ import annotations
 
 from dataclasses import dataclass
 from struct import error
+from typing import AnyStr
+from typing import BinaryIO
 from typing import Callable
+from typing import IO
 from typing import Iterable
 from typing import Optional
 
@@ -301,16 +304,7 @@ class CodeGenerator:
         self.__mark_offset_isolated += instruction.size
         return ret
 
-    def __reset(self) -> None:
-        self.__constants.clear()
-        self.__variables.clear()
-        self.__marks_address.clear()
-        self.__mark_offset_isolated = 0
-        self.__variable_offset = None
-        self.__env = None
-
     def run(self, statements: Iterable[Statement]) -> tuple[tuple[CodeInstruction, ...], Optional[ProgramData]]:
-        self.__reset()
         return (
             tuple(Filter.notNone(self.__METHOD_BY_TYPE[s.type](s) for s in statements)),
             self.getProgramData()
@@ -331,17 +325,30 @@ class CodeGenerator:
         )
 
 
-class ByteCodeGenerator:
+class CountingStream:
+
+    def __init__(self, stream: IO) -> None:
+        self.__stream = stream
+        self.__bytes_written = 0
+
+    def write(self, data: AnyStr) -> None:
+        self.__stream.write(data)
+        self.__bytes_written += len(data)
+
+    def getBytesWritten(self) -> int:
+        return self.__bytes_written
+
+
+class ByteCodeWriter:
 
     def __init__(self, error_handler: BasicErrorHandler) -> None:
         self.__err = error_handler.getChild(self.__class__.__name__)
 
-    def run(self, instructions: Iterable[CodeInstruction], data: Optional[ProgramData]) -> Optional[bytes]:
+    def run(self, instructions: Iterable[CodeInstruction], data: Optional[ProgramData], bytecode_output_stream: BinaryIO) -> None:
         if data is None:
             self.__err.write("Program data is None")
             return
 
-        ret = bytearray()
         profile = data.environment.profile
 
         try:
@@ -351,16 +358,20 @@ class ByteCodeGenerator:
             self.__err.write(f"Область Heap вне допустимого размера: {e}")
             return
 
-        ret.extend(program_start_data)
+        out = CountingStream(bytecode_output_stream)
 
-        for v in data.variables:
-            ret.extend(v.value)
+        out.write(program_start_data)
+
+        for variable in data.variables:
+            out.write(variable.value)
 
         for ins in instructions:
-            ret.extend(ins.write(profile.instruction_index))
+            out.write(ins.write(profile.instruction_index))
 
-        if profile.max_program_length is not None and profile.max_program_length < len(ret):
-            self.__err.write(f"program size ({len(ret)}) out of {profile.max_program_length}")
+        if profile.max_program_length is None:
             return
 
-        return bytes(ret)
+        if out.getBytesWritten() < profile.max_program_length:
+            return
+
+        self.__err.write(f"program size ({out.getBytesWritten()}) out of {profile.max_program_length}")

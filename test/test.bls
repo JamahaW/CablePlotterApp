@@ -1,11 +1,11 @@
 .env esp32_env
 
-.def MY_MACRO 123
+.def MY_MACRO 0xAB
 
 .ptr u32 my_var 0xAB_CD_EF_12
 
 my_mark:
 
-delay_ms 12345
+delay_ms MY_MACRO
 
 quit

@@ -43,7 +43,7 @@ class BasicErrorHandler(ABC):
         self._appendMessage(message)
 
     @abstractmethod
-    def success(self) -> bool:
+    def isSuccess(self) -> bool:
         """True если нет ошибок"""
 
     @abstractmethod
@@ -59,19 +59,14 @@ class ErrorHandler(BasicErrorHandler):
         self.__messages = list[str]()
         """Набор сообщений ошибок"""
 
-    def success(self) -> bool:
+    def isSuccess(self) -> bool:
         """Нет ли ошибки"""
-        return self.count() == 0
-
-    def reset(self) -> None:
-        """Очистить набор ошибок"""
-        self.begin()
-        self.__messages.clear()
+        return self.getCount() == 0
 
     def _appendMessage(self, message: str) -> None:
         self.__messages.append(message)
 
-    def count(self) -> int:
+    def getCount(self) -> int:
         return len(self.__messages)
 
     def getLog(self) -> str:
@@ -81,8 +76,8 @@ class ErrorHandler(BasicErrorHandler):
 class ChildErrorHandler(BasicErrorHandler):
     """Дочерний обработчик ошибок"""
 
-    def success(self) -> bool:
-        return self.__parent.success()
+    def isSuccess(self) -> bool:
+        return self.__parent.isSuccess()
 
     def __init__(self, name: str, parent: BasicErrorHandler) -> None:
         super().__init__()

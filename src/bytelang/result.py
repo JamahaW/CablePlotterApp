@@ -3,11 +3,11 @@ from __future__ import annotations
 from dataclasses import dataclass
 from enum import Flag
 from enum import auto
-from typing import Iterable
+from typing import BinaryIO
+from typing import TextIO
 
 from bytelang.code_generator import CodeInstruction
 from bytelang.code_generator import ProgramData
-from bytelang.content import PrimitiveType
 from bytelang.parsers import Parser
 from bytelang.statement import Statement
 from bytelang.tools import ReprTool
@@ -19,13 +19,11 @@ from bytelang.tools import StringBuilder
 # TODO Организовать флаги
 class LogFlag(Flag):
     """Флаги вывода логов компиляции"""
-    PRIMITIVES = auto()
-    """Вывести данные реестра примитивных типов"""
     ENVIRONMENT_INSTRUCTIONS = auto()
     """Вывести инструкции окружения"""
     PROFILE = auto()
     """Вывести данные профиля"""
-    REGISTRIES = PRIMITIVES | ENVIRONMENT_INSTRUCTIONS | PROFILE
+    REGISTRIES = ENVIRONMENT_INSTRUCTIONS | PROFILE
     """Вывести все доступные реестры"""
 
     STATEMENTS = auto()
@@ -51,20 +49,16 @@ class LogFlag(Flag):
 
 @dataclass(frozen=True, kw_only=True, repr=False)
 class CompileResult:
-    primitives: Iterable[PrimitiveType]
     statements: tuple[Statement, ...]
     instructions: tuple[CodeInstruction, ...]
     program_data: ProgramData
-    bytecode: bytes
-    source_filepath: str
-    bytecode_filepath: str
+
+    source_stream: TextIO
+    bytecode_stream: BinaryIO
 
     def getInfoLog(self, flags: LogFlag = LogFlag.ALL) -> str:
         sb = StringBuilder()
         env = self.program_data.environment
-
-        if LogFlag.PRIMITIVES in flags:
-            sb.append(ReprTool.headed("primitives", self.primitives, _repr=True))
 
         if LogFlag.ENVIRONMENT_INSTRUCTIONS in flags:
             sb.append(ReprTool.headed(f"instructions : {env.name}", env.instructions.values()))
@@ -73,7 +67,7 @@ class CompileResult:
             sb.append(ReprTool.title(f"profile : {env.profile.name}")).append(ReprTool.strDict(env.profile.__dict__, _repr=True))
 
         if LogFlag.STATEMENTS in flags:
-            sb.append(ReprTool.headed(f"statements : {self.source_filepath}", self.statements))
+            sb.append(ReprTool.headed(f"statements : {self.source_stream.name}", self.statements))
 
         if LogFlag.CONSTANTS in flags:
             sb.append(ReprTool.title("constants")).append(ReprTool.strDict(self.program_data.constants))
@@ -82,7 +76,7 @@ class CompileResult:
             sb.append(ReprTool.headed("variables", self.program_data.variables))
 
         if LogFlag.CODE_INSTRUCTIONS in flags:
-            sb.append(ReprTool.headed(f"code instructions : {self.source_filepath}", self.instructions))
+            sb.append(ReprTool.headed(f"code instructions : {self.source_stream.name}", self.instructions))
 
         if LogFlag.BYTECODE in flags:
             self.__writeByteCode(sb)
@@ -97,19 +91,22 @@ class CompileResult:
         ins_by_addr = {ins.address: ins for ins in self.instructions}
         var_by_addr = {var.address: var for var in self.program_data.variables}
 
-        sb.append(ReprTool.title(f"bytecode view : {self.bytecode_filepath}"))
+        sb.append(ReprTool.title(f"bytecode view : {self.bytecode_stream.name}"))
+        self.bytecode_stream.close()
 
-        for address, byte in enumerate(self.bytecode):
-            if address == 0:
-                self.__writeComment(sb, "program start address define")
+        with open(self.bytecode_stream.name, "rb") as bytecode_view:
+            bytecode_view_read = bytecode_view.read()
+            for address, byte in enumerate(bytecode_view_read):
+                if address == 0:
+                    self.__writeComment(sb, "program start address define")
 
-            if (var := var_by_addr.get(address)) is not None:
-                self.__writeComment(sb, var)
+                if (var := var_by_addr.get(address)) is not None:
+                    self.__writeComment(sb, var)
 
-            if (mark := self.program_data.marks.get(address)) is not None:
-                self.__writeComment(sb, f"{mark}:")
+                if (mark := self.program_data.marks.get(address)) is not None:
+                    self.__writeComment(sb, f"{mark}:")
 
-            if (ins := ins_by_addr.get(address)) is not None:
-                self.__writeComment(sb, ins)
+                if (ins := ins_by_addr.get(address)) is not None:
+                    self.__writeComment(sb, ins)
 
-            sb.append(f"{address:04X}: {byte:02X}")
+                sb.append(f"{address:04X}: {byte:02X}")
