@@ -6,13 +6,13 @@ from typing import Iterable
 
 from dearpygui import dearpygui as dpg
 
-from app.ui.abc import Color3i
-from app.ui.abc import Container
-from app.ui.abc import ItemID
-from app.ui.abc import Placeable
-from app.ui.dpg.abc import DPGItem
-from app.ui.dpg.abc import RangedDPGItem
-from app.ui.dpg.abc import VariableDPGItem
+from ui.abc import Color3i
+from ui.abc import Container
+from ui.abc import ItemID
+from ui.abc import Placeable
+from ui.dpg.abc import DPGItem
+from ui.dpg.abc import RangedDPGItem
+from ui.dpg.abc import VariableDPGItem
 
 
 class Group(DPGItem, Container, Placeable):

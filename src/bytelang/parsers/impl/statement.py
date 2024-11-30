@@ -1,15 +1,40 @@
+from __future__ import annotations
+from __future__ import annotations
+
 import re
 from dataclasses import dataclass
 from typing import Callable
 from typing import ClassVar
 from typing import Optional
+from typing import Optional
+from typing import Optional
 
-from bytelang.abc.parsers import Parser
-from bytelang.handlers.error import BasicErrorHandler
-from bytelang.impl.parsers.statement.regex import Regex
-from bytelang.impl.parsers.statement.statement import Statement
-from bytelang.impl.parsers.statement.statement import StatementType
-from bytelang.impl.parsers.statement.statement import UniversalArgument
+from bytelang.bytecode.abc import Regex
+from bytelang.bytecode.abc import Regex
+from bytelang.bytecode.abc import Regex
+from bytelang.bytecode.abc import Regex
+from bytelang.bytecode.abc import Regex
+from bytelang.bytecode.abc import Regex
+from bytelang.bytecode.abc import Regex
+from bytelang.bytecode.abc import Regex
+from bytelang.bytecode.abc import Statement
+from bytelang.bytecode.abc import Statement
+from bytelang.bytecode.abc import Statement
+from bytelang.bytecode.abc import StatementType
+from bytelang.bytecode.abc import StatementType
+
+from bytelang.bytecode.abc import UniversalArgument
+from bytelang.bytecode.abc import UniversalArgument
+from bytelang.bytecode.abc import UniversalArgument
+from bytelang.bytecode.abc import UniversalArgument
+from bytelang.bytecode.abc import UniversalArgument
+from bytelang.bytecode.abc import UniversalArgument
+from bytelang.bytecode.abc import UniversalArgument
+from bytelang.bytecode.abc import UniversalArgument
+from bytelang.bytecode.abc import UniversalArgument
+from bytelang.bytecode.abc import UniversalArgument
+from bytelang.core.handlers.errors import BasicErrorHandler
+from bytelang.parsers.abc import Parser
 
 
 @dataclass(frozen=True)

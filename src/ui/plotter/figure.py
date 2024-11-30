@@ -8,17 +8,17 @@ from typing import Iterable
 
 from dearpygui import dearpygui as dpg
 
-from app.ui.abc import ItemID
-from app.ui.custom.widgets import Border
-from app.ui.dpg.impl import Axis
-from app.ui.dpg.impl import Button
-from app.ui.dpg.impl import Checkbox
-from app.ui.dpg.impl import CollapsingHeader
-from app.ui.dpg.impl import DragPoint
-from app.ui.dpg.impl import InputInt
-from app.ui.dpg.impl import LineSeries
-from app.ui.dpg.impl import Plot
-from app.ui.dpg.impl import Text
+from ui.abc import ItemID
+from ui.custom.widgets import Border
+from ui.dpg.impl import Axis
+from ui.dpg.impl import Button
+from ui.dpg.impl import Checkbox
+from ui.dpg.impl import CollapsingHeader
+from ui.dpg.impl import DragPoint
+from ui.dpg.impl import InputInt
+from ui.dpg.impl import LineSeries
+from ui.dpg.impl import Plot
+from ui.dpg.impl import Text
 
 
 class Figure(LineSeries, ABC):

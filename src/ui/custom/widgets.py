@@ -1,9 +1,9 @@
 from typing import Callable
 
-from app.ui.abc import ItemID
-from app.ui.abc import Placeable
-from app.ui.abc import VariableItem
-from app.ui.dpg.impl import DragLine
+from ui.abc import ItemID
+from ui.abc import Placeable
+from ui.abc import VariableItem
+from ui.dpg.impl import DragLine
 
 
 class BorderLinePair(Placeable, VariableItem[float]):

@@ -5,12 +5,12 @@ from pathlib import Path
 
 from dearpygui import dearpygui as dpg
 
-from app.ui.dpg.impl import Button
-from app.ui.dpg.impl import FileDialog
-from app.ui.dpg.impl import Menu
-from app.ui.plotter.figure import Canvas
-from app.ui.plotter.figure import TransformableFigure
-from app.ui.plotter.figure import WorkAreaFigure
+from ui.dpg.impl import Button
+from ui.dpg.impl import FileDialog
+from ui.dpg.impl import Menu
+from ui.plotter import Canvas
+from ui.plotter import TransformableFigure
+from ui.plotter import WorkAreaFigure
 
 
 class FigureRegistry:
