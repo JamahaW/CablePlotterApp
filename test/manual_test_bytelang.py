@@ -1,10 +1,10 @@
-from bytelang import ByteLang
-from bytelang.tools.string import FixedStringIO
+from bytelang.main import ByteLang
+from tools.string import FixedStringIO
 
 bytelang = ByteLang.simpleSetup(r"A:\Projects\Вертикальный тросовый плоттер\Код\CablePlotterApp\res\bytelang")
 
 SOURCE = """
-.env esp32_env
+.env esp32
 
 .def MY_MACRO 123 
 
@@ -12,7 +12,9 @@ SOURCE = """
 
 my_mark:
 
-delay_ms MY_MACRO 
+delay_ms my_mark 
+
+
 quit    
 """
 

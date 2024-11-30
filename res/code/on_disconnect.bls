@@ -1,0 +1,8 @@
+
+# ON_DISCONNECT
+    set_active_tool {tool_none}
+    delay_ms {tool_change_duration_ms}
+    set_position {x} {y}
+    set_active_tool {tool_paint}
+    delay_ms {tool_change_duration_ms}
+
